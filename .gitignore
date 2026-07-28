@@ -1,0 +1,107 @@
+# ---------------------------------------------------------------
+# Segredo — nunca versionar
+# ---------------------------------------------------------------
+# Onde as credenciais realmente moram. O .mcp.json referencia
+# ${POSTGRES_CONNECTION_STRING}; o valor vive aqui e fica fora do git.
+.env
+.env.*
+!.env.example
+*.env
+
+# Certificado e chave
+*.pfx
+*.p12
+*.key
+*.pem
+secrets.json
+
+# appsettings com segredo. O appsettings.json base é versionado
+# (estrutura, sem valor sensível); os de ambiente, não.
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json.example
+
+# ---------------------------------------------------------------
+# .NET
+# ---------------------------------------------------------------
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+artifacts/
+TestResults/
+[Cc]overage*/
+*.coverage
+*.trx
+project.lock.json
+project.fragment.lock.json
+
+# ---------------------------------------------------------------
+# Node / Vite — front-end da camada Web
+# ---------------------------------------------------------------
+node_modules/
+.vite/
+dist/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Saída do build de assets: gerada por `npm run build` no
+# `dotnet build`, conforme a skill vite-build. Não versionar
+# artefato derivado.
+wwwroot/build/
+wwwroot/.vite/
+
+# ---------------------------------------------------------------
+# Playwright — MCP configurado neste projeto
+# ---------------------------------------------------------------
+# Toda saída do MCP (screenshot, trace, PDF, download) vai para
+# .playwright-mcp/, forçado pelo --output-dir no servers.json.
+# É artefato de inspeção descartável: nunca vai para o git.
+.playwright-mcp/
+playwright-report/
+playwright/.cache/
+test-results/
+blob-report/
+
+# ---------------------------------------------------------------
+# PostgreSQL — dump e dado local
+# ---------------------------------------------------------------
+# Dump pode conter dado pessoal real: nunca no repositório.
+*.dump
+*.sql.gz
+*.backup
+pgdata/
+
+# ---------------------------------------------------------------
+# Ferramentas de IA
+# ---------------------------------------------------------------
+# .mcp.json e .ai/ SÃO versionados de propósito — é o que faz os
+# agentes, skills e servidores MCP funcionarem para quem clona.
+# Nenhum deles guarda credencial: o servers.json só referencia
+# variável de ambiente.
+#
+# O que não se versiona é a preferência local de cada pessoa:
+.claude/settings.local.json
+.claude/*.local.json
+
+# ---------------------------------------------------------------
+# Sistema operacional e editor
+# ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
