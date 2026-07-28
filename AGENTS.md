@@ -69,11 +69,6 @@ Fluxo canônico: `Controller → Service → Repository → Agregado`, retornand
   [docs/components/icon.md](docs/components/icon.md).
 - **Toda tela projeta carregamento, vazio, erro e permissão.** Tela que só existe no caminho feliz
   está incompleta e não é entregue.
-- **Toda tela é avaliada quanto a ilustração** antes de entregar. Empty state, onboarding, erro e
-  hero de landing pedem arte; tabela, formulário e dashboard populado não. Tela funcionalmente
-  correta e visualmente árida é entrega incompleta, não entrega sóbria — acione o `ilustracao-agent`
-  **em paralelo** com a construção, e nunca resolva espaço vazio ampliando um ícone. Critério em
-  [.ai/agents/ilustracao-agent.md](.ai/agents/ilustracao-agent.md).
 - **Todo componente é responsivo** em mobile, tablet e desktop — obrigatório, sem exceção e sem
   "versão mobile depois". Mobile-first, validado em 320px, 768px, 1024px e 1440px. Regra em
   [docs/components/README.md](docs/components/README.md); técnica em
@@ -103,7 +98,7 @@ usuário:
 
 ## Agentes
 
-Dez agentes especializados em [.ai/agents/](.ai/agents/), com 52 skills em [.ai/skills/](.ai/skills/).
+Dez agentes especializados em [.ai/agents/](.ai/agents/), com 50 skills em [.ai/skills/](.ai/skills/).
 
 | Tarefa | Agente |
 |---|---|
@@ -234,7 +229,7 @@ projeto/
 ├── .github/copilot-instructions.md -> ../AGENTS.md
 │
 ├── .ai/
-│   ├── skills/      52 skills, cada uma com SKILL.md
+│   ├── skills/      50 skills, cada uma com SKILL.md
 │   ├── agents/      10 definições de agente
 │   ├── mcp/         servers.json
 │   ├── scripts/     init.mjs (parametrização inicial)

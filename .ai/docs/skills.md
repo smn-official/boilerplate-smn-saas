@@ -1,6 +1,6 @@
 # Mapa de skills
 
-As 52 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
+As 50 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
 `.claude/skills/`. Este arquivo registra a qual agente cada uma pertence; a mesma informação
 está no campo `agent:` do frontmatter de cada `SKILL.md`.
 
@@ -43,7 +43,7 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`typescript-estrito`](../skills/typescript-estrito/SKILL.md) | TypeScript moderno em modo estrito — escolher e fixar a versão, configurar tsconfig com strict/noUnusedLocals/noUnusedParameters, tipar DOM sem any e organizar módulos de feature | ao criar ou alterar .ts, tsconfig.json, atualizar a versão do compilador ou revisar tipagem |
 | [`vite-build`](../skills/vite-build/SKILL.md) | Pipeline de assets com Vite — configurar vite.config.ts, declarar entry points por feature, gerar manifest com hash, definir scripts npm e amarrar o build ao .csproj | ao criar feature com script/estilo próprio, alterar build, dev server ou saída de assets |
 
-## tester-agent — 6 skills
+## tester-agent — 5 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
@@ -51,7 +51,6 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`estrategia-testes`](../skills/estrategia-testes/SKILL.md) | Estratégia de cobertura — pirâmide de testes, o que testar em cada artefato da arquitetura em camadas, o que deliberadamente não testar e como conduzir teste de regressão | antes de escrever a primeira linha de teste ou ao decidir se um cenário merece cobertura |
 | [`testes-integracao`](../skills/testes-integracao/SKILL.md) | Testes de integração com banco real em container efêmero, isolamento por transação com rollback e suíte separada da unitária por ser lenta | ao testar repositório, migration, query ou qualquer fluxo que atravesse a fronteira de persistência |
 | [`testes-ui`](../skills/testes-ui/SKILL.md) | Testes da camada de apresentação com HtmlAgilityPack — asserção sobre o HTML efetivamente renderizado, validação de desktop e mobile e garantia de ausência de overflow horizontal | ao testar View, partial, ViewModel renderizada ou estrutura responsiva |
-| [`teste-navegador`](../skills/teste-navegador/SKILL.md) | Verificação no navegador real com Playwright MCP — reconhecimento antes da ação, os quatro estados, overflow nos quatro breakpoints, console e rede | ao validar tela implementada, reproduzir defeito visual ou conferir responsividade de fato |
 | [`testes-unitarios`](../skills/testes-unitarios/SKILL.md) | Testes unitários em xUnit v3 com FluentAssertions e Moq — agregado testado pela API pública, asserção por constante de mensagem, mock só nos limites, factory privada e um comportamento observável por teste | ao escrever ou revisar teste de agregado, serviço, specification ou controller |
 
 ## github-agent — 4 skills
@@ -107,23 +106,9 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 |---|---|---|
 | [`cor-contexto`](../skills/cor-contexto/SKILL.md) | Escolha da cor primária a partir do contexto — setor, público, personalidade, concorrentes, calibragem de saturação e luminosidade, cores de estado e registro da decisão | ao definir identidade visual, revisar cor existente ou quando não se sabe que cor usar |
 
-## Sem agente dono — 1 skill
-
-Meta-trabalho sobre o próprio repositório. Não pertence a nenhum dos dez agentes porque não é
-tarefa de produto — qualquer agente pode carregá-la.
-
-| Skill | O que cobre | Quando usar |
-|---|---|---|
-| [`criacao-skills`](../skills/criacao-skills/SKILL.md) | Como escrever e revisar uma skill — anatomia, `description` que dispara, divulgação progressiva, escrever o porquê em vez de proibição e teste de gaveta | ao criar ou revisar skill, quando uma skill não dispara, ou ao transformar correção repetida em instrução permanente |
-
 ## Adicionar uma skill
 
-1. Crie `../skills/<nome>/SKILL.md` com frontmatter `name` e `description`; adicione `agent`
-   quando houver agente dono.
+1. Crie `../skills/<nome>/SKILL.md` com frontmatter `name`, `description` e `agent`.
 2. Confirme que `<nome>` não colide com nenhuma skill já listada acima.
 3. Registre-a na tabela do agente dono, aqui e na seção Skills do arquivo do agente em
-   [../agents/](../agents/). Sem agente dono, registre na seção "Sem agente dono".
-4. Atualize a contagem no cabeçalho da seção e o total no topo deste arquivo.
-
-O roteiro completo — o que escrever, como testar o disparo e o checklist de revisão — está em
-[`criacao-skills`](../skills/criacao-skills/SKILL.md).
+   [../agents/](../agents/).

@@ -57,7 +57,6 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 | `testes-unitarios` | Testar agregado, serviço, specification ou controller isoladamente |
 | `testes-integracao` | Testar repositório, migration ou fluxo que toca banco real |
 | `testes-ui` | Assertar HTML renderizado, layout desktop e mobile |
-| `teste-navegador` | Verificar a tela no navegador real com Playwright MCP — quatro estados, overflow, console |
 | `dados-teste` | Builders, object mothers, fixtures e determinismo dos dados |
 
 ## Convenções que valem sempre
