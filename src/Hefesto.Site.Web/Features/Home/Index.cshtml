@@ -1,0 +1,342 @@
+@{
+    Layout = "_LayoutSite";
+    ViewData["Title"] = "ERP para construtoras";
+    ViewData["Description"] = "O Hefesto reúne obras, financeiro e orçamentos da sua construtora " +
+                              "em um só lugar, com isolamento total entre empresas.";
+}
+
+<section class="border-b border-borda bg-superficie">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-16 sm:px-6 md:py-24 lg:flex-row
+                lg:items-center lg:gap-16 lg:px-8">
+        <div class="flex min-w-0 flex-1 flex-col gap-6">
+            <h1 class="text-display-md text-texto md:text-display-lg lg:text-display-xl">
+                Construa mais,<br />controle melhor.
+            </h1>
+
+            <p class="max-w-xl text-body-lg text-texto-suave">
+                O Hefesto reúne obras, financeiro e orçamentos da sua construtora em um só lugar —
+                com isolamento total entre empresas.
+            </p>
+
+            <div class="flex flex-col gap-3 sm:flex-row">
+                <a href="#demonstracao"
+                   class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primaria
+                          px-4 py-3 sm:py-2.5 text-body-sm font-medium text-white transition-colors
+                          hover:bg-primaria-hover focus-visible:outline-2 focus-visible:outline-offset-2
+                          focus-visible:outline-primaria sm:w-auto">
+                    <icon name="calendar-check" class="size-4" aria-hidden="true" />
+                    Agendar demonstração
+                </a>
+                <a href="#planos"
+                   class="inline-flex w-full items-center justify-center gap-2 rounded-lg border
+                          border-borda-forte bg-superficie px-4 py-3 sm:py-2.5 text-body-sm font-medium
+                          text-texto transition-colors hover:bg-borda/30 focus-visible:outline-2
+                          focus-visible:outline-offset-2 focus-visible:outline-primaria sm:w-auto">
+                    Ver planos
+                </a>
+            </div>
+
+            <p class="text-body-sm text-texto-suave">
+                Implantação acompanhada e migração da sua planilha de orçamento inclusas.
+            </p>
+        </div>
+
+        <div class="min-w-0 flex-1">
+            <div class="flex flex-col gap-4 rounded-lg border border-borda bg-fundo p-4 md:p-5 lg:p-6">
+                <div class="flex items-center justify-between gap-4">
+                    <h2 class="text-h3 text-texto">Residencial Vila Nova</h2>
+                    <span class="text-caption text-texto-suave">Obra 04 de 11</span>
+                </div>
+
+                <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div class="flex flex-col gap-1">
+                        <dt class="text-caption text-texto-suave">Orçado</dt>
+                        <dd class="text-h2 text-texto">R$ 4,2 mi</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <dt class="text-caption text-texto-suave">Realizado</dt>
+                        <dd class="text-h2 text-texto">R$ 3,6 mi</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <dt class="text-caption text-texto-suave">Avanço físico</dt>
+                        <dd class="text-h2 text-primaria">78%</dd>
+                    </div>
+                </dl>
+
+                <div class="flex flex-col gap-2">
+                    <div class="h-2 w-full overflow-hidden rounded-full bg-borda">
+                        <div class="h-full w-[78%] rounded-full bg-primaria"></div>
+                    </div>
+                    <p class="text-body-sm text-texto-suave">
+                        Medição de julho aprovada. Desvio de 3,1% abaixo do orçado.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="recursos" aria-labelledby="titulo-recursos"
+         class="border-b border-borda bg-fundo">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+        <div class="flex max-w-2xl flex-col gap-3">
+            <h2 id="titulo-recursos" class="text-h1 text-texto md:text-display-md">
+                Três frentes que hoje moram em planilhas diferentes.
+            </h2>
+            <p class="text-body-lg text-texto-suave">
+                Cada obra tem um orçamento, um cronograma e um caixa. Quando os três vivem separados,
+                o desvio só aparece no fechamento do mês.
+            </p>
+        </div>
+
+        <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <li class="group flex h-full flex-col overflow-hidden rounded-lg border border-borda
+                       bg-superficie">
+                <div class="h-1 bg-transparent transition-colors group-hover:bg-primaria"></div>
+                <div class="flex flex-1 flex-col gap-3 p-4 md:p-5 lg:p-6">
+                    <h3 class="text-h3 text-texto">
+                        <span class="text-texto-suave">1.</span> Obras
+                    </h3>
+                    <p class="text-body text-texto-suave">
+                        Cronograma, medição e diário de obra na mesma tela. O avanço físico conversa
+                        com o financeiro sem redigitação.
+                    </p>
+                    <icon name="building-2" class="mt-auto size-5 self-end text-borda-forte"
+                          aria-hidden="true" />
+                </div>
+            </li>
+
+            <li class="group flex h-full flex-col overflow-hidden rounded-lg border border-borda
+                       bg-superficie">
+                <div class="h-1 bg-transparent transition-colors group-hover:bg-primaria"></div>
+                <div class="flex flex-1 flex-col gap-3 p-4 md:p-5 lg:p-6">
+                    <h3 class="text-h3 text-texto">
+                        <span class="text-texto-suave">2.</span> Financeiro
+                    </h3>
+                    <p class="text-body text-texto-suave">
+                        Contas a pagar e receber por centro de custo de cada obra. Fluxo de caixa
+                        projetado a partir do que já foi contratado.
+                    </p>
+                    <icon name="wallet" class="mt-auto size-5 self-end text-borda-forte"
+                          aria-hidden="true" />
+                </div>
+            </li>
+
+            <li class="group flex h-full flex-col overflow-hidden rounded-lg border border-borda
+                       bg-superficie">
+                <div class="h-1 bg-transparent transition-colors group-hover:bg-primaria"></div>
+                <div class="flex flex-1 flex-col gap-3 p-4 md:p-5 lg:p-6">
+                    <h3 class="text-h3 text-texto">
+                        <span class="text-texto-suave">3.</span> Orçamentos
+                    </h3>
+                    <p class="text-body text-texto-suave">
+                        Composição por insumo com base SINAPI. Reajuste de preço propaga para todas
+                        as propostas em aberto.
+                    </p>
+                    <icon name="calculator" class="mt-auto size-5 self-end text-borda-forte"
+                          aria-hidden="true" />
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section id="isolamento" aria-labelledby="titulo-isolamento"
+         class="border-b border-borda bg-superficie">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-16 sm:px-6 md:py-20 lg:flex-row
+                lg:items-center lg:gap-16 lg:px-8">
+        <div class="flex min-w-0 flex-1 flex-col gap-4">
+            <h2 id="titulo-isolamento" class="text-h1 text-texto md:text-display-md">
+                Uma construtora nunca enxerga o dado da outra.
+            </h2>
+            <p class="text-body-lg text-texto-suave">
+                Cada empresa tem seu próprio espaço, com separação garantida no banco de dados — não
+                por um filtro que alguém pode esquecer de aplicar.
+            </p>
+            <p class="text-body text-texto-suave">
+                Isso importa quando a mesma pessoa presta serviço para duas construtoras, quando um
+                sócio sai, ou quando o contador precisa de acesso a uma empresa só.
+            </p>
+        </div>
+
+        <div class="min-w-0 flex-1">
+            <ul class="flex flex-col gap-3">
+                <li class="flex items-start gap-3 rounded-lg border border-borda bg-fundo p-4">
+                    <icon name="shield-check" class="mt-0.5 size-5 shrink-0 text-primaria"
+                          aria-hidden="true" />
+                    <div class="flex min-w-0 flex-col gap-1">
+                        <h3 class="text-h4 text-texto">Separação no banco</h3>
+                        <p class="text-body-sm text-texto-suave">
+                            O isolamento é estrutural e vale para consulta, relatório e exportação.
+                        </p>
+                    </div>
+                </li>
+
+                <li class="flex items-start gap-3 rounded-lg border border-borda bg-fundo p-4">
+                    <icon name="users" class="mt-0.5 size-5 shrink-0 text-primaria"
+                          aria-hidden="true" />
+                    <div class="flex min-w-0 flex-col gap-1">
+                        <h3 class="text-h4 text-texto">Acesso por papel</h3>
+                        <p class="text-body-sm text-texto-suave">
+                            Engenheiro, financeiro e contador enxergam o que o papel permite, empresa
+                            por empresa.
+                        </p>
+                    </div>
+                </li>
+
+                <li class="flex items-start gap-3 rounded-lg border border-borda bg-fundo p-4">
+                    <icon name="scroll-text" class="mt-0.5 size-5 shrink-0 text-primaria"
+                          aria-hidden="true" />
+                    <div class="flex min-w-0 flex-col gap-1">
+                        <h3 class="text-h4 text-texto">Trilha de auditoria</h3>
+                        <p class="text-body-sm text-texto-suave">
+                            Quem alterou o valor, quando e o que havia antes. Registro que não se apaga.
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="planos" aria-labelledby="titulo-planos" class="border-b border-borda bg-fundo">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+        <div class="flex max-w-2xl flex-col gap-3">
+            <h2 id="titulo-planos" class="text-h1 text-texto md:text-display-md">Planos</h2>
+            <p class="text-body-lg text-texto-suave">
+                Cobrança por obra ativa. Obra concluída não conta no mês seguinte.
+            </p>
+        </div>
+
+        <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <li class="flex h-full flex-col gap-4 rounded-lg border border-borda bg-superficie p-4
+                       md:p-5 lg:p-6">
+                <div class="flex flex-col gap-1">
+                    <h3 class="text-h3 text-texto">Obra Única</h3>
+                    <p class="text-body-sm text-texto-suave">Para quem toca uma obra por vez.</p>
+                </div>
+                <p class="text-display-md text-texto">
+                    R$ 390<span class="text-body text-texto-suave">/mês</span>
+                </p>
+                <ul class="flex flex-1 flex-col gap-2 text-body text-texto-suave">
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        1 obra ativa
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        3 usuários
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Orçamento e financeiro
+                    </li>
+                </ul>
+                <a href="#demonstracao"
+                   class="mt-auto inline-flex w-full items-center justify-center rounded-lg border
+                          border-borda-forte bg-superficie px-4 py-3 sm:py-2.5 text-body-sm font-medium
+                          text-texto transition-colors hover:bg-borda/30 focus-visible:outline-2
+                          focus-visible:outline-offset-2 focus-visible:outline-primaria">
+                    Contratar Obra Única
+                </a>
+            </li>
+
+            <li class="flex h-full flex-col gap-4 rounded-lg border-2 border-primaria bg-superficie p-4
+                       md:p-5 lg:p-6">
+                <div class="flex flex-col gap-1">
+                    <h3 class="text-h3 text-texto">Construtora</h3>
+                    <p class="text-body-sm text-texto-suave">Para carteira de obras simultâneas.</p>
+                </div>
+                <p class="text-display-md text-texto">
+                    R$ 1.190<span class="text-body text-texto-suave">/mês</span>
+                </p>
+                <ul class="flex flex-1 flex-col gap-2 text-body text-texto-suave">
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Até 10 obras ativas
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Usuários ilimitados
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Base SINAPI e reajuste automático
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Trilha de auditoria completa
+                    </li>
+                </ul>
+                <a href="#demonstracao"
+                   class="mt-auto inline-flex w-full items-center justify-center rounded-lg bg-primaria
+                          px-4 py-3 sm:py-2.5 text-body-sm font-medium text-white transition-colors
+                          hover:bg-primaria-hover focus-visible:outline-2 focus-visible:outline-offset-2
+                          focus-visible:outline-primaria">
+                    Contratar Construtora
+                </a>
+            </li>
+
+            <li class="flex h-full flex-col gap-4 rounded-lg border border-borda bg-superficie p-4
+                       md:p-5 lg:p-6">
+                <div class="flex flex-col gap-1">
+                    <h3 class="text-h3 text-texto">Incorporadora</h3>
+                    <p class="text-body-sm text-texto-suave">Para grupos com várias empresas.</p>
+                </div>
+                <p class="text-h1 text-texto">Sob consulta</p>
+                <ul class="flex flex-1 flex-col gap-2 text-body text-texto-suave">
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Obras ilimitadas
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Múltiplos CNPJs isolados
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <icon name="check" class="mt-1 size-4 shrink-0 text-primaria" aria-hidden="true" />
+                        Consolidação entre empresas
+                    </li>
+                </ul>
+                <a href="#demonstracao"
+                   class="mt-auto inline-flex w-full items-center justify-center rounded-lg border
+                          border-borda-forte bg-superficie px-4 py-3 sm:py-2.5 text-body-sm font-medium
+                          text-texto transition-colors hover:bg-borda/30 focus-visible:outline-2
+                          focus-visible:outline-offset-2 focus-visible:outline-primaria">
+                    Falar com consultor
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section id="demonstracao" aria-labelledby="titulo-demonstracao" class="bg-superficie">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+        <div class="flex flex-col gap-3 rounded-lg border border-borda bg-fundo p-6 md:p-8 lg:p-10">
+            <h2 id="titulo-demonstracao" class="max-w-2xl text-h1 text-texto md:text-display-md">
+                Veja o Hefesto rodando com os números da sua obra.
+            </h2>
+            <p class="max-w-2xl text-body-lg text-texto-suave">
+                Uma conversa de 30 minutos. Trazemos uma obra sua para dentro do sistema e mostramos o
+                orçado contra o realizado.
+            </p>
+            <div class="mt-2 flex flex-col gap-3 sm:flex-row">
+                <a href="#contato"
+                   class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primaria
+                          px-4 py-3 sm:py-2.5 text-body-sm font-medium text-white transition-colors
+                          hover:bg-primaria-hover focus-visible:outline-2 focus-visible:outline-offset-2
+                          focus-visible:outline-primaria sm:w-auto">
+                    <icon name="calendar-check" class="size-4" aria-hidden="true" />
+                    Agendar demonstração
+                </a>
+                <a href="#contato"
+                   class="inline-flex w-full items-center justify-center gap-2 rounded-lg border
+                          border-borda-forte bg-superficie px-4 py-3 sm:py-2.5 text-body-sm font-medium
+                          text-texto transition-colors hover:bg-borda/30 focus-visible:outline-2
+                          focus-visible:outline-offset-2 focus-visible:outline-primaria sm:w-auto">
+                    Enviar mensagem
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -73,14 +73,58 @@ O mesmo azul, três mensagens:
 Se a personalidade pedida é "enérgico", suba a saturação antes de trocar de matiz. Se é "calmo",
 suba a luminosidade — mas cuidado: cor clara demais reprova em contraste como texto ou botão.
 
-## Passo 5 — Gerar e validar
+## Passo 5 — Explorar antes de decidir
+
+**`--marca` não gera cor nenhuma: ele devolve exatamente o hex que você passou.** Com marca, o
+script é validador de contraste, não gerador — quem escolheu o matiz foi você. Usá-lo como primeiro
+comando é decidir sozinho e pedir carimbo depois.
+
+Comece **sem argumento**, para que a API sugira de fato. Rode três vezes: cada chamada devolve uma
+paleta diferente.
 
 ```bash
-node .ai/scripts/paleta.mjs --marca "#1D4ED8"
+node .ai/scripts/paleta.mjs
+node .ai/scripts/paleta.mjs
+node .ai/scripts/paleta.mjs
+```
+
+### Monte um leque, não um favorito
+
+Reúna **três candidatas de famílias de matiz diferentes** — uma pode vir dos passos 2 a 4, as outras
+das sugestões da API. Se as três forem vizinhas (três azuis, ou azul + petróleo + teal), o leque é
+falso: troque até que sejam realmente distintas.
+
+Para cada candidata, registre em uma linha: o que ela comunica, e o que ela custa. Só então escolha.
+
+### Sinal de convergência
+
+Se a recomendação cai na mesma família de sempre — azul, petróleo, teal — em produtos de setores
+diferentes, a escolha não está vindo do contexto. Está vindo do hábito. Nesse caso, **descarte a
+primeira resposta** e refaça o leque sem ela.
+
+Azul e derivados são o default do SaaS B2B justamente por serem seguros. Segurança é um argumento
+válido — mas precisa ser **escolhido contra alternativas**, não alcançado por inércia.
+
+### Validar a eleita
+
+```bash
+node .ai/scripts/paleta.mjs --marca "<hex escolhido>"
 ```
 
 O script corrige o contraste e devolve o bloco `@theme` pronto. **Não pule esta etapa**: intuição não
 calcula razão de contraste, e paleta bonita que reprova em WCAG é retrabalho garantido.
+
+### O que o script não resolve
+
+A saída cobre cinco tokens e valida quatro pares contra branco. Ela **não** cobre:
+
+- estado de hover da primária, fundo de página distinto da superfície, ou tint claro da primária;
+- contraste de **branco sobre a primária** — o par do botão primário, que precisa de 4.5:1;
+- coerência de matiz entre os neutros e a primária.
+
+Os neutros vêm da API e podem sair de uma família cromática alheia à marca — borda esverdeada numa
+paleta azul, por exemplo. Passam no contraste e ainda assim destoam. **Confira a coerência a olho e
+derive os neutros da primária quando destoarem**, revalidando com `--validar`.
 
 Se não houver preferência nenhuma, mostre as prontas:
 
@@ -137,3 +181,7 @@ A linha "descartados" é a mais valiosa: é o que impede refazer a mesma discuss
 | Erro e primária se confundem | Estado derivado da marca | Estado segue convenção |
 | Paleta trocada a cada trimestre | Decisão sem registro | Passo 7 |
 | Amarelo ilegível como botão | Luminância alta demais | Acento, não primária |
+| Todo produto acaba em azul ou petróleo | `--marca` usado de saída: ele devolve o hex que você já escolheu | Passo 5 — rodar sem argumento primeiro e montar leque de matizes distintos |
+| Leque de "três opções" com três azuis | Candidatas da mesma família | Exigir famílias de matiz diferentes; vizinhas não são alternativa |
+| Borda ou texto destoando da primária | Neutros vieram da API, de outra família cromática | Derivar os neutros da primária e revalidar com `--validar` |
+| Botão primário com texto ilegível | O script não valida branco sobre primária | Conferir esse par à parte, mínimo 4.5:1 |

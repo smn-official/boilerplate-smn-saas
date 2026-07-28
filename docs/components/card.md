@@ -86,6 +86,88 @@ Quando o card inteiro leva a um lugar, **o alvo é um só**: o próprio `<a>` en
   sombra no hover é proibido**: o card não se moveu, e fingir profundidade que não existe desloca o
   conteúdo sob o cursor.
 
+## Card de destaque — landing page
+
+Em página pública de marketing, um card apresenta **uma frente do produto** a quem ainda não é
+usuário. O trabalho ali é de leitura e persuasão, não de operação: não há tabela, filtro nem ação
+por card. Isso permite um tratamento visual que a tela autenticada não comporta.
+
+**Escopo:** vale apenas em landing page e páginas públicas. Dentro do produto, card continua sendo o
+agrupador descrito acima, sem faixa e sem numeração.
+
+### Anatomia
+
+| Parte | Obrigatória | Tratamento |
+|---|---|---|
+| Faixa superior | sim | `h-1`, transparente em repouso, `bg-primaria` no hover do card |
+| Título numerado | sim | `text-h3`, com `<span class="text-texto-suave">N.</span>` antes do nome |
+| Descrição | sim | `text-body text-texto-suave`, duas a três linhas |
+| Ícone | sim | `size-5` em `text-borda-forte`, no rodapé e alinhado à direita |
+
+### A faixa ocupa espaço sempre
+
+A faixa é `bg-transparent` em repouso e ganha cor por `group-hover`. **Ela nunca é criada ou
+removida no hover** — o `h-1` está lá desde o início. Faixa que só existe ao passar o mouse empurra
+o conteúdo 4px para baixo e faz a grade inteira tremer quando o cursor atravessa a linha de cards.
+
+O card é `group`; a faixa reage com `group-hover:bg-primaria`. É a mesma regra de "hover não desloca
+conteúdo" da seção anterior, aplicada a um elemento que muda de cor, não de tamanho.
+
+No mobile não há ponteiro e a faixa nunca acende — por isso ela é **realce**, não informação. O que
+o card comunica precisa estar inteiro sem ela.
+
+### Numeração vem dentro do título
+
+A numeração fica **dentro do `<h3>`**, em `text-texto-suave` para não competir com o nome da frente.
+Nunca em pílula ou linha própria acima do título: isso é *eyebrow*, proibido por
+[badge.md](badge.md), que prescreve exatamente esta alternativa.
+
+Numerar só se faz quando as frentes têm **ordem real** — sequência de uso, etapas de um fluxo, ou
+uma lógica que o texto sustente. Numeração sobre itens sem ordem promete um encadeamento que não
+existe; nesse caso, o título vai sem número.
+
+### Ícone é assinatura, não entrada
+
+No rodapé e à direita (`mt-auto self-end`), em `text-borda-forte`. O olho entra pelo título e sai
+pelo ícone — o inverso do card operacional, onde o ícone identifica a feature no topo.
+
+O ícone é decorativo: `aria-hidden="true"`, sempre. Ele repete o que o título já diz.
+
+`mt-auto` exige que o container do conteúdo seja `flex flex-1 flex-col` — é o que empurra o ícone
+para baixo e mantém os ícones de todos os cards da linha na mesma altura, mesmo com descrições de
+tamanhos diferentes.
+
+### Markup
+
+```razor
+<ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <li class="group flex h-full flex-col overflow-hidden rounded-lg border border-borda
+               bg-superficie">
+        <div class="h-1 bg-transparent transition-colors group-hover:bg-primaria"></div>
+        <div class="flex flex-1 flex-col gap-3 p-4 md:p-5 lg:p-6">
+            <h3 class="text-h3 text-texto">
+                <span class="text-texto-suave">1.</span> &lt;Frente&gt;
+            </h3>
+            <p class="text-body text-texto-suave">&lt;O que esta frente resolve&gt;</p>
+            <icon name="&lt;icone-lucide&gt;" class="mt-auto size-5 self-end text-borda-forte"
+                  aria-hidden="true" />
+        </div>
+    </li>
+</ul>
+```
+
+`overflow-hidden` no `<li>` faz a faixa respeitar o `rounded-lg` do card — sem ele, os cantos
+superiores aparecem quadrados quando a faixa acende.
+
+### Regras
+
+- **Só em página pública.** Dentro do produto, vale o card agrupador.
+- **A faixa ocupa `h-1` em repouso**, transparente. Nunca aparece do nada no hover.
+- **Numeração dentro do `<h3>`**, e só quando há ordem real entre os itens.
+- **Ícone no rodapé, à direita, em `text-borda-forte`** e `aria-hidden="true"`.
+- **Sem sombra, sem elevação, `rounded-lg`** — tudo que a seção de elevação já exige.
+- **Cor por token semântico**, como em qualquer card.
+
 ## Markup
 
 ### Card simples
@@ -180,3 +262,8 @@ texto longo. O número de colunas em `lg` segue a quantidade real de itens, não
 | Cartão com fundo transparente e blur | Glassmorphism | `bg-superficie` sólido |
 | Pílula de categoria acima do título | Badge de categoria | Remover — ver [badge.md](badge.md) |
 | Card com altura fixa cortando texto | `h-*` em vez de `h-full` na grade | `h-full` e deixar o conteúdo definir a altura |
+| Grade treme quando o cursor atravessa os cards | Faixa de destaque criada só no hover | Faixa `h-1` sempre presente, `bg-transparent` → `group-hover:bg-primaria` |
+| Faixa de destaque com cantos quadrados | Falta `overflow-hidden` no card | `overflow-hidden` no `<li>` para a faixa seguir o `rounded-lg` |
+| Ícones do rodapé em alturas diferentes na mesma linha | Conteúdo sem `flex-1` para o `mt-auto` empurrar | `flex flex-1 flex-col` no container do conteúdo |
+| Numeração em pílula acima do título | Eyebrow disfarçado de numeração | Número dentro do `<h3>` — ver [badge.md](badge.md) |
+| Faixa de destaque em tela do produto | Padrão de landing aplicado fora do escopo | Card agrupador, sem faixa nem numeração |
