@@ -64,12 +64,12 @@ A lista completa do que evitar, e o checklist antes de entregar uma tela, está 
 | Estado vazio | [empty-state.md](empty-state.md) |
 | Ícone | [icon.md](icon.md) |
 | Input | [input.md](input.md) |
-| Menu | [menu.md](menu.md) |
 | Multi-select | [multi-select.md](multi-select.md) |
 | Página | [page.md](page.md) |
 | Paginação | [pagination.md](pagination.md) |
 | Indicador | [stat.md](stat.md) |
 | Select | [select.md](select.md) |
+| Sidebar | [sidebar.md](sidebar.md) |
 | Tabela | [table.md](table.md) |
 | Tabs | [tabs.md](tabs.md) |
 | Toast | [toast.md](toast.md) |

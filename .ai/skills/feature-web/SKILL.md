@@ -201,7 +201,8 @@ Encapsule num TagHelper: `<vite-asset src="Features/<Feature>/Scripts/<feature>.
 
 - Tokens e componentes compartilhados vivem num único lugar central; classe de feature nunca
   redefine o sistema base.
-- Largura máxima única; navegação lateral fixa no desktop, offcanvas abaixo de ~960px.
+- Largura máxima única; Sidebar fixa e recolhível a partir de 768px, em offcanvas no mobile,
+  conforme [sidebar.md](../../../docs/components/sidebar.md).
 - Rolagem vertical pertence à área principal, nunca ao contêiner centralizado.
 - **Nunca** overflow horizontal.
 - Tabela extensa vira card ou recebe scroll interno no próprio contêiner.

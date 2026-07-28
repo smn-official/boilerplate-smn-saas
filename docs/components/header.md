@@ -101,8 +101,8 @@ esmagada — sem isso, o flex container mantém o texto na largura natural e pro
 proibida por [`acessibilidade-responsivo`](../../.ai/skills/acessibilidade-responsivo/SKILL.md).
 
 **Duas ações é o teto.** Com mais que isso, a primeira fica visível e as demais vão para um menu
-suspenso ([menu.md](menu.md)) — três botões lado a lado não cabem em 320px sem virar ícones sem
-rótulo.
+suspenso com operação completa por teclado e foco — três botões lado a lado não cabem em 320px sem
+virar ícones sem rótulo.
 
 ## Markup
 
@@ -158,7 +158,7 @@ Repetido em mais de uma view, isto vira partial, não `@apply` — regra de
   nível.
 - **Sem eyebrow, kicker, pílula ou dot acima do título** — [badge.md](badge.md).
 - **Subtítulo qualifica; não vende.** Frase que serve para qualquer bloco do produto sai.
-- **No máximo duas ações.** Além disso, menu suspenso — [menu.md](menu.md).
+- **No máximo duas ações.** Além disso, menu suspenso com operação completa por teclado e foco.
 - **A ação é do bloco, não da tela.** Ação que afeta a página inteira pertence ao cabeçalho de página
   ([page.md](page.md)); colocá-la no cabeçalho de um bloco engana sobre o escopo do que vai acontecer.
 - **Ícone do cabeçalho é decorativo:** `aria-hidden="true"`, porque o título ao lado já nomeia — ver

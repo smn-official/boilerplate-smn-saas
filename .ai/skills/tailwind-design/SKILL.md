@@ -116,8 +116,8 @@ dentro de `@layer base`, e nunca para montar um componente.
 ## Layout
 
 - Tokens, superfícies e componentes compartilhados vivem em **um único lugar central**.
-- Conteúdo com largura máxima única; navegação lateral fixa no desktop e em offcanvas abaixo de
-  ~960px; barra superior aderente.
+- Conteúdo com largura máxima única; Sidebar fixa e recolhível a partir de 768px, em offcanvas no
+  mobile, conforme [sidebar.md](../../../docs/components/sidebar.md); barra superior aderente.
 - A rolagem vertical pertence à **área principal de conteúdo**, nunca ao contêiner centralizado.
 - Um contêiner de página padrão controla a pilha vertical e o espaçamento entre blocos — não
   redefinir caso a caso.

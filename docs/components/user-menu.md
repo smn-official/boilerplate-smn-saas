@@ -5,7 +5,7 @@ conta?** Ele fica na ponta direita da barra superior do shell descrito em [page.
 por um gatilho com o avatar, e reúne as ações que pertencem à identidade — perfil, preferências e
 sair.
 
-Não é navegação. A navegação do produto é o [menu.md](menu.md), na lateral. O que cai aqui é o que
+Não é navegação. A navegação do produto é a [Sidebar](sidebar.md). O que cai aqui é o que
 não pertence a nenhuma feature: se um item do menu do usuário for uma tela de trabalho do domínio,
 ele está no lugar errado.
 
@@ -100,8 +100,8 @@ a lado para "aproveitar espaço" — ver [`acessibilidade-responsivo`](../../.ai
 
 ## Teclado e foco
 
-O painel é um `role="menu"` com itens `role="menuitem"`. O contrato é o mesmo do offcanvas em
-[menu.md](menu.md), com a navegação por setas que o papel de menu exige:
+O painel é um `role="menu"` com itens `role="menuitem"` e usa a navegação por setas que esse papel
+exige:
 
 | Tecla | Comportamento |
 |---|---|
@@ -116,8 +116,8 @@ O painel é um `role="menu"` com itens `role="menuitem"`. O contrato é o mesmo 
 **O foco volta ao gatilho ao fechar.** Sem isso o `Tab` recomeça do topo da página, e quem navega por
 teclado perde a posição a cada abertura.
 
-O foco **não fica preso** aqui — o menu do usuário não é modal. `Tab` sai e fecha; é o offcanvas do
-[menu.md](menu.md) que prende o foco, porque cobre a tela inteira.
+O foco **não fica preso** aqui — o menu do usuário não é modal. `Tab` sai e fecha; é o offcanvas da
+[Sidebar](sidebar.md) que prende o foco, porque cobre a tela inteira.
 
 Diferença que importa: dentro de `role="menu"`, quem navega é a seta, não o `Tab`. Os itens levam
 `tabindex="-1"` e apenas o item focado no momento entra no fluxo — *roving tabindex*. Menu com dez
@@ -246,7 +246,7 @@ estático que está lá.
 ## Regras
 
 - **Um menu do usuário por aplicação**, sempre no mesmo canto, com ordem de itens estável.
-- **Só ações de conta, sessão e preferência.** Tela de domínio pertence ao [menu.md](menu.md).
+- **Só ações de conta, sessão e preferência.** Tela de domínio pertence à [Sidebar](sidebar.md).
 - **Gatilho é `<button>`** com `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` e nome
   acessível — mesmo quando só o avatar aparece.
 - **Cabeçalho de conta é texto**, não item clicável nem `role="menuitem"`.

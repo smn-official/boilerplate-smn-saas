@@ -26,14 +26,14 @@ Quem decide a estrutura é o layout compartilhado. A view da feature começa no 
 
 | Região | Elemento | Responsabilidade |
 |---|---|---|
-| Barra superior | `<header>` | Gatilho de menu, marca, breadcrumb, ações globais (tema, identidade) |
-| Navegação | `<nav>` | Rail de ícones no desktop e tablet, offcanvas no mobile — ver [menu.md](menu.md) |
+| Barra superior | `<header>` | Controle da Sidebar quando definido no shell, marca, breadcrumb e ações globais |
+| Navegação | `<nav>` | Sidebar recolhível no desktop e tablet, offcanvas no mobile — ver [sidebar.md](sidebar.md) |
 | Área de conteúdo | `<main>` | Único elemento que rola verticalmente |
 | Contêiner de página | `<div>` interno ao `<main>` | Largura máxima e espaçamento entre blocos |
 
 A barra superior é aderente e a navegação é fixa; **a rolagem vertical pertence ao `<main>`**, nunca
-ao contêiner centralizado nem ao `<body>`. É isso que mantém barra e menu visíveis durante a leitura
-de uma lista longa.
+ao contêiner centralizado nem ao `<body>`. É isso que mantém barra e Sidebar visíveis durante a
+leitura de uma lista longa.
 
 ## Cabeçalho de página
 
@@ -47,7 +47,7 @@ Primeiro bloco de toda página. Quatro partes, três delas opcionais:
 | Ação primária | não | ver [button.md](button.md) | Uma só; as demais são secundárias |
 
 Não existe rótulo de categoria acima do título — pílula, eyebrow ou dot são **proibidos**, ver
-[badge.md](badge.md). Quem informa a categoria é o breadcrumb e o item ativo do menu.
+[badge.md](badge.md). Quem informa a categoria é o breadcrumb e o item ativo da Sidebar.
 
 ### Comportamento da ação primária por faixa
 
@@ -75,7 +75,7 @@ Mora na barra superior, não no cabeçalho de página. Marca a posição do usu�
 
 | Faixa | O que aparece |
 |---|---|
-| Mobile 320–767 | **Oculto** — o espaço é da marca e do gatilho de menu |
+| Mobile 320–767 | **Oculto** — o espaço é da marca e do gatilho da Sidebar |
 | Tablet 768–1023 | Encurtado: ícone de início + página atual |
 | Desktop 1024+ | Trilha completa: `Início / <Seção> / <Página atual>` |
 
@@ -88,7 +88,7 @@ Regras:
 - Os níveis anteriores são `<a href>` reais, com URL gerada por `Url.Action` e `nameof`.
 - O separador é decorativo: `aria-hidden="true"`.
 - Ocultar no mobile é `hidden md:block` no markup, não `display:none` por script — a informação não é
-  essencial ali e o menu já mostra onde o usuário está.
+  essencial ali e a Sidebar já mostra onde o usuário está.
 
 ## Empilhamento vertical
 
@@ -108,8 +108,8 @@ O contêiner de página controla a pilha e o espaçamento entre blocos. **Não s
 
 - **Um `<h1>` por página**, e ele é o título do cabeçalho de página. Seções internas começam em
   `<h2>`; card usa `<h3>`. Nunca pular nível para acertar tamanho — tamanho vem do token, não da tag.
-- **O título casa com o item ativo do menu.** Se o menu diz "<Feature>" e o `<h1>` diz outra coisa, um
-  dos dois está errado. Mesmo vocabulário, mesma palavra.
+- **O título casa com o item ativo da Sidebar.** Se a Sidebar diz "<Feature>" e o `<h1>` diz outra
+  coisa, um dos dois está errado. Mesmo vocabulário, mesma palavra.
 - **A rolagem é do `<main>`.** `overflow-y-auto` no `<main>`, `overflow-hidden` no shell externo.
 - **Nunca overflow horizontal**, em 320, 768, 1024 e 1440. Causas e correções em
   [`acessibilidade-responsivo`](../../.ai/skills/acessibilidade-responsivo/SKILL.md).
@@ -130,7 +130,7 @@ está incompleta e não é entregue — ver [aparencia-generica.md](../../.ai/do
 
 | Estado | Onde vive | Regra |
 |---|---|---|
-| Carregando | Área de conteúdo | Cabeçalho e menu permanecem; só o conteúdo é substituído |
+| Carregando | Área de conteúdo | Cabeçalho e Sidebar permanecem; só o conteúdo é substituído |
 | Vazio | Área de conteúdo | Texto diz o que criar e oferece a ação; ilustração opcional |
 | Erro | Área de conteúdo | Diz o que falhou e o que fazer, não "algo deu errado" |
 | Sem permissão | Área de conteúdo | Explica quem libera o acesso; a ação primária não é renderizada |
@@ -154,15 +154,15 @@ estado por cadeia de `if/else`, conforme [`feature-web`](../../.ai/skills/featur
 </a>
 
 <div class="flex h-dvh overflow-hidden bg-superficie text-texto">
-    <partial name="_Menu" model="Model.Menu" />
+    <partial name="_Sidebar" model="Model.Sidebar" />
 
     <div class="flex min-w-0 flex-1 flex-col">
         <header class="flex h-14 shrink-0 items-center gap-3 border-b border-borda px-4 sm:px-6">
             <button type="button"
-                    data-menu-gatilho
-                    aria-controls="menu-principal"
+                    data-sidebar-controle
+                    aria-controls="sidebar-principal"
                     aria-expanded="false"
-                    aria-label="Abrir menu"
+                    aria-label="Abrir navegação"
                     class="inline-flex size-11 items-center justify-center rounded-lg md:hidden
                            focus-visible:outline-2 focus-visible:outline-offset-2
                            focus-visible:outline-primaria">
@@ -217,6 +217,10 @@ estado por cadeia de `if/else`, conforme [`feature-web`](../../.ai/skills/featur
 </div>
 ```
 
+O exemplo adota o controle amplo dentro da própria Sidebar; por isso o gatilho do header é
+`md:hidden` e abre somente o offcanvas mobile. Projetos que posicionam o controle amplo no header
+mantêm o botão visível a partir de `md` e seguem o contrato de [sidebar.md](sidebar.md).
+
 O avatar leva `alt=""`: o nome do usuário já está no texto ao lado, e no mobile — onde o texto some —
 a identidade não é a informação que a tela precisa anunciar.
 
@@ -269,7 +273,7 @@ estilo base é o da tela estreita.
 | Botão espremido ao lado do título no mobile | Faltou `w-full` até `lg` | `w-full lg:w-auto` |
 | Breadcrumb quebra a barra em duas linhas | Trilha completa no tablet | `hidden lg:flex` nos níveis anteriores |
 | Leitor de tela anuncia link para a própria página | Item atual virou `<a>` | `<span aria-current="page">` |
-| `Tab` começa no menu, não no conteúdo | Sem skip link | Skip link como primeiro focável do layout |
+| `Tab` começa na Sidebar, não no conteúdo | Sem skip link | Skip link como primeiro focável do layout |
 | Título da aba genérico | `ViewData["Title"]` não definido | `<Página> · <Produto>` em toda view |
 | Pílula de categoria acima do título | Padrão copiado de referência | Remover — ver [badge.md](badge.md) |
 | Espaçamento irregular entre blocos | `mt-*` nos filhos | `gap-*` no contêiner de página |
