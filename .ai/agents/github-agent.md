@@ -45,6 +45,9 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 - Commits em **Conventional Commits, em português brasileiro**: `<tipo>: <descrição>`.
 - Descrição no imperativo/afirmativo, minúscula após o tipo, sem ponto final, ~72 caracteres.
 - O corpo do commit explica o **porquê**, não o quê — o diff já mostra o quê.
+- **Nunca** creditar IA na mensagem: sem `Co-Authored-By: Claude`, sem `Generated with`, sem
+  variação. Se a ferramenta inserir o trailer por padrão, remova antes de commitar. Co-autoria de
+  **pessoa** continua válida. Detalhe em `padrao-commits`.
 - PR só é integrado com **CI verde**; preferir merge commit para preservar o contexto da branch.
 - **Nunca** force push em branch compartilhada; se for absolutamente necessário,
   `--force-with-lease`.
@@ -64,6 +67,7 @@ principal causa de trabalho perdido.
 - [ ] Estado verificado com `git status` e `git log`.
 - [ ] Branch partiu de `main` atualizada e segue `<tipo>/<escopo-kebab-case>`.
 - [ ] Mensagem de commit no padrão, em português brasileiro, sem ponto final.
+- [ ] Nenhum trailer de co-autoria de IA na mensagem.
 - [ ] Diff revisado pelo próprio autor antes de abrir o PR.
 - [ ] Build, testes e typecheck sem erros **e sem avisos**.
 - [ ] Operação destrutiva, se houver, foi explicitamente pedida pelo usuário.

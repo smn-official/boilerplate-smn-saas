@@ -58,6 +58,9 @@ Fluxo canônico: `Controller → Service → Repository → Agregado`, retornand
 - **Idioma:** domínio e pastas no idioma do negócio; configuração e rotas HTTP em inglês
   (kebab-case).
 - Nunca embutir sigla de rastreamento de requisito (`RN-*`) em mensagem, constante ou teste.
+- **Mensagem de commit nunca credita IA** — sem `Co-Authored-By: Claude`, sem `Generated with`, sem
+  variação, mesmo que a ferramenta insira por padrão. Co-autoria de pessoa continua válida. Regra em
+  [.ai/skills/padrao-commits](.ai/skills/padrao-commits/SKILL.md).
 - Em PostgreSQL, identificadores por extenso — sem abreviação, sigla ou diminutivo.
 - Configuração em `appsettings.json` (PascalCase); só segredo no `.env`. Sobrescrita .NET usa
   `Secao__Chave`; variável de ferramenta externa, `SCREAMING_SNAKE_CASE`.

@@ -90,6 +90,33 @@ usar o identificador, mantendo o código como dado editável.
 Regras: linhas de ~72 caracteres, parágrafos curtos, foco na causa e na decisão. Não repita em prosa
 o que o diff mostra linha a linha.
 
+## Autoria — nunca creditar a IA
+
+A mensagem **nunca** leva trailer de co-autoria de assistente de IA. Nem `Co-Authored-By: Claude`,
+nem Copilot, Gemini, Cursor ou equivalente, em nenhuma forma — trailer, corpo, assinatura ou
+`Generated with`.
+
+```text
+❌  Co-Authored-By: Claude <noreply@anthropic.com>
+❌  🤖 Generated with Claude Code
+❌  Assistido por IA
+```
+
+Vale mesmo que a ferramenta sugira ou insira o trailer por padrão: **remova antes de commitar.**
+Alguns assistentes adicionam automaticamente; a ausência do trailer é responsabilidade de quem
+executa o commit.
+
+O motivo é o significado de autoria no histórico. `Co-Authored-By` atribui autoria a uma entidade
+que não responde por decisão nenhuma: não revisa, não é procurada em seis meses e não assume
+consequência. Quem commita assina o resultado, independentemente da ferramenta usada para chegar
+nele — como não se credita o compilador nem a IDE.
+
+**Co-autoria de pessoa continua válida** — é para isso que o trailer existe:
+
+```text
+Co-Authored-By: Ana Souza <ana.souza@exemplo.com.br>
+```
+
 ## Granularidade
 
 Divida por **intenção**, não por arquivo. Cada commit deve:
@@ -112,5 +139,6 @@ Divida por **intenção**, não por arquivo. Cada commit deve:
 - [ ] Linha em branco antes do corpo, quando houver corpo.
 - [ ] Corpo explica o porquê, não o quê.
 - [ ] Nenhuma sigla de requisito na mensagem.
+- [ ] Nenhum trailer de co-autoria de IA (`Co-Authored-By: Claude`, `Generated with`…).
 - [ ] Commit deixa a base compilando e com testes passando.
 - [ ] Criação do commit explicitamente autorizada pelo usuário.
