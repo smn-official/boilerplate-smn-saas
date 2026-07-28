@@ -241,8 +241,7 @@ próprios atributos `aria-controls` — não precisa de seletor de classe nem de
 - **Ícone da aba é decorativo:** `aria-hidden="true"`, porque o rótulo ao lado já nomeia — ver
   [icon.md](icon.md). Aba só com ícone exige `aria-label` e, na prática, quase nunca se justifica.
 - **Contagem na aba usa número real.** "Pendentes (3)" só entra se o 3 vier do servidor e estiver
-  correto; número aproximado ou fixo é dado demonstrativo, proibido em
-  [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+  correto; número aproximado ou fixo é dado demonstrativo e está proibido.
 - **Sem animação de deslize do indicador.** A troca é instantânea; microinteração aqui não confirma
   nada que o preenchimento já não diga.
 - **Cada visão projeta seus próprios estados** de carregamento, vazio e erro. Uma visão com dados e

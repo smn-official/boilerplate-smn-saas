@@ -25,8 +25,7 @@ tela não mudou. Fora disso, falha é alerta.
 
 ## O que o texto diz
 
-Mesmo com poucos segundos na tela, o texto nomeia **o que aconteceu e com o quê** — regra de
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+Mesmo com poucos segundos na tela, o texto nomeia **o que aconteceu e com o quê**.
 
 | Genérico | Específico |
 |---|---|
@@ -106,9 +105,8 @@ O contêiner é `fixed` e `pointer-events-none`; cada toast reativa `pointer-eve
 
 ## Sombra aqui é legítima
 
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md) proíbe sombra decorativa, e
-[card.md](card.md) segue essa norma: card é superfície no fluxo, delimitada por borda, sem elevação
-para simular.
+Sombra decorativa é proibida, e [card.md](card.md) segue essa norma: card é superfície no fluxo,
+delimitada por borda, sem elevação para simular.
 
 Toast é o caso oposto — **ele realmente flutua sobre o conteúdo**. A sombra comunica que aquele bloco
 está numa camada acima, que não pertence à página abaixo e que vai embora. É informação de
@@ -184,7 +182,7 @@ enhancement se perde.
 - **No mobile não cobre ação primária nem navegação inferior**, e respeita a safe area.
 - **Uma frase, sem título.** Precisou de dois níveis de texto, virou alerta.
 - **Sem barra de progresso decorativa.** A régua que encolhe pressiona a leitura e não acrescenta
-  informação — ver [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+  informação.
 - **Ícone do Lucide, `aria-hidden="true"`** ([icon.md](icon.md)); a intenção também está na frase,
   porque cor não é portador único —
   [`acessibilidade-responsivo`](../../.ai/skills/acessibilidade-responsivo/SKILL.md).

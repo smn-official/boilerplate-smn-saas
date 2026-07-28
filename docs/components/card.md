@@ -21,39 +21,10 @@ funciona no desktop.
 | Um parágrafo de texto | Não | Não há o que agrupar; use espaçamento |
 | Um único indicador numérico | Não | Card não adiciona informação a um número solto |
 | Cada item de uma lista, para "ficar bonito" | Não | Card vira papel de parede e perde o sentido de agrupar |
-| Dar sombra ou borda a algo que já está dentro de um card | Não | É card dentro de card — proibido, ver abaixo |
+| Dar sombra ou borda a algo que já está dentro de um card | Não | É card dentro de card |
 
-Excesso de card e a seção com exatamente três cards lado a lado estão listados em
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Grade de cards se justifica pela
-quantidade real de itens do domínio, nunca por simetria: se existem cinco, são cinco.
-
-## Card dentro de card — proibido
-
-**Agrupamento dentro de agrupamento não agrupa nada.** A segunda borda não cria hierarquia; ela
-apaga a primeira, porque o olho passa a ver duas fronteiras de mesmo peso e não sabe qual delas
-delimita o assunto.
-
-```text
-┌─ card ───────────────────────────┐
-│  ┌─ card ──────────────────────┐ │   ← não fazer
-│  │  filtros                    │ │
-│  └─────────────────────────────┘ │
-│  tabela                          │
-└──────────────────────────────────┘
-```
-
-O que fazer no lugar, em ordem de preferência:
-
-| Intenção | Solução |
-|---|---|
-| Separar dois assuntos dentro do card | Nada: espaçamento entre os blocos já separa |
-| Marcar o fim de uma parte e o início de outra | Um divisor de 1px (`border-t border-borda`) |
-| Nomear a parte de dentro | `<section>` com um `<h3>`, sem borda nem fundo próprios |
-| Os dois assuntos não se relacionam | Não é um card com dois blocos: são dois cards irmãos |
-
-A exceção é elemento que **realmente flutua** sobre o card — dropdown, popover, modal aberto a
-partir dele. Esse não está dentro do card no fluxo, está acima da página, e por isso pode ter
-superfície e sombra próprias.
+Grade de cards se justifica pela quantidade real de itens do domínio, nunca por simetria: se existem
+cinco, são cinco.
 
 ## Anatomia
 
@@ -68,8 +39,7 @@ repetir o nome no card é ruído.
 
 O cabeçalho de feature é uma variação do cabeçalho de card: ícone da feature, título e subtítulo à
 esquerda; ação primária à direita. O ícone vem do Lucide e é decorativo (`aria-hidden="true"`), ver
-[icon.md](icon.md) — e ele fica sobre a superfície do próprio card, sem quadrado colorido em volta,
-que [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md) proíbe.
+[icon.md](icon.md) — e ele fica sobre a superfície do próprio card, sem quadrado colorido em volta.
 
 **Card não leva badge de categoria no topo.** Nem pílula, nem dot colorido, nem eyebrow em caixa
 alta acima do título — [badge.md](badge.md) explica por quê e o que fazer no lugar.
@@ -113,9 +83,8 @@ Quando o card inteiro leva a um lugar, **o alvo é um só**: o próprio `<a>` en
   teclado imprevisível. Se há duas ações, o card não é clicável: as ações são explícitas.
 - Foco visível no card inteiro: `focus-visible:outline-2 focus-visible:outline-offset-2`.
 - Feedback discreto no hover — mudança de cor de borda ou de fundo. **Card que sobe, cresce ou ganha
-  sombra no hover é proibido** por
-  [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md): o card não se moveu, e fingir
-  profundidade que não existe desloca o conteúdo sob o cursor.
+  sombra no hover é proibido**: o card não se moveu, e fingir profundidade que não existe desloca o
+  conteúdo sob o cursor.
 
 ## Markup
 

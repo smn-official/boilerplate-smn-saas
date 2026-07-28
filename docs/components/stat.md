@@ -5,8 +5,7 @@ usar errado da pasta, porque parece útil mesmo quando não é.
 
 **A regra que decide tudo: um indicador existe para provocar uma decisão.** Se ao olhar o número o
 usuário não tem nada a fazer com aquilo, o indicador está ocupando o topo da tela sem pagar aluguel.
-Fileira de indicadores decorativa é o sinal mais citado de interface genérica, ver
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+Fileira de indicadores decorativa é o sinal mais citado de interface genérica.
 
 ## Antes de criar um
 

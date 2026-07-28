@@ -1,8 +1,7 @@
 # Estado vazio
 
 O que ocupa o lugar do conteúdo quando não há conteúdo. Obrigatório em toda superfície que exibe
-dados — tabela, card de análise, lista, painel — conforme
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+dados — tabela, card de análise, lista, painel.
 
 **Vazio não é erro, e vazio não é zero.** São três situações diferentes, com respostas diferentes, e
 confundi-las faz o usuário decidir sobre um fato que não existe:
@@ -107,9 +106,8 @@ caso de primeiro acesso: a lista não tem registros porque nenhum foi criado ain
 - Sem ilustração no compacto — ela pertence ao de tela, uma por tela.
 - Sem animação de entrada, sem elemento flutuando.
 - Sem frase motivacional. "Comece sua jornada" não diz por que a tela está vazia.
-- Sem dado de exemplo desenhado para "mostrar como ficaria". Dado falso na tela é o pior caso de
-  [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md): o usuário não distingue
-  amostra de fato.
+- Sem dado de exemplo desenhado para "mostrar como ficaria". Dado falso na tela é o pior caso: o
+  usuário não distingue amostra de fato.
 
 ## Comportamento por faixa
 

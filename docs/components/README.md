@@ -43,15 +43,6 @@ Este README fixa a obrigação; a skill diz como cumprir.
 A mesma passagem que valida largura valida contraste, `aria`, navegação por teclado e foco visível.
 Não se entrega um sem o outro — a checagem é uma só, na mesma skill.
 
-## Nada de visual genérico
-
-Componente não carrega decoração: sem degradê de fundo, glassmorphism, sombra sem elevação real,
-borda brilhante, card dentro de card ou ícone só para ocupar espaço. Cada componente projeta seus
-estados de carregamento, vazio, erro e sem permissão.
-
-A lista completa do que evitar, e o checklist antes de entregar uma tela, está em
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
-
 ## Catálogo
 
 | Componente | Arquivo |

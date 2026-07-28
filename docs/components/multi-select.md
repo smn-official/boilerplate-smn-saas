@@ -149,8 +149,7 @@ Ponto crítico: **a busca interna filtra a exibição, não a seleção.** Item 
 pelo termo digitado continua selecionado e continua contando no resumo. Perder seleção ao digitar é o
 bug mais frustrante deste componente.
 
-Os quatro estados são exigidos por
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+Os quatro estados são exigidos, como em qualquer componente do produto.
 
 ## Markup
 

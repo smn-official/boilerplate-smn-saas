@@ -117,9 +117,6 @@ progressive enhancement — sem JS, mudar o tamanho ainda navega.
 - **Sem nenhum registro, não há paginação.** Quem fala é o estado vazio da tabela.
 - **Controle indisponível é anunciado, não apenas apagado.** `aria-disabled` no `<a>`, ou o atributo
   `disabled` nativo se for `<button>`; opacidade sozinha não informa o leitor de tela.
-- **Nada de decoração.** Sem sombra, sem borda destacada, sem cápsula ao redor das setas — a
-  separação da lista é uma `border-t border-borda`, e só. Ver
-  [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
 - **A paginação não rola horizontalmente** em 320px. Se não couber, empilhe mais — nunca reduza a
   tipografia abaixo da escala, conforme
   [`acessibilidade-responsivo`](../../.ai/skills/acessibilidade-responsivo/SKILL.md).

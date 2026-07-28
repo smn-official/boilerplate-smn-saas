@@ -174,9 +174,7 @@ Quando a escolha for **scroll interno** em vez de card, existe um wrapper só, e
 
 ## Estados obrigatórios
 
-Toda tabela projeta os quatro, conforme
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Tabela que só existe com dados
-está incompleta e não é entregue.
+Toda tabela projeta os quatro. Tabela que só existe com dados está incompleta e não é entregue.
 
 | Estado | O que renderizar |
 |---|---|

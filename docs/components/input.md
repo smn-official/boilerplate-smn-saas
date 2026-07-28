@@ -107,7 +107,6 @@ progressive enhancement de [`razor-interop`](../../.ai/skills/razor-interop/SKIL
 - **Cor nunca é o único portador do erro.** Borda avermelhada sem texto não existe para quem não
   distingue a cor nem para quem usa leitor de tela. Texto sempre — ícone, se quiser reforçar.
 - **A mensagem diz o que fazer.** "Campo inválido" não ajuda; "O <Campo> deve ter 11 dígitos" ajuda.
-  O critério de texto está em [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
 - **Erro aparece depois da interação**, não ao carregar a tela. Formulário que abre em erro acusa o
   usuário de algo que ele ainda não fez.
 - **O foco vai para o primeiro campo com erro** após um envio recusado.
@@ -244,8 +243,7 @@ debounce e substitui só a lista — sem URL literal dentro do `.ts`, conforme
 
 ## Estados obrigatórios
 
-Campo também tem estados, e eles são projetados junto com o caminho feliz, como exige
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md):
+Campo também tem estados, e eles são projetados junto com o caminho feliz:
 
 | Estado | O que renderizar |
 |---|---|

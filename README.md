@@ -168,8 +168,7 @@ Mapa skill → agente: [.ai/docs/skills.md](.ai/docs/skills.md).
 - Em PostgreSQL, identificadores por extenso — sem abreviação, sigla ou diminutivo.
 - Ícones do [Lucide](https://lucide.dev), SVG inline, nunca icon font.
 - Todo componente é responsivo, validado em 320px, 768px, 1024px e 1440px.
-- Nada de visual genérico de IA — a lista completa está em
-  [.ai/docs/aparencia-generica.md](.ai/docs/aparencia-generica.md).
+- Toda tela projeta carregamento, vazio, erro e permissão.
 
 O conjunto normativo vive em [AGENTS.md](AGENTS.md).
 

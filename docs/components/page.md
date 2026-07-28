@@ -101,8 +101,6 @@ O contêiner de página controla a pilha e o espaçamento entre blocos. **Não s
 - `max-w-*` é único no produto — largura máxima decidida uma vez, no layout.
 - `gap-*` no contêiner, não `mt-*`/`mb-*` no filho. Margem por bloco produz espaçamento irregular
   assim que alguém reordena a página.
-- Espaço vazio excessivo entre blocos é um dos sinais de tela genérica, ver
-  [aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
 
 ## Regras
 
@@ -126,7 +124,7 @@ O contêiner de página controla a pilha e o espaçamento entre blocos. **Não s
 ## Estados
 
 **A página inteira projeta quatro estados**, não só o caminho feliz. Tela que só existe com dados
-está incompleta e não é entregue — ver [aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+está incompleta e não é entregue.
 
 | Estado | Onde vive | Regra |
 |---|---|---|

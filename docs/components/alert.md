@@ -42,8 +42,7 @@ não descreve algo que aconteceu ou vai acontecer com o dado do usuário, ele n�
 ## O que o texto precisa dizer
 
 Alerta genérico é pior que nenhum alerta: ocupa espaço, interrompe a leitura e não permite agir. O
-texto responde **o que aconteceu, com o quê ou com quem, quando, e qual é a ação necessária** — regra
-de [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+texto responde **o que aconteceu, com o quê ou com quem, quando, e qual é a ação necessária**.
 
 | Genérico | Específico |
 |---|---|
@@ -185,8 +184,7 @@ O `data-dispensar-alerta` é o contrato com o TypeScript, conforme
   `aria-describedby` — ver [input.md](input.md). Alerta no topo listando 8 erros faz o usuário
   procurar cada um.
 - **Sem sombra.** Alerta é inline: ele não flutua sobre nada, logo não tem elevação. Sombra aqui é
-  decoração, proibida em [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Quem
-  flutua de verdade é o toast ([toast.md](toast.md)).
+  decoração. Quem flutua de verdade é o toast ([toast.md](toast.md)).
 - **Sem animação de entrada** em alerta renderizado pelo servidor. Ele já estava lá quando a página
   carregou; animar sugere que algo acabou de acontecer.
 - **Erro que impede o usuário de continuar não é alerta dispensável.** Ou a condição muda, ou o

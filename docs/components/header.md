@@ -37,9 +37,8 @@ página com vários blocos empilhados:
 ```
 
 Ela é **decorativa** — `aria-hidden`, e nunca o único sinal de que ali começa uma seção; o `<h2>` já
-cumpre esse papel para quem navega por headings. Vale porque custa 1px de largura e não abre nenhuma
-das portas que [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md) fecha: não é
-pílula, não é badge de categoria ([badge.md](badge.md)), não tem fundo nem texto próprio.
+cumpre esse papel para quem navega por headings. Vale porque custa 1px de largura e não é pílula, não
+é badge de categoria ([badge.md](badge.md)), não tem fundo nem texto próprio.
 
 Uma barra **por seção**, no mesmo lado, com a mesma altura. Barra em todo título de card dentro da
 seção transforma o marcador em textura e ele deixa de marcar o que quer que seja.
@@ -76,8 +75,7 @@ seção que o contextualiza, e repetir a categoria acima do título só disputa 
 olho.
 
 O subtítulo é **uma frase curta que qualifica o título**, não uma promessa. "Materiais cadastrados
-nos últimos 30 dias" qualifica; "Gerencie tudo em um só lugar" é slogan, e slogan está na lista de
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Se o subtítulo serve para
+nos últimos 30 dias" qualifica; "Gerencie tudo em um só lugar" é slogan. Se o subtítulo serve para
 qualquer outro bloco do produto, ele não informa nada — corte.
 
 Título também não é centralizado. Alinhamento à esquerda, como todo texto de bloco: texto centralizado
@@ -145,8 +143,7 @@ rótulo.
 
 O nível do heading vem da ViewModel quando o bloco é reutilizável; o markup acima fixa `<h3>` por ser
 o caso mais comum. `AcaoRotulo` diz o que acontece ao clicar — "Nova `<Entidade>`", não "Adicionar" —
-regra de [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md) e de
-[button.md](button.md).
+regra de [button.md](button.md).
 
 Repetido em mais de uma view, isto vira partial, não `@apply` — regra de
 [`tailwind-design`](../../.ai/skills/tailwind-design/SKILL.md).
@@ -165,9 +162,9 @@ Repetido em mais de uma view, isto vira partial, não `@apply` — regra de
   [icon.md](icon.md). Ícone que entra só para preencher o espaço à esquerda do título sai.
 - **Alinhado à esquerda.** Nada de título centralizado.
 - **Sem sombra e sem borda própria.** O cabeçalho pertence ao card ou à seção que já tem a sua
-  superfície ([card.md](card.md)); envolvê-lo em outra caixa produz card dentro de card, proibido em
-  [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Uma `border-b border-borda`
-  separando cabeçalho e corpo é aceitável quando há separação real de conteúdo.
+  superfície ([card.md](card.md)); envolvê-lo em outra caixa produz card dentro de card. Uma
+  `border-b border-borda` separando cabeçalho e corpo é aceitável quando há separação real de
+  conteúdo.
 - **Alvo de ~44px no mobile** (`min-h-11`), reduzido a partir de `sm`.
 - **Sem contador inventado.** "12 `<Entidade>`" ao lado do título só entra com número real do
   servidor.

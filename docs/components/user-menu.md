@@ -125,8 +125,7 @@ itens tabuláveis obriga a atravessar todos para chegar ao conteúdo da página.
 
 ## Estados obrigatórios
 
-Os quatro existem, como em qualquer componente do produto — ver
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md).
+Os quatro existem, como em qualquer componente do produto.
 
 | Estado | Comportamento |
 |---|---|

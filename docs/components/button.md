@@ -40,9 +40,8 @@ que o usuário fala no telefone é o termo do botão.
 | "OK" | "Confirmar <Ação>" |
 | "Sim" | "Excluir <Entidade>" |
 
-Rótulo vago — "Começar", "Explorar", "Saiba mais", "Continuar" — é proibido por
-[.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Serve para qualquer produto,
-logo não serve para nenhum.
+Rótulo vago — "Começar", "Explorar", "Saiba mais", "Continuar" — é proibido. Serve para qualquer
+produto, logo não serve para nenhum.
 
 Outras regras de rótulo:
 
@@ -84,8 +83,8 @@ não `aria-label="Ver"`. Numa lista, dez botões com o mesmo nome são indisting
 
 ## Estados obrigatórios
 
-Todos os cinco existem em qualquer botão do produto. Falta de estado de carregamento é um dos itens
-que [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md) marca como obrigatório.
+Todos os cinco existem em qualquer botão do produto. Falta de estado de carregamento é um dos erros
+mais comuns e mais caros de um botão.
 
 | Estado | Marcação | Regra |
 |---|---|---|
@@ -130,8 +129,7 @@ sistema, aparece no histórico, e não deve ter `role="button"` por cima.
 ## Formato
 
 - Cantos pela escala: **`rounded-lg`**. O botão acompanha o raio do card, ver [card.md](card.md).
-- **`rounded-full` é proibido** em botão no fluxo da página. Botão em cápsula está na lista de
-  [.ai/docs/aparencia-generica.md](../../.ai/docs/aparencia-generica.md). Botão só de ícone também é
+- **`rounded-full` é proibido** em botão no fluxo da página. Botão só de ícone também é
   `rounded-lg` — o quadrado arredondado combina com o alvo de toque retangular e com o raio do card.
   A **única** exceção é o botão flutuante, abaixo, que realmente paira sobre o conteúdo.
 - Sem sombra — salvo o botão flutuante, que flutua de verdade e por isso precisa se destacar do que

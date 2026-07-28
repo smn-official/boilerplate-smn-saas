@@ -67,11 +67,8 @@ Fluxo canônico: `Controller → Service → Repository → Agregado`, retornand
 - **Ícone vem do [Lucide](https://lucide.dev)** (`lucide-static`), sempre SVG inline, nunca outro
   acervo nem icon font. Detalhe e regras de acessibilidade em
   [docs/components/icon.md](docs/components/icon.md).
-- **Nada de visual genérico de IA** — sem degradê roxo/índigo, mancha luminosa de fundo,
-  glassmorphism, card dentro de card, sombra decorativa, emoji como ícone, trio de cards ou quarteto
-  de KPIs de enfeite. Decoração não substitui informação; toda tela projeta carregamento, vazio,
-  erro e permissão. Lista completa e checklist em
-  [.ai/docs/aparencia-generica.md](.ai/docs/aparencia-generica.md).
+- **Toda tela projeta carregamento, vazio, erro e permissão.** Tela que só existe no caminho feliz
+  está incompleta e não é entregue.
 - **Todo componente é responsivo** em mobile, tablet e desktop — obrigatório, sem exceção e sem
   "versão mobile depois". Mobile-first, validado em 320px, 768px, 1024px e 1440px. Regra em
   [docs/components/README.md](docs/components/README.md); técnica em

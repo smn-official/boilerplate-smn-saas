@@ -14,7 +14,6 @@ profundidade.
 | Decidir entre `.env` e `appsettings.json` | [configuracao.md](configuracao.md) |
 | Saber o que versionar no git | [gitignore.md](gitignore.md) |
 | Entender os servidores MCP | [mcp.md](mcp.md) |
-| Evitar que a interface pareça genérica | [aparencia-generica.md](aparencia-generica.md) |
 
 ## Os arquivos
 
