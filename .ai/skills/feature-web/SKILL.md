@@ -208,3 +208,26 @@ Encapsule num TagHelper: `<vite-asset src="Features/<Feature>/Scripts/<feature>.
 - Grade de formulário colapsa para uma coluna no mobile; ação primária ocupa a largura disponível.
 - **Tipografia nunca reduzida abaixo da escala** para caber — reorganize o layout.
 - Validar desktop **e** mobile antes de entregar.
+
+### Ilustração — avalie sempre, use quando couber
+
+Antes de entregar uma tela, **pergunte se ela pede ilustração**. Não é etapa opcional de capricho: é
+a diferença entre uma tela correta e uma tela acabada. Tela funcionalmente certa e visualmente
+árida é entrega incompleta.
+
+| A tela é | Ilustração? |
+|---|---|
+| Empty state, onboarding, erro 404/500/sem permissão | **Sim** — caso canônico |
+| Hero de landing ou de login, com espaço real | **Sim** |
+| Sucesso de fluxo longo | Sim, spot pequeno |
+| Tabela, formulário, dashboard populado | **Não** — o conteúdo é o assunto |
+
+Quem desenha é o [`ilustracao-agent`](../../agents/ilustracao-agent.md), com as skills
+[`ilustracao-tokens`](../ilustracao-tokens/SKILL.md) e
+[`ilustracao-svg`](../ilustracao-svg/SKILL.md) — arte derivada dos design tokens, não SVG de banco de
+imagem. Acione-o **em paralelo** com a construção da tela: o contrato é o espaço reservado no
+layout, e ele não precisa esperar o Razor ficar pronto.
+
+Ilustração nunca carrega a mensagem sozinha: o texto diz o que houve, a ação oferece a saída, a arte
+acompanha. É decorativa — `aria-hidden="true"` e `focusable="false"` — e some primeiro em tela
+estreita.

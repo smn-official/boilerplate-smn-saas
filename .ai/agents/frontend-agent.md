@@ -56,6 +56,9 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 | `razor-interop` | `data-*`, `Url.Action`, TagHelper de asset, progressive enhancement |
 | `acessibilidade-responsivo` | Breakpoint, tabela, grade de formulário, foco, contraste, aria |
 
+Ilustração não é sua: quem desenha é o [`ilustracao-agent`](ilustracao-agent.md). Mas **avaliar se a
+tela pede arte é seu** — ver "Toda tela é avaliada quanto a ilustração", abaixo.
+
 ## Convenções que valem sempre
 
 - **Sem comentários no código**, exceto quando a intenção não é dedutível do próprio trecho.
@@ -68,6 +71,19 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 - Linhas de ~100 caracteres, aspas duplas, ponto e vírgula, newline final.
 - **Idioma:** nomes de feature e domínio no idioma do negócio; classes utilitárias e API do
   navegador em inglês.
+
+## Toda tela é avaliada quanto a ilustração
+
+Antes de entregar, **pergunte se a tela pede arte**. Empty state, onboarding, erro e hero de landing
+pedem; tabela, formulário e dashboard populado não — ali o conteúdo é o assunto.
+
+Tela funcionalmente correta e visualmente árida é **entrega incompleta**, não entrega sóbria. Se a
+resposta for sim, acione o [`ilustracao-agent`](ilustracao-agent.md) **em paralelo** com a
+construção: o contrato é o espaço reservado no layout, e ele não precisa esperar o Razor ficar
+pronto.
+
+Não desenhe você mesmo, e não resolva espaço vazio ampliando um ícone de 24px — ícone e ilustração
+são coisas diferentes, ver [icon.md](../../docs/components/icon.md).
 
 ## Antes de entregar
 
