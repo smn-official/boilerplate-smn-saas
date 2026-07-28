@@ -1,0 +1,469 @@
+@{
+    ViewData["Title"] = "Fiat Mobi 2026 — a partir de R$ 79.990 | Concessionária";
+    ViewData["Description"] = "Fiat Mobi 2026 zero km nas versões Like e Trekking. Simule a parcela, "
+        + "veja a ficha técnica completa e agende seu test-drive sem compromisso.";
+}
+
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "Car",
+    "name": "Fiat Mobi 2026",
+    "brand": { "@@type": "Brand", "name": "Fiat" },
+    "model": "Mobi",
+    "vehicleModelDate": "2026",
+    "fuelType": "Flex",
+    "vehicleTransmission": "Manual",
+    "numberOfDoors": 4,
+    "offers": {
+        "@@type": "AggregateOffer",
+        "priceCurrency": "BRL",
+        "lowPrice": "79990",
+        "highPrice": "92990",
+        "availability": "https://schema.org/InStock"
+    }
+}
+</script>
+
+@* ---------------------------------------------------------------- Hero *@
+<section class="border-b border-borda bg-superficie">
+    <div class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8 lg:py-20">
+        <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
+            <div class="lg:col-span-6">
+                <h1 class="text-display-md text-texto md:text-display-lg lg:text-display-xl">
+                    O zero km que cabe na<br class="hidden sm:block" /> sua parcela
+                </h1>
+
+                <p class="mt-5 max-w-xl text-body-lg text-texto-suave">
+                    Fiat Mobi 2026, quatro portas, motor 1.0 Flex e o menor consumo da categoria.
+                    Escolha a versão, veja a parcela na hora e agende o test-drive.
+                </p>
+
+                <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
+                    <div>
+                        <dt class="text-micro uppercase text-texto-suave">Consumo na estrada</dt>
+                        <dd class="mt-1 text-h2 text-texto">14,9 <span class="text-h4">km/l</span></dd>
+                    </div>
+                    <div>
+                        <dt class="text-micro uppercase text-texto-suave">Porta-malas</dt>
+                        <dd class="mt-1 text-h2 text-texto">235 <span class="text-h4">litros</span></dd>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <dt class="text-micro uppercase text-texto-suave">Garantia de fábrica</dt>
+                        <dd class="mt-1 text-h2 text-texto">3 <span class="text-h4">anos</span></dd>
+                    </div>
+                </dl>
+
+                <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                    <a href="#agendar"
+                       class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primaria
+                              px-5 py-3 text-body-sm font-medium text-texto-invertido transition-colors
+                              hover:bg-primaria-hover focus-visible:outline-2 focus-visible:outline-offset-2
+                              focus-visible:outline-primaria sm:w-auto">
+                        <icon name="calendar-check" class="size-4" aria-hidden="true" />
+                        Agendar test-drive
+                    </a>
+                    <a href="#versoes"
+                       class="inline-flex w-full items-center justify-center gap-2 rounded-lg border
+                              border-borda bg-superficie px-5 py-3 text-body-sm font-medium text-texto
+                              transition-colors hover:bg-borda/30 focus-visible:outline-2
+                              focus-visible:outline-offset-2 focus-visible:outline-primaria sm:w-auto">
+                        Comparar as versões
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6">
+                <div class="rounded-lg bg-fundo p-6 text-primaria md:p-8">
+                    <partial name="Ilustracoes/_MobiPerfil" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ------------------------------------------------- Versões + simulador *@
+<section id="versoes" class="border-b border-borda">
+    <div class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h2 class="text-h1 text-texto md:text-display-md">Escolha a sua versão</h2>
+        <p class="mt-3 max-w-2xl text-body-lg text-texto-suave">
+            As duas saem de fábrica com ar-condicionado, direção elétrica e quatro airbags.
+            A parcela ao lado acompanha a versão selecionada.
+        </p>
+
+        <div class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
+            <div class="lg:col-span-7">
+                <fieldset data-simulador-versoes class="flex flex-col gap-4">
+                    <legend class="sr-only">Versão do Fiat Mobi</legend>
+
+                    @* --- Like --- *@
+                    <label class="group relative flex cursor-pointer flex-col gap-3 rounded-lg border
+                                  border-borda bg-superficie p-4 transition-colors
+                                  hover:border-borda-forte has-[:checked]:border-primaria
+                                  has-[:checked]:bg-primaria-suave has-[:focus-visible]:outline-2
+                                  has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primaria
+                                  md:p-5">
+                        <input type="radio" name="versao" value="like" class="sr-only" checked
+                               data-preco="79990" data-nome="Like" />
+
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="text-h3 text-texto">Mobi Like 1.0</h3>
+                                <p class="mt-1 text-body-sm text-texto-suave">
+                                    A configuração de entrada, completa de série.
+                                </p>
+                            </div>
+                            <p class="shrink-0 text-h3 text-texto">R$ 79.990</p>
+                        </div>
+
+                        <ul class="flex flex-wrap gap-x-5 gap-y-2 text-body-sm text-texto-suave">
+                            <li class="flex items-center gap-1.5">
+                                <icon name="check" class="size-4 text-primaria" aria-hidden="true" />
+                                Ar-condicionado
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <icon name="check" class="size-4 text-primaria" aria-hidden="true" />
+                                Direção elétrica
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <icon name="check" class="size-4 text-primaria" aria-hidden="true" />
+                                Central com Bluetooth
+                            </li>
+                        </ul>
+                    </label>
+
+                    @* --- Trekking --- *@
+                    <label class="group relative flex cursor-pointer flex-col gap-3 rounded-lg border
+                                  border-borda bg-superficie p-4 transition-colors
+                                  hover:border-borda-forte has-[:checked]:border-primaria
+                                  has-[:checked]:bg-primaria-suave has-[:focus-visible]:outline-2
+                                  has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primaria
+                                  md:p-5">
+                        <input type="radio" name="versao" value="trekking" class="sr-only"
+                               data-preco="92990" data-nome="Trekking" />
+
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="text-h3 text-texto">Mobi Trekking 1.0</h3>
+                                <p class="mt-1 text-body-sm text-texto-suave">
+                                    Altura elevada e rodas de liga, para rua ruim.
+                                </p>
+                            </div>
+                            <p class="shrink-0 text-h3 text-texto">R$ 92.990</p>
+                        </div>
+
+                        <ul class="flex flex-wrap gap-x-5 gap-y-2 text-body-sm text-texto-suave">
+                            <li class="flex items-center gap-1.5">
+                                <icon name="check" class="size-4 text-primaria" aria-hidden="true" />
+                                Tudo do Like
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <icon name="check" class="size-4 text-primaria" aria-hidden="true" />
+                                Rodas de liga 15"
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <icon name="check" class="size-4 text-primaria" aria-hidden="true" />
+                                Câmera de ré
+                            </li>
+                        </ul>
+                    </label>
+                </fieldset>
+            </div>
+
+            @* --- Simulador: a assinatura da página --- *@
+            <div class="lg:col-span-5">
+                <div class="rounded-lg border border-borda bg-superficie lg:sticky lg:top-24">
+                    <div class="border-b border-borda p-4 md:p-5">
+                        <h3 class="text-h3 text-texto">Simule a sua parcela</h3>
+                        <p class="mt-1 text-body-sm text-texto-suave">
+                            Valores de referência, sujeitos a análise de crédito.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-5 p-4 md:p-5">
+                        <div>
+                            <div class="flex items-baseline justify-between gap-3">
+                                <label for="entrada" class="text-body-sm font-medium text-texto">
+                                    Entrada
+                                </label>
+                                <output for="entrada" data-simulador-entrada
+                                        class="text-h4 text-texto">R$ 24.000</output>
+                            </div>
+                            <input type="range" id="entrada" min="0" max="60000" step="1000" value="24000"
+                                   data-simulador-controle-entrada
+                                   class="mt-3 h-2 w-full cursor-pointer appearance-none rounded-lg
+                                          bg-borda accent-primaria focus-visible:outline-2
+                                          focus-visible:outline-offset-2 focus-visible:outline-primaria" />
+                            <p class="mt-1.5 text-caption text-texto-suave">
+                                De R$ 0 a R$ 60.000.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label for="prazo" class="text-body-sm font-medium text-texto">
+                                Número de parcelas
+                            </label>
+                            <select id="prazo" data-simulador-controle-prazo
+                                    class="mt-2 w-full rounded-lg border border-borda bg-superficie px-3
+                                           py-2.5 text-body text-texto focus-visible:outline-2
+                                           focus-visible:outline-offset-2 focus-visible:outline-primaria">
+                                <option value="24">24 vezes</option>
+                                <option value="36">36 vezes</option>
+                                <option value="48" selected>48 vezes</option>
+                                <option value="60">60 vezes</option>
+                            </select>
+                        </div>
+
+                        <div class="border-t border-borda pt-5">
+                            <p class="text-micro uppercase text-texto-suave">
+                                <span data-simulador-nome>Like</span> — parcela estimada
+                            </p>
+                            <p class="mt-2 text-display-md text-primaria">
+                                <span data-simulador-parcela>R$ 1.512</span>
+                                <span class="text-h3 text-texto-suave">/mês</span>
+                            </p>
+                            <p class="mt-2 text-body-sm text-texto-suave">
+                                Financiado <span data-simulador-financiado>R$ 55.990</span>
+                                em <span data-simulador-prazo>48</span> parcelas, juros de 1,49% ao mês.
+                            </p>
+                        </div>
+
+                        <a href="#agendar"
+                           class="inline-flex w-full items-center justify-center gap-2 rounded-lg
+                                  bg-primaria px-4 py-3 text-body-sm font-medium text-texto-invertido
+                                  transition-colors hover:bg-primaria-hover focus-visible:outline-2
+                                  focus-visible:outline-offset-2 focus-visible:outline-primaria">
+                            Pedir proposta desta versão
+                        </a>
+
+                        <p role="status" aria-live="polite" class="sr-only" data-simulador-anuncio></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ------------------------------------------------------- Ficha técnica *@
+<section id="ficha" class="border-b border-borda bg-superficie">
+    <div class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h2 class="text-h1 text-texto md:text-display-md">Ficha técnica</h2>
+
+        <div class="mt-8 overflow-x-auto">
+            <table class="w-full min-w-[36rem] border-collapse text-left">
+                <caption class="sr-only">
+                    Comparação das especificações entre as versões Like e Trekking
+                </caption>
+                <thead>
+                    <tr class="border-b border-borda">
+                        <th scope="col" class="py-3 pr-4 text-micro uppercase text-texto-suave">Item</th>
+                        <th scope="col" class="py-3 pr-4 text-micro uppercase text-texto-suave">Like</th>
+                        <th scope="col" class="py-3 text-micro uppercase text-texto-suave">Trekking</th>
+                    </tr>
+                </thead>
+                <tbody class="text-body text-texto">
+                    <tr class="border-b border-borda">
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Motor</th>
+                        <td class="py-3 pr-4">1.0 Firefly Flex</td>
+                        <td class="py-3">1.0 Firefly Flex</td>
+                    </tr>
+                    <tr class="border-b border-borda">
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Potência</th>
+                        <td class="py-3 pr-4">75 cv (etanol)</td>
+                        <td class="py-3">75 cv (etanol)</td>
+                    </tr>
+                    <tr class="border-b border-borda">
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Câmbio</th>
+                        <td class="py-3 pr-4">Manual de 5 marchas</td>
+                        <td class="py-3">Manual de 5 marchas</td>
+                    </tr>
+                    <tr class="border-b border-borda">
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Consumo na cidade</th>
+                        <td class="py-3 pr-4">13,1 km/l</td>
+                        <td class="py-3">12,7 km/l</td>
+                    </tr>
+                    <tr class="border-b border-borda">
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Altura do solo</th>
+                        <td class="py-3 pr-4">17,2 cm</td>
+                        <td class="py-3">18,5 cm</td>
+                    </tr>
+                    <tr class="border-b border-borda">
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Rodas</th>
+                        <td class="py-3 pr-4">Aço 14" com calota</td>
+                        <td class="py-3">Liga leve 15"</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="py-3 pr-4 font-normal text-texto-suave">Câmera de ré</th>
+                        <td class="py-3 pr-4">Opcional</td>
+                        <td class="py-3">De série</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@* ------------------------------------------------------------ Agendar *@
+<section id="agendar" class="border-b border-borda">
+    <div class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <div class="lg:col-span-5">
+                <h2 class="text-h1 text-texto md:text-display-md">Agende seu test-drive</h2>
+                <p class="mt-3 text-body-lg text-texto-suave">
+                    Um consultor confirma o horário por telefone em até um dia útil.
+                    Sem compromisso de compra.
+                </p>
+
+                <ul class="mt-8 flex flex-col gap-4">
+                    <li class="flex items-start gap-3">
+                        <icon name="map-pin" class="mt-0.5 size-5 shrink-0 text-primaria" aria-hidden="true" />
+                        <span class="text-body text-texto-suave">
+                            Av. das Concessionárias, 1.200 — Curitiba, PR
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <icon name="clock" class="mt-0.5 size-5 shrink-0 text-primaria" aria-hidden="true" />
+                        <span class="text-body text-texto-suave">
+                            Segunda a sexta das 8h às 18h, sábado até as 13h
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <icon name="phone" class="mt-0.5 size-5 shrink-0 text-primaria" aria-hidden="true" />
+                        <span class="text-body text-texto-suave">(41) 3000-0000</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="lg:col-span-7">
+                <form data-formulario-agendamento novalidate
+                      class="rounded-lg border border-borda bg-superficie p-4 md:p-5 lg:p-6">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="md:col-span-2">
+                            <label for="nome" class="text-body-sm font-medium text-texto">
+                                Nome completo
+                            </label>
+                            <input type="text" id="nome" name="nome" required autocomplete="name"
+                                   class="mt-2 w-full rounded-lg border border-borda bg-superficie px-3
+                                          py-2.5 text-body text-texto focus-visible:outline-2
+                                          focus-visible:outline-offset-2 focus-visible:outline-primaria" />
+                            <p data-erro-de="nome" hidden
+                               class="mt-1.5 text-body-sm text-erro"></p>
+                        </div>
+
+                        <div>
+                            <label for="telefone" class="text-body-sm font-medium text-texto">
+                                Telefone com DDD
+                            </label>
+                            <input type="tel" id="telefone" name="telefone" required autocomplete="tel"
+                                   placeholder="(41) 99999-0000"
+                                   class="mt-2 w-full rounded-lg border border-borda bg-superficie px-3
+                                          py-2.5 text-body text-texto focus-visible:outline-2
+                                          focus-visible:outline-offset-2 focus-visible:outline-primaria" />
+                            <p data-erro-de="telefone" hidden
+                               class="mt-1.5 text-body-sm text-erro"></p>
+                        </div>
+
+                        <div>
+                            <label for="dia" class="text-body-sm font-medium text-texto">
+                                Melhor dia para você
+                            </label>
+                            <select id="dia" name="dia"
+                                    class="mt-2 w-full rounded-lg border border-borda bg-superficie px-3
+                                           py-2.5 text-body text-texto focus-visible:outline-2
+                                           focus-visible:outline-offset-2 focus-visible:outline-primaria">
+                                <option value="semana">Durante a semana</option>
+                                <option value="sabado">Sábado de manhã</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" data-botao-enviar
+                            class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg
+                                   bg-primaria px-4 py-3 text-body-sm font-medium text-texto-invertido
+                                   transition-colors hover:bg-primaria-hover focus-visible:outline-2
+                                   focus-visible:outline-offset-2 focus-visible:outline-primaria
+                                   disabled:pointer-events-none disabled:opacity-50 sm:w-auto">
+                        <icon name="calendar-check" class="size-4" data-icone-padrao aria-hidden="true" />
+                        <icon name="loader-circle" class="hidden size-4 animate-spin motion-reduce:animate-none"
+                              data-icone-carregando aria-hidden="true" />
+                        Agendar test-drive
+                    </button>
+
+                    <p class="mt-3 text-caption text-texto-suave">
+                        Ao enviar, você concorda em ser contatado sobre este agendamento.
+                    </p>
+
+                    <div data-mensagem-sucesso hidden role="status" aria-live="polite"
+                         class="mt-4 flex items-start gap-3 rounded-lg border border-borda bg-fundo p-4">
+                        <icon name="circle-check" class="mt-0.5 size-5 shrink-0 text-sucesso"
+                              aria-hidden="true" />
+                        <p class="text-body text-texto">
+                            Agendamento recebido. Um consultor liga em até um dia útil para confirmar.
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ------------------------------------------------------------ Dúvidas *@
+<section id="perguntas" class="bg-superficie">
+    <div class="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h2 class="text-h1 text-texto md:text-display-md">Dúvidas frequentes</h2>
+
+        <div class="mt-8 flex flex-col divide-y divide-borda border-y border-borda">
+            <details class="group py-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4
+                                rounded-lg text-h4 text-texto focus-visible:outline-2
+                                focus-visible:outline-offset-2 focus-visible:outline-primaria
+                                [&::-webkit-details-marker]:hidden">
+                    O valor da parcela do simulador é o final?
+                    <icon name="chevron-down"
+                          class="size-5 shrink-0 text-texto-suave transition-transform group-open:rotate-180"
+                          aria-hidden="true" />
+                </summary>
+                <p class="mt-3 text-body text-texto-suave">
+                    Não. É uma estimativa com juros de 1,49% ao mês para comparar as versões.
+                    O valor final sai depois da análise de crédito e pode incluir taxas do banco.
+                </p>
+            </details>
+
+            <details class="group py-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4
+                                rounded-lg text-h4 text-texto focus-visible:outline-2
+                                focus-visible:outline-offset-2 focus-visible:outline-primaria
+                                [&::-webkit-details-marker]:hidden">
+                    Aceitam meu carro usado na troca?
+                    <icon name="chevron-down"
+                          class="size-5 shrink-0 text-texto-suave transition-transform group-open:rotate-180"
+                          aria-hidden="true" />
+                </summary>
+                <p class="mt-3 text-body text-texto-suave">
+                    Sim. A avaliação é feita na loja no mesmo dia do test-drive, e o valor entra
+                    como entrada no financiamento.
+                </p>
+            </details>
+
+            <details class="group py-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4
+                                rounded-lg text-h4 text-texto focus-visible:outline-2
+                                focus-visible:outline-offset-2 focus-visible:outline-primaria
+                                [&::-webkit-details-marker]:hidden">
+                    Qual o prazo de entrega?
+                    <icon name="chevron-down"
+                          class="size-5 shrink-0 text-texto-suave transition-transform group-open:rotate-180"
+                          aria-hidden="true" />
+                </summary>
+                <p class="mt-3 text-body text-texto-suave">
+                    Cores em estoque saem em até 5 dias úteis após a aprovação do crédito.
+                    Pedido de fábrica leva de 30 a 45 dias.
+                </p>
+            </details>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <vite-asset src="Features/Home/Scripts/simulador.ts" />
+}

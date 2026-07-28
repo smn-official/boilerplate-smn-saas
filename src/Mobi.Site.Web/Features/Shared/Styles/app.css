@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@source "../../**/*.cshtml";
+
+@theme {
+    --font-sans: "Inter", system-ui, sans-serif;
+
+    --color-primaria: #A6172A;
+    --color-primaria-hover: #86121F;
+    --color-primaria-suave: #FBEDEE;
+    --color-superficie: #FFFFFF;
+    --color-fundo: #F6F5F4;
+    --color-contraste: #17161A;
+    --color-contraste-suave: #2A282E;
+    --color-borda: #D6D2CE;
+    --color-borda-forte: #8A8580;
+    --color-texto: #17161A;
+    --color-texto-suave: #625D58;
+    --color-texto-invertido: #F6F5F4;
+    --color-sucesso: #1B6B45;
+    --color-erro: #A6172A;
+
+    --text-display-xl: 56px;
+    --text-display-xl--font-weight: 700;
+    --text-display-xl--letter-spacing: -0.025em;
+    --text-display-xl--line-height: 1.05;
+
+    --text-display-lg: 44px;
+    --text-display-lg--font-weight: 700;
+    --text-display-lg--letter-spacing: -0.025em;
+    --text-display-lg--line-height: 1.1;
+
+    --text-display-md: 34px;
+    --text-display-md--font-weight: 700;
+    --text-display-md--letter-spacing: -0.025em;
+    --text-display-md--line-height: 1.15;
+
+    --text-h1: 27px;
+    --text-h1--font-weight: 700;
+    --text-h1--letter-spacing: -0.02em;
+    --text-h1--line-height: 1.2;
+
+    --text-h2: 23px;
+    --text-h2--font-weight: 700;
+    --text-h2--letter-spacing: -0.02em;
+    --text-h2--line-height: 1.25;
+
+    --text-h3: 18px;
+    --text-h3--font-weight: 600;
+    --text-h3--letter-spacing: -0.01em;
+    --text-h3--line-height: 1.35;
+
+    --text-h4: 16px;
+    --text-h4--font-weight: 600;
+    --text-h4--letter-spacing: 0;
+    --text-h4--line-height: 1.4;
+
+    --text-body-lg: 16px;
+    --text-body-lg--font-weight: 400;
+    --text-body-lg--letter-spacing: 0;
+    --text-body-lg--line-height: 1.6;
+
+    --text-body: 14px;
+    --text-body--font-weight: 400;
+    --text-body--letter-spacing: 0;
+    --text-body--line-height: 1.6;
+
+    --text-body-sm: 13px;
+    --text-body-sm--font-weight: 400;
+    --text-body-sm--letter-spacing: 0;
+    --text-body-sm--line-height: 1.5;
+
+    --text-caption: 12px;
+    --text-caption--font-weight: 500;
+    --text-caption--letter-spacing: 0;
+    --text-caption--line-height: 1.45;
+
+    --text-micro: 11px;
+    --text-micro--font-weight: 600;
+    --text-micro--letter-spacing: 0.08em;
+    --text-micro--line-height: 1.4;
+
+    --text-nano: 11px;
+    --text-nano--font-weight: 600;
+    --text-nano--letter-spacing: 0.32em;
+    --text-nano--line-height: 1.4;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+
+    body {
+        text-rendering: optimizeLegibility;
+    }
+}
