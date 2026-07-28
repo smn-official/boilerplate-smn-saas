@@ -288,8 +288,8 @@ exemplo e registra o formato dos templates em docs/features/README.md.
   console.log('\nPróximo passo — definir a paleta (os tokens de cor ainda são #<hex>):');
   console.log('  node .ai/scripts/paleta.mjs --marca "#2563EB"   # se já houver cor de marca');
   console.log('  node .ai/scripts/paleta.mjs --sem-api           # para escolher entre as prontas');
-  console.log('\n  Sem cor definida? Peça ao cor-agent: ele escolhe a partir do setor,');
-  console.log('  do público e dos concorrentes, e valida o contraste.');
+  console.log('\n  Sem cor definida? --sem-api lista as paletas prontas: azul, verde,');
+  console.log('  violeta e grafite, todas já com contraste validado.');
 
   console.log(`\nE criar a solução:`);
   console.log(`  dotnet new sln -n ${args.produto} --format slnx`);

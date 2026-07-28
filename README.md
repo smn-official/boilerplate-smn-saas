@@ -2,7 +2,7 @@
 
 Ponto de partida para um SaaS em .NET 10, com a arquitetura, as convenções e a orientação de IA já
 definidas. **Não há código de aplicação aqui** — o que existe é o contrato de como o código deve ser
-escrito: 10 agentes especializados, 50 skills, documentação normativa e dois scripts de
+escrito: 10 agentes especializados, 51 skills, documentação normativa e dois scripts de
 parametrização.
 
 A premissa: decisão de arquitetura, convenção de nome, política de LGPD e critério de design custam
@@ -50,7 +50,8 @@ node .ai/scripts/paleta.mjs --sem-api           # escolhe entre as paletas pront
 node .ai/scripts/paleta.mjs --validar "#2563EB,#FFFFFF,#E5E7EB,#111827,#6B7280"
 ```
 
-Sem cor definida? Peça ao `cor-agent`: ele decide a partir de setor, público e concorrentes.
+Sem cor definida? `--sem-api` lista as paletas prontas (azul, verde, violeta, grafite) — escolha uma
+e refine depois; trocar o matiz cedo custa menos que trocá-lo com tokens e ilustração já aplicados.
 
 ### 3. Crie a solução
 
@@ -114,7 +115,7 @@ A referência normativa completa está em
 │
 └── .ai/                   documentação da CONSTRUÇÃO — como construir
     ├── agents/            10 definições de agente
-    ├── skills/            50 skills, cada uma com SKILL.md
+    ├── skills/            51 skills, cada uma com SKILL.md
     ├── docs/              arquitetura, agentes, skills, MCP, configuração
     ├── mcp/servers.json   playwright, context7, postgres
     └── scripts/           init.mjs (parametrização), paleta.mjs (cores)
@@ -129,23 +130,24 @@ ritmos diferentes — misturá-las faz a de negócio envelhecer junto com o cód
 |---|---|
 | Criar feature, agregado, serviço, repositório | `net10-agent` |
 | Escrever ou revisar stored procedure | `pgproc-agent` |
-| Tela, componente, estilo, TypeScript | `frontend-agent` |
+| Tela nova, landing, página do zero | `tela-agent` |
+| Alterar tela, componente, estilo, TypeScript | `frontend-agent` |
 | Escrever ou revisar teste | `tester-agent` |
 | Branch, commit, merge, desfazer algo no git | `github-agent` |
 | Campo novo com dado pessoal, retenção, direito do titular | `lgpd-agent` |
 | Auditar implementação, dependência vulnerável | `security-agent` |
 | Ilustração, empty state, tela com muito espaço vazio | `ilustracao-agent` |
 | Pagamento, assinatura, plano, cobrança recorrente | `stripe-agent` |
-| Escolher a cor do produto, identidade visual | `cor-agent` |
 
 Ordem sugerida numa entrega — sequencial nas pontas, paralela no meio:
 
 ```text
 lgpd-agent                          (antes, se houver dado pessoal)
       ↓
-net10-agent ┐
-pgproc-agent├─ em paralelo, arquivos distintos
-frontend-agent ┘   (+ tester-agent, assim que o contrato existir)
+net10-agent  ┐
+pgproc-agent ├─ em paralelo, arquivos distintos
+tela-agent   │   (tela nova; frontend-agent se for alteração)
+ilustracao-agent ┘  (+ tester-agent, assim que o contrato existir)
       ↓
 security-agent                      (precisa do diff pronto)
       ↓

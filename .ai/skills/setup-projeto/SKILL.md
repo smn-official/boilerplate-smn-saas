@@ -83,11 +83,9 @@ Pergunte ao usuário: **já existe cor de marca?**
   node .ai/scripts/paleta.mjs --marca "#2563EB"
   ```
 
-- **Não tem** — **acione o [`cor-agent`](../../agents/cor-agent.md)**. Ele escolhe a partir do que o
-  produto é: setor, público, personalidade da marca e o que os concorrentes usam. Cor escolhida sem
-  contexto é chute, e trocar depois custa retrabalho em tokens, ilustração e material de marca.
-
-  Se o usuário preferir resolver rápido, as prontas atendem:
+- **Não tem** — parta de uma das prontas. Escolher pelo que o produto é (setor, público,
+  personalidade da marca) vale mais que pegar a primeira: trocar o matiz depois custa retrabalho em
+  tokens, ilustração e material de marca.
 
   ```bash
   node .ai/scripts/paleta.mjs --sem-api      # lista azul, verde, violeta, grafite

@@ -105,3 +105,6 @@ desktop.ini
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json.example
+
+# preview local da landing — artefato descartável, não é entrega
+.preview/
