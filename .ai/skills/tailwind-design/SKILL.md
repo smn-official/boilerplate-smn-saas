@@ -1,6 +1,6 @@
 ---
 name: tailwind-design
-description: Design system em Tailwind CSS 4 — declarar tokens em @theme, aplicar a escala tipográfica de 13 tokens, definir cor, espaçamento e superfície, extrair padrão repetido para componente Razor. Use ao criar ou alterar estilo, token, tipografia, cor ou componente visual.
+description: Design system em Tailwind CSS 4 — declarar tokens em @theme, aplicar e estender a escala tipográfica, definir cor, espaçamento e superfície, extrair padrão repetido para componente Razor. Use ao criar ou alterar estilo, token, tipografia, cor ou componente visual.
 agent: frontend-agent
 ---
 
@@ -52,6 +52,17 @@ tracking embutidos — é isso que impede o uso de `text-[18px] font-semibold tr
 
 ## Escala tipográfica
 
+A escala abaixo é o **ponto de partida** de um produto novo, não um teto. Ela cobre o caso comum —
+painel, formulário, listagem — e é deliberadamente sóbria.
+
+Tela com brief próprio pode precisar de outra voz: uma landing de campanha, uma capa, um produto de
+marca forte. Nesse caso o token novo é **declarado no `@theme`** e entra na tabela — não vira
+`text-[64px]` no markup. O que a regra proíbe é token nascer solto na view; não é a escala ser
+pequena para sempre.
+
+Um token novo se justifica quando existe um papel que a escala não expressa. Não se justifica para
+fazer um texto caber, nem para dar destaque que o layout deveria dar.
+
 | Token | Tamanho | Peso | Tracking | Uso |
 |---|---|---|---|---|
 | `display-xl` | 56px | 700 | -0.025em | Hero de landing, lado de marca |
@@ -65,14 +76,14 @@ tracking embutidos — é isso que impede o uso de `text-[18px] font-semibold tr
 | `body` | 14px | 400 | 0 | Texto padrão: inputs, parágrafos, células |
 | `body-sm` | 13px | 400–500 | 0 | Label de formulário, link e botão secundário |
 | `caption` | 12px | 500 | 0 | Rodapé, texto de ajuda, metadado |
-| `micro` | 11px | 600 | 0.08em | Eyebrow, label de indicador, tag — **sempre uppercase** |
+| `micro` | 11px | 600 | 0.08em | Label de indicador, cabeçalho de tabela — **sempre uppercase** |
 | `nano` | 10–11px | 600 | 0.32em | Tagline, divisor tipográfico — **sempre uppercase** |
 
 ## Princípios de tipografia
 
-- Toda declaração de tamanho, peso ou tracking **escolhe um token da escala**. Valor arbitrário fora
-  da tabela é proibido; um caso real que não caiba exige **alterar a escala antes de codar a
-  exceção**.
+- Toda declaração de tamanho, peso ou tracking **sai de um token nomeado**. Valor arbitrário no
+  markup é proibido — mas a saída para um caso que não cabe é **declarar o token no `@theme` antes
+  de codar**, não espremer o conteúdo na escala existente.
 - Pesos seguem a escala: 700 em display e headings altos, 600 em `h3`/`h4`/`micro`/`nano`, 500 para
   ênfase em `body-sm`/`caption`, 400 para texto corrido.
 - Tracking negativo existe **apenas** em display e heading; de `body` para baixo é `0`.
@@ -81,6 +92,7 @@ tracking embutidos — é isso que impede o uso de `text-[18px] font-semibold tr
   `text-18`.
 - Tipografia mora na camada de estilo, **nunca** em atributo `style`.
 - Tipografia nunca é reduzida abaixo da escala para fazer conteúdo caber — reorganize o layout.
+  Token novo se declara para expressar um papel que falta, nunca para espremer texto.
 
 ## Cor, espaçamento e superfície
 
@@ -128,7 +140,8 @@ dentro de `@layer base`, e nunca para montar um componente.
 
 | Sintoma | Causa | Correção |
 |---|---|---|
-| `text-[15px]` no markup | Valor fora da escala | Usar o token vizinho ou alterar a escala |
+| `text-[15px]` no markup | Token nasceu na view, fora do tema | Usar o token vizinho, ou declarar o novo no `@theme` |
+| Toda tela com o mesmo peso e ritmo | Escala tratada como teto | Brief que pede outra voz ganha token próprio |
 | `style="color: red"` | Estilo escapou do sistema | Classe utilitária com token de cor |
 | `.card { @apply ... }` usado em 8 views | Componente disfarçado de CSS | Partial Razor |
 | Cor duplicada em `:root` e `@theme` | Fonte de verdade dupla | Só `@theme` |

@@ -28,9 +28,9 @@ invente.
 Renderização é **no servidor**: Razor + Tailwind 4 + Vite, TypeScript só para enriquecer.
 
 Nada de React, Vue, Svelte, shadcn, Bootstrap, jQuery ou `tailwind.config.ts` — no Tailwind 4 a
-configuração vive no `@theme` do CSS. Componente vem do
-[catálogo do produto](../../docs/components/README.md), que já tem 18 peças definidas: se o que você
-precisa está lá, use; se não está, escreva um partial Razor.
+configuração vive no `@theme` do CSS. Componente é partial Razor, desenhado para o que esta tela
+precisa. Padrão que se repetir em mais de uma tela sobe para `Features/Shared/` — mas a forma é
+decisão da tela, não de um gabarito pronto.
 
 ## O ciclo
 
@@ -64,7 +64,7 @@ Ordem que evita retrabalho:
    caminho feliz não é entregue.
 5. **Responsivo desde o começo**, mobile-first — não existe "versão mobile depois".
 6. **Toast** confirma ação concluída e some sozinho; ele nunca carrega informação que a pessoa
-   precise reler ([toast.md](../../docs/components/toast.md)).
+   precise reler — mensagem que exige releitura vive na página, não numa notificação efêmera.
 
 Espaço vazio legítimo se resolve com ilustração — acione o `ilustracao-agent` **em paralelo**,
 não no fim. Nunca resolva vazio ampliando um ícone.
@@ -95,10 +95,10 @@ breakpoint, console lido. Entrega sem tela renderizada olhada não é entrega.
 |---|---|---|
 | `text-white`, `bg-slate-800`, cor literal | Fura o design system e o tema | Token semântico do `@theme` |
 | `style=""` inline | Escapa da especificidade e do sistema | Classe utilitária |
-| `text-[22px]` ou peso avulso | Fura a escala de 13 tokens | Token; se não cabe, altere a escala antes |
-| Paleta nova por tela | Cria fonte de verdade dupla | Token único no `@theme` compartilhado |
-| *Eyebrow*, *kicker*, pílula de categoria | Proibido no repositório | Hierarquia de título ([badge.md](../../docs/components/badge.md)) |
-| Gradiente e sombra decorativos sem razão | Carimbo de tela gerada por IA | Uma assinatura, o resto quieto |
+| `text-[22px]` ou peso avulso | Token nasceu no markup, fora do tema | Declarar no `@theme` e usar pelo nome |
+| Paleta nova espalhada pelo markup | Cria fonte de verdade dupla | Token no `@theme`, declarado uma vez |
+| *Eyebrow*, *kicker*, pílula de categoria | Proibido no repositório | Hierarquia de título |
+| Gradiente e sombra decorativos sem razão | Ousadia espalhada vira ruído | Uma assinatura, o resto quieto |
 | Ícone de outro acervo | Padrão do produto é Lucide | `lucide-static`, SVG inline |
 | Placeholder de imagem | Entrega pela metade | Ilustração SVG do `ilustracao-agent` |
 
@@ -126,13 +126,13 @@ E na tela renderizada:
 - [ ] Sem overflow horizontal em 320, 768, 1024 e 1440.
 - [ ] Grade de formulário colapsa; ação primária ocupa a largura em tela estreita.
 - [ ] Os quatro estados existem e foram olhados.
-- [ ] Nenhum tamanho de fonte fora dos 13 tokens; nenhuma cor fora do `@theme`.
+- [ ] Nenhum tamanho e nenhuma cor soltos no markup — tudo sai de token do `@theme`.
 - [ ] Nenhum `style=""`, nenhum `@apply` novo para padrão repetido.
 - [ ] Foco visível em todo interativo; navegação completa por teclado.
 - [ ] A página funciona com o JavaScript desabilitado.
 - [ ] SEO conferido, se a página for pública.
 - [ ] Console sem erro.
-- [ ] A tela tem **uma** assinatura clara e não caiu no default de IA.
+- [ ] A tela tem **uma** assinatura clara, e cada decisão visual tem razão vinda do produto.
 
 Sem erros **e sem avisos**. Se algo falhar, reporte a saída real — nunca declare sucesso sem
 verificar.

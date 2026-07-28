@@ -65,17 +65,21 @@ Fluxo canônico: `Controller → Service → Repository → Agregado`, retornand
 - Configuração em `appsettings.json` (PascalCase); só segredo no `.env`. Sobrescrita .NET usa
   `Secao__Chave`; variável de ferramenta externa, `SCREAMING_SNAKE_CASE`.
 - **Ícone vem do [Lucide](https://lucide.dev)** (`lucide-static`), sempre SVG inline, nunca outro
-  acervo nem icon font. Detalhe e regras de acessibilidade em
-  [docs/components/icon.md](docs/components/icon.md).
+  acervo nem icon font. Ícone decorativo leva `aria-hidden="true"`; botão só de ícone exige
+  `aria-label` específico — regra em
+  [.ai/skills/acessibilidade-responsivo](.ai/skills/acessibilidade-responsivo/SKILL.md).
 - **Toda tela projeta carregamento, vazio, erro e permissão.** Tela que só existe no caminho feliz
   está incompleta e não é entregue.
+- **Tela nasce de decisão, não de default.** Antes de codar, fixe assunto, público e a única tarefa
+  da tela, e escolha o elemento de assinatura; depois de codar, verifique no navegador de verdade.
+  Critério em [.ai/skills/design-intencional](.ai/skills/design-intencional/SKILL.md), método de
+  verificação em [.ai/skills/verificacao-navegador](.ai/skills/verificacao-navegador/SKILL.md).
 - **Todo componente é responsivo** em mobile, tablet e desktop — obrigatório, sem exceção e sem
-  "versão mobile depois". Mobile-first, validado em 320px, 768px, 1024px e 1440px. Regra em
-  [docs/components/README.md](docs/components/README.md); técnica em
+  "versão mobile depois". Mobile-first, validado em 320px, 768px, 1024px e 1440px. Regra e técnica em
   [.ai/skills/acessibilidade-responsivo](.ai/skills/acessibilidade-responsivo/SKILL.md).
 - **Nunca usar badge de categoria** — nem a pílula de rótulo (`ORÇAMENTO · PILAR 1`), nem a variante
   com dot colorido. Vale para *pill*, *chip*, *tag*, *eyebrow* e *kicker*. Badge de **estado** de
-  registro continua permitido. Alternativas em [docs/components/badge.md](docs/components/badge.md).
+  registro continua permitido; no lugar da pílula, use hierarquia de título.
 - Toda saída do Playwright (screenshot, trace, PDF, download) vai para `.playwright-mcp/`, que é
   ignorada pelo git — **nunca na raiz**. Ao tirar screenshot, passe só o nome do arquivo, jamais
   caminho absoluto ou `../`. Screenshot é inspeção descartável, não artefato de entrega.
@@ -98,20 +102,20 @@ usuário:
 
 ## Agentes
 
-Dez agentes especializados em [.ai/agents/](.ai/agents/), com 50 skills em [.ai/skills/](.ai/skills/).
+Dez agentes especializados em [.ai/agents/](.ai/agents/), com 51 skills em [.ai/skills/](.ai/skills/).
 
 | Tarefa | Agente |
 |---|---|
 | Criar feature, agregado, serviço, repositório | `net10-agent` |
 | Escrever ou revisar stored procedure | `pgproc-agent` |
-| Tela, componente, estilo, TypeScript | `frontend-agent` |
+| Tela nova, landing, página do zero | `tela-agent` |
+| Alterar tela, componente, estilo, TypeScript | `frontend-agent` |
 | Escrever ou revisar teste | `tester-agent` |
 | Branch, commit, merge, desfazer algo no git | `github-agent` |
 | Campo novo com dado pessoal, retenção, direito do titular | `lgpd-agent` |
 | Auditar implementação nova, dependência vulnerável | `security-agent` |
 | Ilustração, empty state, tela com muito espaço vazio | `ilustracao-agent` |
 | Pagamento, assinatura, plano, cobrança recorrente | `stripe-agent` |
-| Escolher a cor do produto, identidade visual | `cor-agent` |
 
 Índice da documentação de apoio: [.ai/docs/README.md](.ai/docs/README.md).
 
@@ -229,7 +233,7 @@ projeto/
 ├── .github/copilot-instructions.md -> ../AGENTS.md
 │
 ├── .ai/
-│   ├── skills/      50 skills, cada uma com SKILL.md
+│   ├── skills/      51 skills, cada uma com SKILL.md
 │   ├── agents/      10 definições de agente
 │   ├── mcp/         servers.json
 │   ├── scripts/     init.mjs (parametrização inicial)

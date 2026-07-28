@@ -1,6 +1,6 @@
 ---
 name: design-intencional
-description: Direção visual deliberada e escrita de interface — evitar o default de IA, ancorar a tela no que o produto é, escolher o elemento de assinatura, decidir onde cabe movimento e escrever rótulo, erro e vazio como material de design. Use ao criar tela nova, landing, hero ou empty state, ao revisar uma tela que ficou genérica, e sempre que houver texto de interface a redigir.
+description: Direção visual deliberada e escrita de interface — ancorar a tela no que o produto é, escolher o elemento de assinatura, decidir onde cabe movimento e escrever rótulo, erro e vazio como material de design. Use ao criar tela nova, landing, hero ou empty state, ao revisar uma tela que ficou genérica, e sempre que houver texto de interface a redigir.
 agent: frontend-agent
 ---
 
@@ -9,32 +9,23 @@ agent: frontend-agent
 `tailwind-design` responde **com que peças construir**. Esta skill responde **por que esta tela é
 assim e não de qualquer outro jeito** — e como escrever o texto que vive nela.
 
-As duas convivem: a intenção é livre, o vocabulário não. Toda decisão daqui sai em token existente
-do `@theme`, na escala de 13 tokens, sem valor arbitrário e sem paleta paralela.
+As duas convivem: a intenção decide, o sistema executa. Toda decisão daqui sai em token declarado no
+`@theme` — se o papel que a tela precisa não existe na escala, o token novo entra no tema antes de
+codar, nunca como valor solto no markup.
 
-## O default de IA — o que evitar sem pensar
+## Decida pelo produto, não por lista de proibições
 
-Tela gerada por IA converge para três caras, e ela aparece independentemente do assunto:
+Não existe catálogo de looks banidos aqui, e isso é deliberado: uma lista de caras proibidas não
+abre o espaço, ela recorta regiões e empurra tudo para o meio seguro — que é como todas as telas
+acabam parecidas.
 
-| O clichê | Como se reconhece |
-|---|---|
-| Creme + serifa + terracota | Fundo `#F4F1EA`, display serifado de alto contraste, acento terracota |
-| Preto + acento ácido | Fundo quase preto com um único verde-limão ou vermelhão |
-| Broadsheet | Fio de 1px, `radius: 0`, colunas densas de jornal |
+O critério é outro, e é positivo: **cada decisão visual precisa de uma razão que venha deste
+produto.** Uma direção que você escolheu porque o assunto pede é legítima, mesmo que seja comum.
+A mesma direção escolhida porque foi a primeira que apareceu é o defeito — independentemente de
+qual seja.
 
-Nenhum é proibido: se o brief pede, o brief ganha. O defeito é chegar num deles **por inércia**,
-sem que o produto tenha pedido. Quando o brief deixa o eixo livre, não gaste a liberdade no default.
-
-O mesmo vale para os tiques estruturais:
-
-- Marcador numerado `01 / 02 / 03` só quando o conteúdo **é** sequência de verdade — processo com
-  ordem, linha do tempo. Se a ordem não carrega informação, o número é enfeite.
-- Número gigante + label pequeno + gradiente é a resposta template para hero. Use se for mesmo a
-  melhor, não por ser a primeira.
-- Neste repositório, *eyebrow* e *kicker* de categoria são **proibidos** — a regra do
-  [AGENTS.md](../../../AGENTS.md) vale sobre qualquer conselho de direção de arte. Estrutura se
-  resolve com hierarquia de título, não com pílula acima dele. Alternativas em
-  [badge.md](../../../docs/components/badge.md).
+A pergunta que separa as duas: *se o produto fosse outro, eu teria chegado aqui igual?* Se sim,
+não foi decisão, foi inércia. Troque e registre o porquê.
 
 ## Ancore no que o produto é
 
@@ -54,8 +45,7 @@ inventar cor nem tipografia fora do tema.
 ## O elemento de assinatura
 
 Cada tela tem **um** elemento pelo qual é lembrada, e o resto é disciplinado ao redor dele. Ousadia
-concentrada num ponto lê como decisão; espalhada, lê como ruído — e ruído é o sintoma nº 1 de tela
-gerada por IA.
+concentrada num ponto lê como decisão; espalhada, lê como ruído.
 
 Num produto com design system compartilhado, a assinatura vem de **composição**, não de exceção
 visual. Ela pode ser o recorte do hero, a ilustração, o ritmo da grade, o modo como a lista respira.
@@ -67,7 +57,7 @@ Ela **não** é um botão que só existe ali, um token novo, nem uma família ti
 ## Movimento
 
 Movimento serve o assunto ou não entra. Um momento orquestrado — a entrada da tela, uma revelação no
-scroll — vale mais que efeito espalhado em tudo. Excesso de animação é outro carimbo de IA.
+scroll — vale mais que efeito espalhado em tudo.
 
 - Micro-interação em hover e foco: sim, é feedback.
 - Transição de estado que explica o que aconteceu: sim.
@@ -88,7 +78,8 @@ ilustração ([ilustracao-svg](../ilustracao-svg/SKILL.md)), nunca ampliando um 
 
 - **Cor:** quais tokens do `@theme` esta tela usa e em que papel. Se falta um papel, o token entra
   no tema — não no markup.
-- **Tipo:** quais dos 13 tokens da escala, em que hierarquia.
+- **Tipo:** que hierarquia a tela precisa, e quais tokens a expressam. Se o brief pede uma voz
+  tipográfica que a escala atual não tem, o token entra no `@theme` nesta passada.
 - **Layout:** uma frase de conceito, e um rascunho em ASCII se ajudar a comparar opções.
 - **Assinatura:** a única coisa pela qual a tela será lembrada.
 - **Estados:** carregamento, vazio, erro e permissão — os quatro, sempre.
@@ -122,11 +113,11 @@ mesmo cuidado que espaçamento e cor.
 ## Autocrítica antes de entregar
 
 - [ ] Consigo dizer, em uma frase, por que esta tela é assim para **este** produto?
-- [ ] Algum pedaço caiu num dos três clichês sem o brief pedir?
+- [ ] Cada decisão visual tem razão vinda do produto, ou alguma foi a primeira que apareceu?
 - [ ] A assinatura é uma só, e o resto está quieto?
 - [ ] Tem numeração, divisória ou rótulo que decora em vez de informar?
 - [ ] Nenhum *eyebrow*, *kicker*, pílula ou tag de categoria?
-- [ ] Todo tamanho de fonte é um dos 13 tokens; toda cor é token do `@theme`?
+- [ ] Todo tamanho e toda cor saem de token do `@theme` — nenhum valor solto no markup?
 - [ ] Os quatro estados existem — carregamento, vazio, erro, permissão?
 - [ ] Os textos passam na tabela acima: rótulo pelo que a pessoa controla, verbo consistente, erro
       específico?
@@ -144,6 +135,7 @@ E as duas perguntas finais, antes do signoff:
 | Tela correta e sem personalidade | Plano pulado; foi direto ao código | Passada 1 e 2 antes de codar |
 | Três elementos disputando atenção | Ousadia espalhada | Escolher uma assinatura, calar o resto |
 | Cor nova aparecendo no markup | Paleta pensada por tela | Token no `@theme`, uma vez só |
-| `text-[22px]` no meio da tela | Escala tratada como sugestão | Usar token; se não cabe, alterar a escala antes |
+| `text-[22px]` no meio da tela | Token criado no markup em vez do tema | Declarar no `@theme` e usar pelo nome |
+| Todas as telas com o mesmo peso e ritmo | Escala tratada como teto, não como ponto de partida | Brief que pede outra voz ganha token próprio no tema |
 | Pílula de categoria "reaparecendo" | Conselho externo de direção de arte | Regra do repositório vence — hierarquia de título |
 | Botão "Enviar" e toast "Sucesso!" | Copy escrita depois, por outra pessoa | Verbo definido junto do fluxo, mantido até o fim |

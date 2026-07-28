@@ -130,6 +130,51 @@ clique ou hover, está quebrado.
 Não coloque `aria-label` em elemento que já tem texto visível — o rótulo acessível passa a divergir
 do que se vê.
 
+Numa lista, `aria-label` genérico torna dez botões indistinguíveis por teclado. Inclua o
+identificador do registro: `aria-label="<Ação> <Entidade> @item.Identificador"`, não `"Ver"`.
+
+### Ação em andamento
+
+Botão que dispara requisição fica `disabled` enquanto ela corre — é o que impede o duplo envio, o
+defeito clássico de formulário. Junto dele, `aria-busy="true"`, e a conclusão anunciada por uma
+região `role="status"` `aria-live="polite"` **fora** do botão; trocar o texto dele em silêncio não é
+anunciado.
+
+**A largura do botão não muda durante o carregamento.** Trocar "Salvar" por "Salvando…" estica o
+botão e desloca o que está ao lado. Mantenha o rótulo e troque apenas o ícone pelo spinner — que
+respeita `prefers-reduced-motion`.
+
+Botão desabilitado por permissão diz **por quê** em texto próximo ou `title`. Botão cinza sem
+explicação é tela sem tratamento de permissão.
+
+### Ordem visual e ordem de foco
+
+A ordem do DOM é a ordem visual. **Não use `flex-col-reverse` para inverter só o visual** — a
+tabulação continua seguindo o DOM, e o teclado passaria pela ação secundária antes da primária que
+aparece no topo. Ordem visual divergindo da ordem de foco é defeito de acessibilidade, não detalhe
+de layout.
+
+### Navegação e hierarquia de título
+
+- **Um `<h1>` por página.** Seções internas começam em `<h2>`. Nunca pular nível para acertar
+  tamanho — tamanho vem do token tipográfico, não da tag.
+- **O item atual do breadcrumb não é link:** `<span aria-current="page">`. Link que aponta para a
+  página em que já se está é uma parada de teclado que não faz nada.
+- Separador de breadcrumb é decorativo: `aria-hidden="true"`.
+- Ocultar no mobile é `hidden md:block` no markup, não `display:none` por script.
+- **Landmarks nativos** — `<header>`, `<nav>`, `<main>`, um `<main>` por documento. Nada de
+  `<div role="main">`.
+- **Título do documento repete o `<h1>`** — é o que o leitor de tela anuncia ao trocar de rota.
+- Elemento que flutua sobre o conteúdo respeita a safe area do aparelho
+  (`pb-[env(safe-area-inset-bottom)]`) e não cobre o último item da lista: reserve o espaço com
+  `padding-bottom` no contêiner.
+
+### Rolagem
+
+A rolagem vertical pertence ao `<main>` (`overflow-y-auto`), com `overflow-hidden` no shell externo
+— nunca ao `<body>` nem ao contêiner centralizado. É isso que mantém barra e menu visíveis durante a
+leitura de uma lista longa.
+
 ## Checklist antes de entregar
 
 - [ ] Sem overflow horizontal em 320px, 768px, 1024px e 1440px.
@@ -142,4 +187,8 @@ do que se vê.
 - [ ] Contraste verificado em texto, borda e ícone.
 - [ ] Toda imagem com `alt` (vazio se decorativa); todo botão de ícone com `aria-label`.
 - [ ] Erros de formulário associados por `aria-describedby`.
+- [ ] Botão que envia dados desabilita durante a requisição, com `aria-busy` e largura estável.
+- [ ] `aria-label` de item de lista inclui o identificador do registro.
+- [ ] Um `<h1>` por página; item atual do breadcrumb é `aria-current`, não link.
+- [ ] Ordem do DOM igual à ordem visual — sem `flex-col-reverse` invertendo só a aparência.
 - [ ] Validado em desktop **e** mobile reais, não só redimensionando a janela.

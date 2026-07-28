@@ -1,10 +1,14 @@
 # Mapa de skills
 
-As 50 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
+As 51 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
 `.claude/skills/`. Este arquivo registra a qual agente cada uma pertence; a mesma informação
 está no campo `agent:` do frontmatter de cada `SKILL.md`.
 
 Um agente carrega a skill correspondente **antes** de executar a tarefa.
+
+Skill tem **um dono**, mas pode ser carregada por outro agente. O `tela-agent` não possui skill
+própria: ele consome `design-intencional`, `tailwind-design`, `acessibilidade-responsivo` e
+`verificacao-navegador`, todas do `frontend-agent`.
 
 ## net10-agent — 8 skills
 
@@ -33,13 +37,15 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`transacoes-erros`](../skills/transacoes-erros/SKILL.md) | Controle transacional e tratamento de erro em procedures PostgreSQL — COMMIT/ROLLBACK no corpo, blocos EXCEPTION, SQLSTATE, savepoints implícitos, processamento em lote e locks | ao escrever procedure que grava dados, processa lote ou precisa tratar falha |
 | [`versionamento-deploy`](../skills/versionamento-deploy/SKILL.md) | Versionamento e deploy de procedures PostgreSQL — organização de arquivos .sql, idempotência do script, rollback, mudança de assinatura, integração com migration do EF Core e revisão | ao criar arquivo de procedure, alterar assinatura ou preparar deploy |
 
-## frontend-agent — 5 skills
+## frontend-agent — 7 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
+| [`design-intencional`](../skills/design-intencional/SKILL.md) | Direção visual deliberada e escrita de interface — evitar os três defaults de IA, ancorar a tela no produto, elemento de assinatura, onde cabe movimento, e rótulo, erro e vazio como material de design | ao criar tela, landing, hero ou empty state, revisar tela genérica, ou escrever texto de interface |
+| [`verificacao-navegador`](../skills/verificacao-navegador/SKILL.md) | Verificação no navegador real via Playwright MCP — inventário antes de testar, laço snapshot→ref→ação, QA funcional e visual separados, recorte de viewport obrigatório, orçamento de screenshot e confirmação negativa | ao validar tela implementada, reproduzir defeito visual ou conferir responsividade de fato |
 | [`acessibilidade-responsivo`](../skills/acessibilidade-responsivo/SKILL.md) | Responsividade e acessibilidade — eliminar overflow horizontal, adaptar tabela extensa, colapsar grade de formulário, dimensionar ação primária em tela estreita, garantir foco visível, contraste, aria e navegação por teclado | ao criar ou alterar layout, tabela, formulário, modal, menu ou ao revisar uma tela antes de entregar |
 | [`razor-interop`](../skills/razor-interop/SKILL.md) | Contrato entre Razor e TypeScript — passar dados e URLs por atributos data-*, gerar rota com Url.Action e nameof, resolver assets pelo TagHelper do Vite (dev server vs. manifest.json) e garantir progressive enhancement | ao ligar comportamento a uma view, incluir script numa página ou revisar acoplamento entre .cshtml e .ts |
-| [`tailwind-design`](../skills/tailwind-design/SKILL.md) | Design system em Tailwind CSS 4 — declarar tokens em @theme, aplicar a escala tipográfica de 13 tokens, definir cor, espaçamento e superfície, extrair padrão repetido para componente Razor | ao criar ou alterar estilo, token, tipografia, cor ou componente visual |
+| [`tailwind-design`](../skills/tailwind-design/SKILL.md) | Design system em Tailwind CSS 4 — declarar tokens em @theme, aplicar e estender a escala tipográfica, definir cor, espaçamento e superfície, extrair padrão repetido para componente Razor | ao criar ou alterar estilo, token, tipografia, cor ou componente visual |
 | [`typescript-estrito`](../skills/typescript-estrito/SKILL.md) | TypeScript moderno em modo estrito — escolher e fixar a versão, configurar tsconfig com strict/noUnusedLocals/noUnusedParameters, tipar DOM sem any e organizar módulos de feature | ao criar ou alterar .ts, tsconfig.json, atualizar a versão do compilador ou revisar tipagem |
 | [`vite-build`](../skills/vite-build/SKILL.md) | Pipeline de assets com Vite — configurar vite.config.ts, declarar entry points por feature, gerar manifest com hash, definir scripts npm e amarrar o build ao .csproj | ao criar feature com script/estilo próprio, alterar build, dev server ou saída de assets |
 
@@ -99,12 +105,6 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`stripe-assinaturas`](../skills/stripe-assinaturas/SKILL.md) | `Product`/`Price`/`Subscription`, trial, add-on como item, upgrade com proration, cancelamento, dunning e Customer Portal | ao implementar plano recorrente, mudança de plano ou cancelamento |
 | [`stripe-webhooks`](../skills/stripe-webhooks/SKILL.md) | Verificação de assinatura, corpo bruto, idempotência por `event.id`, responder 2xx antes de processar e ausência de ordem | ao criar ou revisar endpoint de webhook |
 | [`stripe-modelagem`](../skills/stripe-modelagem/SKILL.md) | O que persistir, agregado `Assinatura`, tabela de idempotência, EF Core e LGPD do dado de pagamento | ao criar schema de cobrança ou migration de billing |
-
-## cor-agent — 1 skill
-
-| Skill | O que cobre | Quando usar |
-|---|---|---|
-| [`cor-contexto`](../skills/cor-contexto/SKILL.md) | Escolha da cor primária a partir do contexto — setor, público, personalidade, concorrentes, calibragem de saturação e luminosidade, cores de estado e registro da decisão | ao definir identidade visual, revisar cor existente ou quando não se sabe que cor usar |
 
 ## Adicionar uma skill
 
