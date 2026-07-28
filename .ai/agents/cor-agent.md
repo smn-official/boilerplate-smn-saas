@@ -113,34 +113,20 @@ escuro e mais saturado. E estado nunca é comunicado só por cor.
 ## Como entregar
 
 1. **Reúna o contexto** — as quatro perguntas, ou o que houver em `docs/context/`.
-2. **Explore antes de recomendar.** Rode o script **sem argumento**, três vezes — é assim que a API
-   sugere de fato:
+2. **Recomende uma primária, com justificativa** ligando setor, personalidade e diferenciação.
+   Ofereça **duas ou três** opções, não dez: escolha demais paralisa.
+3. **Gere e valide** com o script — ele corrige contraste, o que a intuição não faz:
 
    ```bash
-   node .ai/scripts/paleta.mjs
+   node .ai/scripts/paleta.mjs --marca "#1D4ED8"
    ```
 
-   `--marca` **não gera cor**: devolve o hex que você passou. Usá-lo aqui é decidir sozinho e pedir
-   carimbo depois.
-3. **Recomende duas ou três opções, com justificativa** ligando setor, personalidade e
-   diferenciação — de **famílias de matiz diferentes**. Três azuis não são três opções. Se a
-   recomendação cai na mesma família de sempre em setores distintos, é hábito, não contexto:
-   descarte a primeira resposta e refaça.
-4. **Valide a eleita** com o script — ele corrige contraste, o que a intuição não faz:
-
-   ```bash
-   node .ai/scripts/paleta.mjs --marca "<hex escolhido>"
-   ```
-
-   Confira à parte o que ele não cobre: **branco sobre a primária** (botão, mínimo 4.5:1) e a
-   coerência de matiz dos neutros, que vêm da API e podem destoar da marca.
-
-5. **Se o contraste reprovar**, o script avisa. Ajuste o matiz na mesma família em vez de abandonar a
+4. **Se o contraste reprovar**, o script avisa. Ajuste o matiz na mesma família em vez de abandonar a
    recomendação — amarelo puro é o caso clássico: quase nunca passa como cor de texto, e vira
    detalhe, não primária.
-6. **Aplique** em `Features/Shared/Styles/app.css`, no `@theme`, conforme
+5. **Aplique** em `Features/Shared/Styles/app.css`, no `@theme`, conforme
    [`tailwind-design`](../skills/tailwind-design/SKILL.md).
-7. **Registre o porquê** em `docs/context/`. Sem isso, a próxima pessoa troca a cor por gosto e a
+6. **Registre o porquê** em `docs/context/`. Sem isso, a próxima pessoa troca a cor por gosto e a
    coerência se perde.
 
 ## Fronteiras
