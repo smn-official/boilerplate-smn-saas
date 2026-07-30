@@ -6,10 +6,12 @@ agent: net10-agent
 
 # Paginação
 
-[`dominio-agregados`](../dominio-agregados/SKILL.md) já coloca filtro e ordenação na specification, e
-[`persistencia-ef`](../persistencia-ef/SKILL.md) já traduz ambos no `SpecificationEvaluator`. Falta a
-terceira dimensão da mesma consulta: **quantos registros e a partir de onde**. Ela pertence ao mesmo
-lugar — não ao controller, não ao repositório.
+[`dominio-agregados`](../dominio-agregados/SKILL.md) é dono de `ISpecification<T>` e
+`Specification<T>` — filtro, includes, ordenação com desempate e paginação, tudo lá.
+[`persistencia-ef`](../persistencia-ef/SKILL.md) é dono do `SpecificationEvaluator`, que traduz isso
+para `IQueryable`. Esta skill **não redefine nenhum dos dois**: ela responde como usá-los para a
+terceira dimensão da consulta — **quantos registros e a partir de onde** — e por que essa decisão
+pertence à specification, não ao controller nem ao repositório.
 
 ## A regra que não se quebra
 
@@ -62,28 +64,43 @@ ele não for público de qualquer forma, e valide o que voltar — cursor forjad
 
 ## Na specification, não no controller
 
-```csharp
-public abstract class Specification<T> : ISpecification<T>
-{
-    public int? Pular { get; private set; }
-    public int? Levar { get; private set; }
+`Pular`, `Levar`, `OrdenarPor` e `DesempatarPor` **já fazem parte** de `ISpecification<T>` e
+`Specification<T>`, cuja definição canônica é de
+[`dominio-agregados`](../dominio-agregados/SKILL.md) — esta skill não redeclara nada disso. A spec
+concreta apenas chama os membros protegidos herdados:
 
-    protected void Paginar(PaginacaoDto paginacao)
+```csharp
+namespace <Produto>.<Modulo>.Core.Specs.<Entidade>;
+
+/// <summary>Página de <Entidade> do <Feature>, ordenada com desempate estável.</summary>
+public sealed class <Entidade>Por<Feature>PaginadaSpec : Specification<<Entidade>>
+{
+    private readonly <Tipo> _<chave>;
+
+    public <Entidade>Por<Feature>PaginadaSpec(<Tipo> <chave>, PaginacaoDto paginacao)
     {
-        Pular = (paginacao.Pagina - 1) * paginacao.Tamanho;
-        Levar = paginacao.Tamanho;
+        _<chave> = <chave>;
+
+        AdicionarInclude(<entidade> => <entidade>.<Filhas>);
+        OrdenarPor(<entidade> => <entidade>.DataCriacao, descendente: true);
+        DesempatarPor(<entidade> => <entidade>.Id);
+        Paginar((paginacao.Pagina - 1) * paginacao.Tamanho, paginacao.Tamanho);
     }
+
+    public override Expression<Func<<Entidade>, bool>> ToExpression() =>
+        <entidade> => <entidade>.<Chave> == _<chave> && !<entidade>.Excluido;
 }
 ```
 
-```csharp
-if (specification.Levar is null)
-    return consultaOrdenada;
+O cálculo `(Pagina - 1) * Tamanho` acontece **uma vez**, aqui, sobre um `PaginacaoDto` já normalizado.
+A specification expõe **`Pular`/`Levar`** — offset em registros, não número de página. Não existem
+`.Pagina` nem `.Tamanho` na spec: numeração de página é assunto do DTO de entrada e do DTO de
+resultado, que é onde ela faz sentido para a tela.
 
-return consultaOrdenada
-    .Skip(specification.Pular ?? 0)
-    .Take(specification.Levar.Value);
-```
+Quem traduz `Pular`/`Levar` para `Skip`/`Take` é o `SpecificationEvaluator` da camada `Data`, cujo
+código completo é de [`persistencia-ef`](../persistencia-ef/SKILL.md) — **dono do avaliador**. O que
+importa aqui: ele aplica **filtro → includes → ordenação com desempate → `Skip`/`Take`**, nessa ordem,
+e expõe `AplicarFiltro` separado, sem include nem ordenação, para a contagem.
 
 `Skip`/`Take` **depois** do `OrderBy` — invertido, o EF gera SQL que pagina antes de ordenar e o
 resultado é outro. Manter isso no avaliador compartilhado garante a ordem certa uma vez, para todas
@@ -102,19 +119,42 @@ var pagina = todos.Skip(50).Take(25).ToList();
 
 O total exige uma **segunda consulta**, com o mesmo filtro e sem ordenação nem paginação:
 
+A página e o tamanho do resultado vêm do `PaginacaoDto` recebido, **não da specification** — ela só
+conhece `Pular`/`Levar`:
+
 ```csharp
-public async Task<ResultadoPaginadoDto<T>> ListarPaginadoAsync(
-    ISpecification<T> specification,
-    CancellationToken cancellationToken)
+namespace <Produto>.<Modulo>.Data.Repositories;
+
+/// <summary>Repositório de <Entidade> com listagem paginada.</summary>
+public sealed class <Entidade>Repository : I<Entidade>Repository
 {
-    var consulta = AplicarFiltro(_contexto.Set<T>(), specification);
+    private readonly <Contexto>DbContext _contexto;
 
-    var total = await consulta.CountAsync(cancellationToken);
-    var itens = await AplicarOrdenacaoEPaginacao(consulta, specification).ToListAsync(cancellationToken);
+    public <Entidade>Repository(<Contexto>DbContext contexto) => _contexto = contexto;
 
-    return new ResultadoPaginadoDto<T>(itens, total, specification.Pagina, specification.Tamanho);
+    /// <summary>Devolve a página da specification e o total sob o mesmo filtro.</summary>
+    public async Task<ResultadoPaginadoDto<<Entidade>>> ListarPaginadoAsync(
+        ISpecification<<Entidade>> specification,
+        PaginacaoDto paginacao,
+        CancellationToken cancellationToken)
+    {
+        var consulta = _contexto.Set<<Entidade>>().AsNoTracking();
+
+        var total = await SpecificationEvaluator
+            .AplicarFiltro(consulta, specification)
+            .CountAsync(cancellationToken);
+
+        var itens = await SpecificationEvaluator
+            .AplicarSpecification(consulta, specification)
+            .ToListAsync(cancellationToken);
+
+        return new ResultadoPaginadoDto<<Entidade>>(itens, total, paginacao.Pagina, paginacao.Tamanho);
+    }
 }
 ```
+
+**A mesma specification alimenta as duas consultas.** Filtro diferente entre contagem e página é o
+defeito em que o total nunca bate com o que a tela mostra.
 
 O `CountAsync` roda sobre o filtro **sem** `Include` e **sem** `OrderBy` — ordenar para contar é
 trabalho jogado fora, e `Include` numa contagem gera `JOIN` inútil.
@@ -153,16 +193,37 @@ tabela inteira, e dez derrubam o processo. Isso é o A04/A05 de
 
 **Todo tamanho vindo do cliente passa por um teto do servidor.** Sempre, sem exceção.
 
+O teto tem **um único nome em todo o projeto**: `TamanhoMaximoDePagina`, igual na classe de settings,
+no `appsettings.json` e no `Clamp`. Dois nomes para o mesmo teto é como um deles fica sem ninguém
+configurando.
+
 ```csharp
+namespace <Produto>.<Modulo>.Core.Settings;
+
+/// <summary>Padrões e teto de paginação, vindos do <c>appsettings.json</c>.</summary>
+public sealed class PaginacaoSettings
+{
+    public const string SecaoConfiguracao = "<Modulo>:Paginacao";
+
+    public int TamanhoPagina { get; init; } = 25;
+    public int TamanhoMaximoDePagina { get; init; } = 100;
+}
+```
+
+```csharp
+namespace <Produto>.<Modulo>.Core.DTOs.Comum;
+
+/// <summary>Página e tamanho pedidos pelo cliente, antes da normalização.</summary>
 public sealed record PaginacaoDto
 {
     public int Pagina { get; init; } = 1;
     public int Tamanho { get; init; } = 25;
 
+    /// <summary>Aplica piso 1 na página e o teto do servidor no tamanho.</summary>
     public PaginacaoDto Normalizar(PaginacaoSettings settings) => this with
     {
         Pagina = Math.Max(Pagina, 1),
-        Tamanho = Math.Clamp(Tamanho, 1, settings.TamanhoMaximo),
+        Tamanho = Math.Clamp(Tamanho, 1, settings.TamanhoMaximoDePagina),
     };
 }
 ```
@@ -177,11 +238,16 @@ nunca segredo e nunca constante espalhada:
 ```json
 {
   "<Modulo>": {
-    "TamanhoPagina": 25,
-    "TamanhoMaximoDePagina": 100
+    "Paginacao": {
+      "TamanhoPagina": 25,
+      "TamanhoMaximoDePagina": 100
+    }
   }
 }
 ```
+
+`Normalizar` roda no **controller**, antes de montar a specification — o domínio recebe valor já
+confiável, e nenhuma spec precisa se defender de `Tamanho` absurdo.
 
 Cuide também do `Pagina`: valor negativo vira `Skip` negativo e exceção; página além do total devolve
 lista vazia com `Total` correto, que é o comportamento certo — não é erro.
@@ -194,8 +260,10 @@ lista vazia com `Total` correto, que é o comportamento certo — não é erro.
 | Registro some ao avançar de página | Inserção durante a navegação com offset | Keyset, ou aceitar e documentar |
 | Listagem lenta só em páginas altas | `Skip` grande varre e descarta | Keyset/cursor |
 | Memória estoura com filtro amplo | `Skip`/`Take` em memória, após materializar | Paginar na specification, antes do `ToListAsync` |
-| `?tamanho=999999` derruba a aplicação | Tamanho do cliente sem teto | `Math.Clamp` contra `TamanhoMaximo` do `appsettings` |
+| `?tamanho=999999` derruba a aplicação | Tamanho do cliente sem teto | `Math.Clamp` contra `TamanhoMaximoDePagina` do `appsettings` |
 | Contagem mais lenta que a página | `CountAsync` com `Include`/`OrderBy` | Contar sobre o filtro puro, ou dispensar o total |
 | Total não bate com os itens | Contagem e página com filtros diferentes | Mesma specification para as duas consultas |
 | SQL pagina antes de ordenar | `Skip`/`Take` aplicados antes do `OrderBy` | Ordenar primeiro no avaliador da specification |
 | `ArgumentOutOfRangeException` no `Skip` | Página zero ou negativa | Normalizar com piso 1 antes de calcular |
+| `specification.Pagina` não compila | A spec expõe `Pular`/`Levar`, não número de página | Ler página e tamanho do `PaginacaoDto` |
+| Ordenação da spec composta se perde | `And` que descarta ordenação de um dos lados | `And` da definição canônica preserva ambos |

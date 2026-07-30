@@ -71,27 +71,108 @@ Uma `IEntityTypeConfiguration<T>` por entidade, aplicada explicitamente em `OnMo
 - Soft delete por `Excluido` com `HasDefaultValue(false)`.
 - `nameof` para nomes de tabela e coluna.
 
-## Repositórios
+### Value Object
 
-Recebem `ISpecification<T>` e delegam a tradução ao avaliador compartilhado:
+O tipo é definido em `Core` sem saber que o EF existe — ver
+[`dominio-agregados`](../dominio-agregados/SKILL.md). Mapear é responsabilidade daqui, e a forma do
+tipo escolhe o mecanismo:
 
 ```csharp
-public static IQueryable<T> AplicarSpecification<T>(IQueryable<T> consulta, ISpecification<T> specification)
-    where T : class
+public void Configure(EntityTypeBuilder<<Entidade>> builder)
 {
-    var consultaComFiltro = consulta.Where(specification.ToExpression());
+    builder.ToTable(nameof(<Entidade>));
 
-    foreach (var include in specification.Includes)
-        consultaComFiltro = consultaComFiltro.Include(include);
+    builder.Property(<entidade> => <entidade>.Cpf)
+        .HasConversion(cpf => cpf.Numero, numero => Cpf.Criar(numero))
+        .HasColumnName(nameof(<Entidade>.Cpf))
+        .HasMaxLength(11)
+        .IsRequired();
 
-    if (specification.OrderBy is null)
-        return consultaComFiltro;
-
-    return specification.OrdemDescendente
-        ? consultaComFiltro.OrderByDescending(specification.OrderBy)
-        : consultaComFiltro.OrderBy(specification.OrderBy);
+    builder.ComplexProperty(<entidade> => <entidade>.Endereco, endereco =>
+    {
+        endereco.Property(valor => valor.Logradouro).HasMaxLength(200).IsRequired();
+        endereco.Property(valor => valor.Numero).HasMaxLength(20).IsRequired();
+        endereco.Property(valor => valor.CodigoPostal).HasMaxLength(8).IsRequired();
+    });
 }
 ```
+
+`ComplexProperty` grava as colunas na própria tabela e **não cria identidade** — é o certo para valor
+composto no EF Core 10. `OwnsOne` inventa uma chave que o domínio disse não existir; use apenas
+quando o valor precisa de tabela própria (`OwnsMany`, para coleção).
+
+O conversor chama a factory `Criar`, que valida: dado corrompido no banco falha na materialização em
+vez de circular inválido pela aplicação. Value Object **não** entra em `HasConversion<string>()` —
+esse é o padrão dos enums.
+
+## Repositórios
+
+Recebem `ISpecification<T>` e delegam a tradução ao avaliador compartilhado. **Este é o único
+`SpecificationEvaluator` do projeto** — [`paginacao`](../paginacao/SKILL.md) referencia este código e
+não o redeclara; a definição de `ISpecification<T>` é de
+[`dominio-agregados`](../dominio-agregados/SKILL.md).
+
+Filtro, `Includes`, ordenação **com desempate** e `Skip`/`Take` no mesmo corpo — é o que garante a
+ordem correta das operações uma vez, para todas as consultas:
+
+```csharp
+namespace <Produto>.<Modulo>.Data.Repositories;
+
+/// <summary>Traduz uma specification de domínio para <see cref="IQueryable{T}"/>.</summary>
+public static class SpecificationEvaluator
+{
+    /// <summary>Aplica filtro, includes, ordenação e paginação, nesta ordem.</summary>
+    public static IQueryable<T> AplicarSpecification<T>(
+        IQueryable<T> consulta,
+        ISpecification<T> specification)
+        where T : class
+    {
+        var resultado = consulta.Where(specification.ToExpression());
+
+        foreach (var include in specification.Includes)
+            resultado = resultado.Include(include);
+
+        if (specification.OrderBy is null)
+            return AplicarPaginacao(resultado, specification);
+
+        var ordenada = specification.OrdemDescendente
+            ? resultado.OrderByDescending(specification.OrderBy)
+            : resultado.OrderBy(specification.OrderBy);
+
+        if (specification.ThenBy is not null)
+        {
+            ordenada = specification.DesempateDescendente
+                ? ordenada.ThenByDescending(specification.ThenBy)
+                : ordenada.ThenBy(specification.ThenBy);
+        }
+
+        return AplicarPaginacao(ordenada, specification);
+    }
+
+    /// <summary>Aplica apenas o filtro, para contagem — sem include nem ordenação.</summary>
+    public static IQueryable<T> AplicarFiltro<T>(IQueryable<T> consulta, ISpecification<T> specification)
+        where T : class =>
+        consulta.Where(specification.ToExpression());
+
+    private static IQueryable<T> AplicarPaginacao<T>(IQueryable<T> consulta, ISpecification<T> specification)
+        where T : class
+    {
+        if (specification.Levar is null)
+            return consulta;
+
+        return consulta
+            .Skip(specification.Pular ?? 0)
+            .Take(specification.Levar.Value);
+    }
+}
+```
+
+`Skip`/`Take` **depois** da ordenação, sempre — invertido, o EF gera SQL que pagina antes de ordenar e
+o resultado é outro. Paginar sem `OrderBy` devolve linhas arbitrárias: quem pagina precisa ordenar com
+desempate, e o porquê está em [`paginacao`](../paginacao/SKILL.md).
+
+`AplicarFiltro` existe separado porque a contagem total não deve arrastar `Include` nem `OrderBy` —
+`JOIN` e ordenação numa contagem são trabalho jogado fora.
 
 Assim nenhum repositório tem regra de filtro própria e nenhuma consulta escapa do domínio.
 

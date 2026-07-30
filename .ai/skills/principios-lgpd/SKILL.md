@@ -136,11 +136,11 @@ public sealed class FinalidadeTratamento
         TimeSpan prazoRetencao)
     {
         if (string.IsNullOrWhiteSpace(codigo))
-            throw new DominioException(MensagensPrivacidade.FinalidadeSemCodigo);
+            throw new DomainException(MensagensPrivacidade.FinalidadeSemCodigo);
         if (string.IsNullOrWhiteSpace(descricao))
-            throw new DominioException(MensagensPrivacidade.FinalidadeSemDescricao);
+            throw new DomainException(MensagensPrivacidade.FinalidadeSemDescricao);
         if (prazoRetencao <= TimeSpan.Zero)
-            throw new DominioException(MensagensPrivacidade.PrazoRetencaoInvalido);
+            throw new DomainException(MensagensPrivacidade.PrazoRetencaoInvalido);
 
         Codigo = codigo;
         Descricao = descricao;

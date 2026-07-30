@@ -1,7 +1,10 @@
 # AGENTS.md
 
 Fonte única da verdade para qualquer assistente de IA que trabalhe neste repositório.
-`CLAUDE.md`, `GEMINI.md` e `.github/copilot-instructions.md` são symlinks para este arquivo.
+`CLAUDE.md` e `GEMINI.md` são symlinks para este arquivo. `.github/copilot-instructions.md` é uma
+**cópia gerada** — link relativo lido de dentro de `.github/` resolveria para `.github/.ai/…` e
+morreria, então lá os caminhos são reescritos para `../`. Alterou este arquivo? Regenere a cópia; o
+`verificar.mjs` acusa se as duas divergirem.
 
 O detalhamento normativo completo está em
 [.ai/docs/estrutura-arquitetura.md](.ai/docs/estrutura-arquitetura.md). Este arquivo é o índice e
@@ -116,7 +119,7 @@ usuário:
 
 ## Agentes
 
-Nove agentes especializados em [.ai/agents/](.ai/agents/), com 53 skills em [.ai/skills/](.ai/skills/).
+Nove agentes especializados em [.ai/agents/](.ai/agents/), com 57 skills em [.ai/skills/](.ai/skills/).
 
 | Tarefa | Agente |
 |---|---|
@@ -228,9 +231,20 @@ verificar.
 - Pastas nascem com o primeiro artefato real — não crie estrutura vazia antecipadamente.
 - Ao alterar convenção, responsabilidade ou estrutura, atualize a documentação na mesma entrega.
 - **Mexeu em agente, skill ou doc? Rode `node .ai/scripts/verificar.mjs` antes de entregar.** Ele
-  confere contagens, links, frontmatter e registro contra o disco. Adicionar uma skill exige tocar
-  seis arquivos; o script transforma o esquecimento em erro barulhento, em vez de deixar o agente
-  orientar contra o padrão vigente.
+  confere contagens, links, âncoras, frontmatter, registro, tabelas de roteamento, marcadores de
+  identidade e tipos usados em exemplo contra o disco. Adicionar uma skill exige tocar seis arquivos;
+  o script transforma o esquecimento em erro barulhento, em vez de deixar o agente orientar contra o
+  padrão vigente.
+- **Contrato fundacional tem uma definição só.** `AggregateRoot<TId>`, `DomainException`,
+  `ISpecification<T>` e `Specification<T>` são declarados em
+  [.ai/skills/dominio-agregados](.ai/skills/dominio-agregados/SKILL.md); `AcessoNegadoException`, em
+  [.ai/skills/owasp-web](.ai/skills/owasp-web/SKILL.md); o `SpecificationEvaluator`, em
+  [.ai/skills/persistencia-ef](.ai/skills/persistencia-ef/SKILL.md). Toda outra skill **referencia** —
+  nunca redeclara, nem "só a parte que interessa". Duas declarações parciais do mesmo tipo produzem
+  duas skills corretas isoladamente cujo código não compila junto, e nenhuma das duas parece errada.
+- **Tipo do projeto usado em exemplo precisa estar definido em algum `.md`.** Exemplo que lança uma
+  exceção inexistente ou chama um método que nenhuma classe declara faz o agente inventar a
+  assinatura — e cada agente inventa uma diferente. O verificador reprova.
 
 ## Estrutura deste repositório
 
@@ -255,10 +269,11 @@ projeto/
 ├── .github/copilot-instructions.md -> ../AGENTS.md
 │
 ├── .ai/
-│   ├── skills/      53 skills, cada uma com SKILL.md
+│   ├── skills/      57 skills, cada uma com SKILL.md
 │   ├── agents/      9 definições de agente
 │   ├── mcp/         servers.json
-│   ├── scripts/     init.mjs (parametrização), verificar.mjs (integridade da doc)
+│   ├── scripts/     init.mjs (parametrização), verificar.mjs (integridade da doc),
+│   │                regenerar-copilot.mjs (cópia do AGENTS.md para o .github/)
 │   └── docs/        README.md (índice), estrutura-arquitetura.md,
 │                    agentes.md, skills.md,
 │                    mcp.md, gitignore.md, configuracao.md

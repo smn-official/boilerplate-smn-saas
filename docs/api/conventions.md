@@ -19,26 +19,26 @@ quando o domínio inteiro está em português. O nome do Controller e das action
 do negócio** — a rota não é o nome da action.
 
 ```csharp
-[Route("subscriptions")]
+[Route("orders")]
 [Authorize]
-public class AssinaturaController(IAssinaturaService assinaturaService) : Controller
+public class PedidoController(IPedidoService pedidoService) : Controller
 {
-    [HttpGet("")]        public Task<IActionResult> Gerenciar(...);
-    [HttpGet("new")]     public Task<IActionResult> Novo(...);
-    [HttpGet("edit")]    public Task<IActionResult> Editar(...);
-    [HttpPost("save")]   [ValidateAntiForgeryToken] public Task<IActionResult> Salvar(...);
-    [HttpPost("delete")] [ValidateAntiForgeryToken] public Task<IActionResult> Excluir(...);
+    [HttpGet("")]         public Task<IActionResult> Gerenciar(...);
+    [HttpGet("new")]      public Task<IActionResult> Novo(...);
+    [HttpGet("edit")]     public Task<IActionResult> Editar(...);
+    [HttpPost("confirm")] [ValidateAntiForgeryToken] public Task<IActionResult> Confirmar(...);
+    [HttpPost("cancel")]  [ValidateAntiForgeryToken] public Task<IActionResult> Cancelar(...);
 }
 ```
 
 | Elemento | Regra | Exemplo |
 |---|---|---|
-| Segmento de rota | Inglês, kebab-case, recurso no plural | `/subscription-items` |
-| Parâmetro de rota | Inglês, kebab-case | `/subscriptions/{id}/items` |
+| Segmento de rota | Inglês, kebab-case, recurso no plural | `/order-items` |
+| Parâmetro de rota | Inglês, kebab-case | `/orders/{id}/items` |
 | Query string | Inglês, kebab-case | `?page-size=20&order-by=created-at` |
-| Nome do Controller | Idioma do negócio | `AssinaturaController` |
-| Nome da action | Idioma do negócio, verbo de intenção | `Gerenciar`, `Salvar`, `Excluir` |
-| ViewModel / DTO | Idioma do negócio | `AssinaturaResumoDto` |
+| Nome do Controller | Idioma do negócio | `PedidoController` |
+| Nome da action | Idioma do negócio, verbo de intenção | `Gerenciar`, `Confirmar`, `Cancelar` |
+| ViewModel / DTO | Idioma do negócio | `PedidoResumoDto` |
 
 Rota é declarada **por atributo** no Controller, nunca por convenção implícita de roteamento — o
 contrato externo fica visível no arquivo, e renomear a classe não muda a URL publicada.
@@ -72,7 +72,7 @@ interromper trabalho — sem isso, o banco continua respondendo a uma pergunta q
 ```csharp
 [HttpPost("save")]
 [ValidateAntiForgeryToken]
-public async Task<IActionResult> Salvar(SalvarAssinaturaRequest request, CancellationToken cancellationToken)
+public async Task<IActionResult> Salvar(SalvarPedidoRequest request, CancellationToken cancellationToken)
 ```
 
 ### Model binding

@@ -57,7 +57,7 @@ yarn-error.log*
 # Saída do build de assets: gerada por `npm run build` no
 # `dotnet build`, conforme a skill vite-build. Não versionar
 # artefato derivado.
-wwwroot/build/
+wwwroot/dist/
 wwwroot/.vite/
 
 # ---------------------------------------------------------------

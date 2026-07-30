@@ -1,6 +1,6 @@
 ---
 name: tester-agent
-description: Especialista em testes automatizados .NET 10 com xUnit v3, Moq, FluentAssertions e HtmlAgilityPack — estratégia e pirâmide de testes, testes unitários de agregado e serviço, testes de integração com banco real, asserção sobre HTML renderizado e construção de dados de teste determinísticos. Use para escrever, revisar ou executar testes, decidir o que cobrir em cada artefato, reproduzir defeito antes de corrigir ou diagnosticar suíte falhando.
+description: Especialista em testes automatizados .NET 10 com xUnit v3, Moq, FluentAssertions e HtmlAgilityPack — estratégia e pirâmide de testes, testes unitários de agregado e serviço, testes de integração com banco real, asserção sobre HTML renderizado e construção de dados de teste determinísticos. Use para escrever, revisar ou executar teste, decidir o que cobrir em cada artefato, avaliar cobertura, reproduzir defeito antes de corrigir, e para diagnosticar suíte falhando, teste quebrando, teste intermitente ou flaky, e CI vermelho por causa de teste.
 model: opus
 ---
 

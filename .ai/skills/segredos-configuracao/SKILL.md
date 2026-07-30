@@ -35,10 +35,21 @@ appsettings.Production.json
 `.env.example` versionado, com placeholder que não parece valor:
 
 ```dotenv
-DATABASE_CONNECTION=Host=<host>;Database=<db>;Username=<user>;Password=<senha>
-SMTP_PASSWORD=<preencher>
-APPLICATIONINSIGHTS_CONNECTION_STRING=<preencher>
+# { "ConnectionStrings": { "Default": "..." } }
+ConnectionStrings__Default=Host=<host>;Database=<banco>;Username=<usuario>;Password=<senha>
+# { "Email": { "Senha": "..." } }
+Email__Senha=<preencher>
+# { "ApplicationInsights": { "ConnectionString": "..." } }
+ApplicationInsights__ConnectionString=<preencher>
 ```
+
+**O nome da chave não é livre.** Sobrescrita de configuração do .NET usa `Secao__Chave` — dois
+underscores por nível de hierarquia, maiúsculas e minúsculas idênticas às do `appsettings.json`.
+`SCREAMING_SNAKE_CASE` fica reservado a variável lida por ferramenta externa (`POSTGRES_CONNECTION_STRING`,
+`ASPNETCORE_ENVIRONMENT`). Um `.env` com `DATABASE_CONNECTION` ou `SMTP_PASSWORD` é lido por ninguém:
+o .NET não encontra a chave e a aplicação sobe com a configuração vazia. Os nomes válidos estão no
+[`.env.example`](../../../.env.example) versionado; o critério, em
+[configuracao.md](../../docs/configuracao.md).
 
 Placeholder que parece real (`Password=admin123`) acaba copiado para produção. Use delimitadores
 que quebram se não forem substituídos.

@@ -29,20 +29,39 @@ O Razor escreve; o script lê. Nada de URL, id de rota ou texto literal dentro d
 </div>
 ```
 
+A leitura mora **dentro da função de inicialização** do entry point. `return` no topo de um módulo ESM
+é erro de sintaxe: a saída antecipada só existe se houver função da qual sair.
+
 ```ts
-const raiz = document.querySelector<HTMLElement>("[data-<feature>-root]");
+function inicializarFeature(): void {
+    const raiz = document.querySelector<HTMLElement>("[data-<feature>-root]");
 
-if (raiz === null) {
-    return;
+    if (raiz === null) {
+        return;
+    }
+
+    const urlSalvar = raiz.dataset.urlSalvar;
+    const permiteEditar = raiz.dataset.permiteEditar === "true";
+
+    if (urlSalvar === undefined) {
+        return;
+    }
+
+    raiz.addEventListener("submit", (evento: SubmitEvent) => {
+        if (!permiteEditar) {
+            evento.preventDefault();
+        }
+    });
 }
 
-const urlSalvar = raiz.dataset.urlSalvar;
-const permite<Acao> = raiz.dataset.permite<Acao> === "true";
-
-if (urlSalvar === undefined) {
-    return;
-}
+inicializarFeature();
 ```
+
+O marcador `<Feature>` vale em Razor, em caminho de arquivo e em nome de rota. **Em `.ts` ele nunca
+aparece entre colchetes angulares num identificador** — `function inicializar<Feature>()` é lido pelo
+compilador como parâmetro de tipo genérico e falha com `Cannot find name`. Escreva o nome concreto da
+feature (`inicializarFeature`) ou o marcador sem colchetes. Dentro de string literal, como no seletor
+`"[data-<feature>-root]"`, o marcador é dado e não sintaxe — ali ele permanece.
 
 ### Regras
 

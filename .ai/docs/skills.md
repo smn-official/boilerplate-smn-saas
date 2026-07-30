@@ -1,16 +1,17 @@
 # Mapa de skills
 
-As 53 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
+As 57 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
 `.claude/skills/`. Este arquivo registra a qual agente cada uma pertence; a mesma informação
 está no campo `agent:` do frontmatter de cada `SKILL.md`.
 
 Um agente carrega a skill correspondente **antes** de executar a tarefa.
 
-## net10-agent — 12 skills
+## net10-agent — 15 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
 | [`arquitetura-camadas`](../skills/arquitetura-camadas/SKILL.md) | Estrutura de solução .NET 10 em camadas — criar projetos, decidir onde um artefato mora, validar direção de dependência, configurar composição da raiz e dependências essenciais | ao iniciar um projeto, adicionar um projeto novo, mover código entre camadas ou avaliar se uma dependência é permitida |
+| [`cache`](../skills/cache/SKILL.md) | Cache em memória e distribuído — chave prefixada pelo schema do cliente como defesa contra vazamento entre clientes, escolha entre `IMemoryCache`, `IDistributedCache` e `HybridCache`, onde o cache mora nas camadas, invalidação por TTL curto, o que nunca cachear e `OutputCache` em página autenticada | ao diagnosticar tela lenta ou consulta repetida, decidir se vale Redis, invalidar ou expirar entrada, ou investigar dado de um cliente aparecendo para outro |
 | [`dominio-agregados`](../skills/dominio-agregados/SKILL.md) | Modelagem de domínio em .NET — criar agregados com invariantes, serviços de domínio, DTOs, enums e specifications; decidir quando separar um domínio novo | ao criar ou alterar qualquer artefato dentro da camada Core |
 | [`email-transacional`](../skills/email-transacional/SKILL.md) | Envio de e-mail transacional — contrato `IEnviadorDeEmail` em Core, implementação real e desabilitada em Data com escolha por flag na DI, falha do provedor que não derruba o caso de uso, idempotência no reenvio e template sem segredo nem dado pessoal desnecessário | ao enviar OTP, confirmação, recuperação de acesso ou qualquer notificação por e-mail, e ao revisar quem chama o envio |
 | [`feature-web`](../skills/feature-web/SKILL.md) | Camada de apresentação ASP.NET Core MVC — criar feature vertical (Controller, ViewModel, View) e definir rotas | ao criar ou alterar tela, rota ou feature da camada Web |
@@ -21,7 +22,9 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`revisao-codigo`](../skills/revisao-codigo/SKILL.md) | Checklist de revisão de código .NET 10 — convenções, Clean Code, SOLID, KISS, formatação, null safety e violações de camada | ao revisar um diff, PR ou antes de entregar uma alteração |
 | [`setup-projeto`](../skills/setup-projeto/SKILL.md) | Parametrização inicial do boilerplate — substitui `<Produto>` e `<Modulo>`, preservando a notação didática das skills, e cria a solução .NET | uma única vez, ao iniciar projeto novo a partir deste boilerplate |
 | [`tarefas-em-segundo-plano`](../skills/tarefas-em-segundo-plano/SKILL.md) | Trabalho fora do request com `BackgroundService` e `IHostedService` — escopo por `IServiceScopeFactory` em vez de `DbContext` injetado, shutdown gracioso, exceção que derruba o worker em silêncio, idempotência, execução duplicada em múltiplas instâncias e resolução explícita do schema | ao processar webhook fora do request, agendar expurgo de retenção, despachar e-mail ou criar qualquer worker |
-| [`testes-dotnet`](../skills/testes-dotnet/SKILL.md) | Testes automatizados em .NET 10 com xUnit v3, Moq e FluentAssertions — organização espelhando o código, nomenclatura, o que testar em agregado e serviço, e comandos de validação | ao escrever, revisar ou executar testes |
+| [`testes-dotnet`](../skills/testes-dotnet/SKILL.md) | Índice das skills de teste e a disciplina comum — organização dos projetos, nomenclatura, comandos de validação; roteia para o nível certo | quando a tarefa menciona teste e o nível ainda não está claro |
+| [`tratamento-erro-global`](../skills/tratamento-erro-global/SKILL.md) | Tratamento de erro em ASP.NET Core MVC — o único `catch (DomainException)` legítimo no controller, `IExceptionHandler` global no `Program.cs` mapeando `DomainException` para `400` e `AcessoNegadoException` para `403`, página `/erro` com identificador de correlação, resposta HTML vs. `ProblemDetails` em AJAX e o que nunca vaza na resposta | quando regra de negócio vira `500`, stack trace aparece na tela, exceção não é tratada, ou ao criar página de erro e exception handler |
+| [`validacao-entrada`](../skills/validacao-entrada/SKILL.md) | Validação de entrada em ASP.NET Core MVC — DataAnnotations no objeto de model binding validam forma, o agregado valida regra e o controller só traduz; `ModelState.IsValid` com early return, `IValidatableObject` para forma complexa, unicidade que depende do banco no serviço de domínio e mensagem em constante pública | ao escrever ou revisar action de POST, decidir onde uma validação mora, ou diagnosticar validação duplicada, ausente ou mensagem que não aparece na tela |
 
 ## pgproc-agent — 9 skills
 
@@ -83,7 +86,7 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`principios-lgpd`](../skills/principios-lgpd/SKILL.md) | Os dez princípios do art. 6 e as dez bases legais do art. 7 da LGPD traduzidos em decisão de código, mais a distinção dado pessoal vs dado sensível (art. 5, II) e o regime do art. 11 | ao justificar um tratamento, escolher base legal, avaliar se uma coleta cabe na finalidade ou revisar feature nova quanto a fundamento legal |
 | [`retencao-descarte`](../skills/retencao-descarte/SKILL.md) | Política de retenção e descarte sob a LGPD — art. 15 e art. 16, as hipóteses que permitem conservar o dado após o término do tratamento, por que soft delete não é eliminação, anonimização irreversível, expurgo automático e o problema de backup e réplica | ao definir prazo de guarda, implementar exclusão de conta, desenhar rotina de expurgo ou revisar política de backup |
 
-## security-agent — 5 skills
+## security-agent — 6 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
@@ -92,6 +95,7 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`dependencias-vulneraveis`](../skills/dependencias-vulneraveis/SKILL.md) | Verificação de dependência vulnerável em .NET e npm — dotnet list package --vulnerable --include-transitive, npm audit, pin de dependência transitiva no .csproj com justificativa, Dependabot/Renovate, avaliação de severidade CVSS e alcançabilidade do caminho vulnerável, e risco de pacote abandonado | ao auditar alteração em .csproj, package.json ou lockfile, e periodicamente sobre a esteira |
 | [`owasp-web`](../skills/owasp-web/SKILL.md) | OWASP Top 10 aplicado a ASP.NET Core MVC e EF Core — broken access control e IDOR, injeção com FromSqlRaw, XSS via Html.Raw e innerHTML, CSRF com antiforgery, SSRF, desserialização insegura, security misconfiguration e redirect aberto | ao auditar controller, rota, view, query, upload, redirect ou endpoint novo |
 | [`segredos-configuracao`](../skills/segredos-configuracao/SKILL.md) | Gestão de segredo e configuração segura — .env fora do git, resposta a segredo commitado (rotacionar primeiro), Azure Key Vault e App Settings, connection string, HTTPS obrigatório e HSTS, headers de segurança (CSP, X-Content-Type-Options, Referrer-Policy) e cookie com HttpOnly, Secure e SameSite | ao auditar appsettings, .env, pipeline, Program.cs ou configuração de cookie e header |
+| [`upload-arquivos`](../skills/upload-arquivos/SKILL.md) | Upload e download de arquivo — `IFormFile` com limite no C# **e** no Kestrel, validação em três camadas (allowlist de extensão, content-type declarado e magic bytes), path traversal com `GetFileName`/`GetFullPath`/`StartsWith`, nome opaco no storage com o original só como metadado, contrato `IArmazenamentoDeArquivos` em Core, download autorizado por cliente e `Content-Disposition: attachment` | ao permitir anexo, foto, documento ou PDF, gravar em disco ou Azure Blob, criar rota de download, ou revisar upload existente |
 
 ## stripe-agent — 6 skills
 

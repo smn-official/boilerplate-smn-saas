@@ -72,19 +72,35 @@ Modo estrito é obrigatório. Estas flags não são negociáveis:
 `querySelector` devolve união com `null` e o tipo genérico `Element`. Estreite com guarda e saia
 cedo — a página não pode quebrar quando o script carrega numa rota sem o elemento-alvo.
 
+A saída antecipada exige uma função da qual sair — `return` no topo de um módulo ESM não compila. Por
+isso o entry point é sempre uma função nomeada mais a chamada:
+
 ```ts
-const formulario = document.querySelector<HTMLFormElement>("[data-<feature>-form]");
+function inicializarFormularioDeEntidade(): void {
+    const formulario = document.querySelector<HTMLFormElement>("[data-<feature>-form]");
 
-if (formulario === null) {
-    return;
+    if (formulario === null) {
+        return;
+    }
+
+    const campo = formulario.elements.namedItem("<campo>");
+
+    if (!(campo instanceof HTMLInputElement)) {
+        return;
+    }
+
+    campo.addEventListener("input", () => {
+        campo.setCustomValidity("");
+    });
 }
 
-const campo = formulario.elements.namedItem("<campo>");
-
-if (!(campo instanceof HTMLInputElement)) {
-    return;
-}
+inicializarFormularioDeEntidade();
 ```
+
+Marcador didático (`<Entidade>`, `<Feature>`) vale em Razor, caminho e rota. **Em `.ts` ele não entra
+num identificador entre colchetes angulares**: `function inicializar<Entidade>()` é parâmetro de tipo
+genérico para o compilador, e falha com `Cannot find name 'Entidade'`. No nome, escreva por extenso
+(`inicializarFormularioDeEntidade`); dentro de string, o marcador continua sendo dado, não sintaxe.
 
 Proibido: `any`, `as` para calar o compilador, `!` de non-null assertion, `@ts-ignore`.
 Quando precisar afirmar um tipo, use `instanceof` ou um type guard nomeado — a checagem sobrevive à
@@ -107,6 +123,8 @@ Features/Shared/Scripts/<modulo>.ts       utilitário reutilizado por mais de um
 ```
 
 - Um entry point por feature; nada de arquivo global que roda em toda página.
+- **O entry point é uma função de inicialização nomeada mais a chamada** — nunca código solto no topo
+  do módulo, que não permite saída antecipada.
 - Módulo compartilhado exporta função pura tipada; não toca em `document` no topo do arquivo.
 - Nada de estado global mutável entre módulos.
 - `export`/`import` ESM sempre; sem `namespace`, sem `require`, sem `<script>` inline com lógica.
@@ -141,4 +159,6 @@ Prefira `type` a `interface` para dados; `readonly` por padrão, como nas classe
 | Import de tipo quebra o bundle | Falta `verbatimModuleSyntax` | Ligar a flag e usar `import type` |
 | `any` implícito em handler de evento | Parâmetro sem tipo | Tipar com `MouseEvent`, `SubmitEvent` |
 | Script quebra em rota sem o elemento | Sem saída antecipada | Retornar quando o alvo é `null` |
+| `return` outside of function body | Guarda escrita no topo do módulo | Envolver na função de inicialização e chamá-la |
+| `Cannot find name 'Entidade'` | Marcador `<Entidade>` num identificador `.ts` | Nome por extenso; marcador só em string, Razor e caminho |
 | JSON do servidor tipado por asserção | `as` em `.json()` | Validar com type guard a partir de `unknown` |

@@ -99,6 +99,53 @@ comando.Parameters.Add(new NpgsqlParameter { Value = schema });
 O catálogo de clientes (schema compartilhado) é a lista branca natural: se o nome não está lá, não é
 schema — é tentativa.
 
+#### `AcessoNegadoException`
+
+Falha de isolamento **não é violação de invariante de negócio**: `DomainException` (de
+[`dominio-agregados`](../dominio-agregados/SKILL.md)) vira `400` — "seu pedido estava inválido" — e
+usar o mesmo tipo aqui devolveria `400` para tentativa de atravessar cliente, escondendo o incidente
+no meio dos erros de formulário. Tipo próprio, que o middleware mapeia para **`403`** e o
+Application Insights trata como evento de segurança:
+
+```csharp
+namespace <Produto>.<Modulo>.Core.Common;
+
+/// <summary>Acesso barrado por falta de vínculo, claim ausente ou schema não reconhecido.</summary>
+public class AcessoNegadoException : Exception
+{
+    /// <summary>Cria a exceção com o motivo da negativa.</summary>
+    public AcessoNegadoException(string mensagem)
+        : base(mensagem)
+    {
+    }
+
+    /// <summary>Cria a exceção preservando a falha de origem.</summary>
+    public AcessoNegadoException(string mensagem, Exception excecaoInterna)
+        : base(mensagem, excecaoInterna)
+    {
+    }
+}
+```
+
+A mensagem vem de constante em `MensagensAcesso` e é **genérica para o usuário** — `ClienteNaoResolvido`
+não conta qual schema existe nem se o cliente é válido. O detalhe fica no log, nunca na resposta:
+mensagem de erro que diferencia "schema inexistente" de "schema sem seu acesso" é oráculo de
+enumeração.
+
+```csharp
+namespace <Produto>.<Modulo>.Core.Common;
+
+/// <summary>Mensagens de negativa de acesso, sem revelar estrutura interna.</summary>
+public static class MensagensAcesso
+{
+    public const string ClienteNaoResolvido = "Não foi possível identificar seu acesso.";
+    public const string SchemaDesconhecido = "Não foi possível identificar seu acesso.";
+}
+```
+
+Duas constantes com o mesmo texto é **intencional**: o código distingue as causas para o log e a
+telemetria, o usuário vê a mesma frase nos dois casos.
+
 #### Toda conexão precisa do SET antes da primeira query
 
 Esta é a falha mais perigosa do modelo porque **é silenciosa**. Conexão reusada do pool sem o
@@ -216,7 +263,7 @@ private static readonly FrozenSet<string> ColunasOrdenaveis =
     new[] { "Nome", "CriadoEm", "Situacao" }.ToFrozenSet();
 
 if (!ColunasOrdenaveis.Contains(ordenacao))
-    throw new DominioException(MensagensValidacao.OrdenacaoInvalida);
+    throw new DomainException(MensagensValidacao.OrdenacaoInvalida);
 ```
 
 Antes de recorrer a SQL dinâmico, pergunte se LINQ resolve — quase sempre resolve.

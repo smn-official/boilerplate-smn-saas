@@ -41,7 +41,8 @@ ambiente, não de intenção.
 | **Host, porta, IP interno, nome de servidor, connection string** | Descreve a topologia da infraestrutura |
 | **Chave de API, token, segredo, hash** | Comprometimento imediato; se vazou, rotacione antes de corrigir o código |
 | **Dado pessoal de qualquer titular** | CPF, e-mail, telefone, endereço, nome completo, dado de cartão |
-| **Existência de conta ou recurso alheio** | Permite enumerar usuários e recursos de outros assinantes |
+| **Existência de conta ou recurso alheio** | Permite enumerar usuários e recursos de outros contratantes — e, dentro do mesmo contratante, de outros vendedores |
+| **Nome de schema, de contratante ou existência de outro contratante** | O schema é a fronteira de isolamento ([ADR-003](../decisions/ADR-003-isolamento-multi-schema.md)); revelá-lo entrega o alvo e permite enumerar a base de clientes |
 | **Mensagem bruta de exceção de terceiro** | Frequentemente carrega todos os itens acima de uma vez |
 | **Identificador `RN-*`** | Rastreamento de requisito vive só na documentação, nunca no runtime |
 
@@ -66,6 +67,13 @@ aquele CPF está na base, o que é vazamento por si só.
 - **Recurso de outro dono:** responder "não encontrado" em vez de "sem permissão" quando revelar a
   existência já é informação. Decida por recurso e registre a decisão — os dois caminhos são
   legítimos em contextos diferentes.
+- **Recurso de outro contratante:** aqui não há decisão a tomar. O registro está em outro schema e a
+  consulta simplesmente não o encontra, então o desfecho natural já é "não encontrado" — e é o certo.
+  O que **não** pode acontecer é o código distinguir os dois casos para dar uma mensagem melhor
+  ("este pedido pertence a outra empresa"): isso confirma a existência do recurso e do contratante, e
+  reintroduz por mensagem o vazamento que o [ADR-003](../decisions/ADR-003-isolamento-multi-schema.md)
+  evita por estrutura. Erro de resolução de schema é `500` genérico com correlação, nunca uma
+  explicação.
 - **Identificador de correlação:** toda resposta de erro inesperado carrega um identificador que
   permite achar o evento na telemetria. É o que substitui o stack trace: o usuário informa o código,
   o time encontra o detalhe do lado de dentro. O identificador é opaco e não carrega significado.
@@ -124,8 +132,11 @@ string. O identificador `RN-*` fica nesta tabela e não na mensagem.*
 
 | Situação | Agregado / constante | Status | Mensagem ao usuário | Regra |
 |---|---|---|---|---|
-| *(exemplo — substituir)* Assinante inadimplente cria usuário | `Assinante.MsgAssinanteInadimplente` | `409` | "Regularize o pagamento para adicionar usuários." | RN-2 |
-| *(exemplo — substituir)* Assinatura em teste expirada | `Assinatura.MsgTesteExpirado` | `409` | "O período de teste terminou." | RN-1 |
+| *(exemplo — substituir)* Confirmação de pedido sem item | `Pedido.MsgPedidoSemItem` | `409` | "Inclua ao menos um item para confirmar o pedido." | RN-1 |
+| *(exemplo — substituir)* Faturamento de pedido cancelado | `Pedido.MsgPedidoCancelado` | `409` | "Pedido cancelado não pode ser faturado." | RN-3 |
+| *(exemplo — substituir)* Quantidade de item zerada ou negativa | `ItemPedido.MsgQuantidadeInvalida` | `409` | "A quantidade deve ser maior que zero." | RN-4 |
+| *(exemplo — substituir)* Produto repetido no mesmo pedido | `Pedido.MsgProdutoDuplicado` | `409` | "Este produto já está no pedido; altere a quantidade do item existente." | RN-5 |
+| *(exemplo — substituir)* Produto inativo incluído em pedido | `Produto.MsgProdutoInativo` | `409` | "Este produto não está disponível para venda." | RN-7 |
 
 ### Tratamento de falha de integração externa
 
@@ -144,5 +155,6 @@ costuma carregar detalhe de infraestrutura.*
 - [ ] Regra de negócio devolve `409`/`422`, nunca `500`.
 - [ ] Erro inesperado devolve identificador de correlação, e o detalhe está na telemetria.
 - [ ] Falha de autenticação não distingue usuário inexistente de senha errada.
+- [ ] Nenhuma mensagem revela nome de schema, nome de outro contratante ou a existência dele.
 - [ ] A página de erro genérica não expõe detalhe fora de Development, e a diferença está atrás de
       guarda de ambiente.

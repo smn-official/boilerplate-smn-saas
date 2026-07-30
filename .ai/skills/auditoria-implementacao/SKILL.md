@@ -127,7 +127,7 @@ alguém adiciona à classe seis meses depois.
 // ❌ Repassa detalhe de infraestrutura para a tela.
 catch (NpgsqlException ex)
 {
-    return View("Erro", new ErroViewModel(ex.Message));
+    return View("Erro", new ErroViewModel(StatusCodes.Status500InternalServerError, ex.Message, string.Empty));
 }
 
 // ✅ Genérico para o usuário, detalhado só no log, com correlação.
@@ -135,11 +135,21 @@ catch (NpgsqlException ex)
 {
     var correlacao = HttpContext.TraceIdentifier;
     _logger.LogError(ex, "Falha ao persistir | Correlacao: {Correlacao}", correlacao);
-    return View("Erro", new ErroViewModel(MensagensErro.FalhaGenerica, correlacao));
+
+    return View("Erro", new ErroViewModel(
+        StatusCodes.Status500InternalServerError,
+        MensagensDeErro.FalhaGenerica,
+        correlacao));
 }
 ```
 
 O identificador de correlação dá suporte ao atendimento sem entregar o detalhe técnico ao atacante.
+
+`ErroViewModel` e `MensagensDeErro` são definidos em
+[`tratamento-erro-global`](../tratamento-erro-global/SKILL.md), que é a skill dona da tradução de
+exceção em resposta. O `catch` acima é o caso particular do auditor; o caminho geral é o
+`IExceptionHandler` global de lá — um `catch` por controller para falha inesperada é justamente o que
+ele evita.
 
 ### 3. Over-fetching de DTO
 

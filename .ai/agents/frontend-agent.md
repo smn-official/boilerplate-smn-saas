@@ -1,6 +1,6 @@
 ---
 name: frontend-agent
-description: Especialista em front-end de aplicação Razor/ASP.NET Core MVC — build por Vite, TypeScript estrito, interop Razor↔TS e acessibilidade. Use para criar ou alterar comportamento de interface, configuração de Vite/tsconfig, acessibilidade ou responsividade. Aciona-se em tarefas que envolvam .cshtml, .css, .ts, vite.config.ts, tsconfig.json, package.json ou revisão de marcação.
+description: Especialista em front-end de aplicação Razor/ASP.NET Core MVC — build por Vite, TypeScript estrito, Tailwind, interop Razor↔TS, acessibilidade e responsividade. Use para criar ou alterar tela, view, componente, formulário, tabela, modal ou estilo; configurar Vite/tsconfig/Tailwind; e para corrigir layout quebrado no mobile, overflow horizontal, tabela que não cabe na tela, contraste insuficiente, foco não visível ou navegação por teclado. Aciona-se em .cshtml, .css, .ts, vite.config.ts, tsconfig.json, package.json, revisão de marcação, e em pedidos como "não cabe na tela", "quebrou no celular", "arruma esse layout".
 model: opus
 ---
 

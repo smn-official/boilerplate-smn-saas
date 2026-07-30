@@ -50,7 +50,7 @@ public void Construtor_QuandoCodigoVazio_DeveLancarExcecao()
     var acao = () => new <Entidade>(string.Empty, <outros>);
 
     acao.Should()
-        .Throw<ArgumentException>()
+        .Throw<DomainException>()
         .WithMessage(<Entidade>.MsgCodigoObrigatorio);
 }
 ```
@@ -64,7 +64,7 @@ public void Construtor_QuandoCodigoVazio_DeveLancarExcecao()
 - A asserção de mensagem usa a **constante exposta pelo agregado**:
 
 ```csharp
-acao.Should().Throw<ArgumentException>().WithMessage(<Entidade>.MsgCodigoObrigatorio);
+acao.Should().Throw<DomainException>().WithMessage(<Entidade>.MsgCodigoObrigatorio);
 ```
 
 Nunca duplique a string literal no teste — o teste passaria a validar a si mesmo e a mensagem poderia
@@ -81,7 +81,7 @@ public void Ativar_QuandoJaAtivo_DeveLancarExcecao()
 
     var acao = () => <entidade>.Ativar();
 
-    acao.Should().Throw<InvalidOperationException>().WithMessage(<Entidade>.MsgJaAtivo);
+    acao.Should().Throw<DomainException>().WithMessage(<Entidade>.MsgJaAtivo);
 }
 ```
 

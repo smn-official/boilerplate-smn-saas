@@ -54,55 +54,90 @@ os erros em produção.*
 (403) de "autenticado, com direito, mas o recurso é de outro" — este último é o caso que mais vaza,
 porque parece um 404 e frequentemente é implementado como acesso liberado.*
 
+*Sobre permissão e isolamento entre contratantes — os dois não são a mesma coisa.* O bloco
+**Permissões** de um caso de uso responde **"qual papel pode executar isto?"**. Ele **não** é o que
+impede o contratante A de ver dado do contratante B: isso vem do schema resolvido no `search_path` da
+conexão, decidido no login e fora do alcance de qualquer caso de uso
+([ADR-003](../decisions/ADR-003-isolamento-multi-schema.md)). Escrever "apenas os do próprio cliente"
+na coluna de permissão é enganoso duas vezes: sugere que existe um filtro de linha a aplicar — não
+existe, e escrevê-lo seria a alternativa que o ADR-003 descartou — e faz parecer que esquecê-lo é uma
+falha de permissão, quando na verdade o dado do outro contratante está em outro schema e a consulta
+simplesmente não o alcança.
+
+*O caso "recurso de outro dono" continua existindo e continua sendo o que mais vaza — só que **dentro
+do mesmo contratante**: o vendedor que abre o pedido de outro vendedor da mesma empresa. Esse é
+verificação explícita no serviço, e é dele que o bloco Permissões precisa falar.*
+
 ## Índice dos casos de uso
 
 *Uma linha por caso de uso. Agrupe por feature quando a lista passar de uma tela.*
 
 | Caso de uso | Ator | Endpoint | Regras |
 |---|---|---|---|
-| *(exemplo — substituir)* Contratar assinatura | Visitante | `POST /subscriptions/save` | RN-1, RN-3 |
-| *(exemplo — substituir)* Cadastrar usuário na conta | Administrador do assinante | `POST /users/save` | RN-2 |
+| *(exemplo — substituir)* Confirmar pedido | Vendedor | `POST /orders/confirm` | RN-1, RN-3, RN-7 |
+| *(exemplo — substituir)* Adicionar item ao pedido | Vendedor | `POST /orders/items/save` | RN-3, RN-4, RN-5, RN-7 |
+| *(exemplo — substituir)* Listar pedidos | Vendedor, Supervisor | `GET /orders` | — |
 
 ## Exemplo de caso de uso detalhado — substituir
 
-### Cadastrar usuário na conta
+### Confirmar pedido
 
-**Ator.** Administrador do assinante (autenticado, vinculado ao assinante dono da conta).
+**Ator.** Vendedor (autenticado, com vínculo ao contratante da sessão). O Supervisor também confirma,
+inclusive pedido de outro vendedor — ver Permissões.
 
-**Pré-condições.** O assinante existe e sua assinatura não está cancelada. O e-mail informado ainda
-não pertence a outro usuário do mesmo assinante.
+**Pré-condições.** O pedido existe no schema do contratante da sessão e está em rascunho. Tem ao menos
+um item. Todos os produtos referenciados pelos itens continuam ativos.
 
 **Fluxo principal.**
 
-1. O administrador informa nome e e-mail do novo usuário.
-2. O sistema verifica que o assinante está adimplente.
-3. O sistema cria o usuário vinculado ao assinante, em situação "convite pendente".
-4. O sistema envia o convite por e-mail.
-5. O sistema confirma o cadastro e exibe o usuário na lista da conta.
+1. O vendedor abre o pedido em rascunho e aciona a confirmação.
+2. O sistema verifica que o pedido tem ao menos um item.
+3. O sistema lê o preço de venda vigente de cada produto referenciado.
+4. O sistema copia esse preço para cada item, congelando-o.
+5. O sistema passa o pedido para confirmado e calcula o total.
+6. O sistema exibe o pedido confirmado, com o total e os preços praticados.
 
 **Fluxos alternativos e falhas.**
 
 | Condição | Desfecho |
 |---|---|
-| Assinante inadimplente (RN-2) | Operação recusada pelo agregado; a tela informa a pendência de pagamento e oferece o caminho de regularização |
-| E-mail já cadastrado no mesmo assinante | Operação recusada; a tela aponta o campo e-mail |
-| Falha no envio do convite | Usuário permanece criado; o convite entra em reenvio e a tela informa que o e-mail será reenviado — a persistência não é desfeita por falha de integração |
-| Assinatura cancelada | Operação recusada; nenhuma escrita ocorre |
+| Pedido sem itens (RN-1) | Operação recusada pelo agregado; a tela mantém o rascunho e informa que é preciso incluir ao menos um item |
+| Pedido já confirmado (RN-1) | Operação recusada; a tela informa a situação atual e nenhuma escrita ocorre — evita duplo clique reconfirmar e reescrever preços |
+| Pedido cancelado (RN-3) | Operação recusada; nenhuma escrita ocorre |
+| Produto de um item foi inativado (RN-7) | Operação recusada; a tela aponta qual item bloqueia e oferece removê-lo |
+| Pedido de outro vendedor, ator sem papel de Supervisor | Mesmo desfecho de "não encontrado"; nenhuma escrita ocorre |
+| Pedido inexistente no schema da sessão | "Não encontrado" — indistinguível do caso anterior por decisão, ver Permissões |
 
-**Pós-condições.** Existe um usuário em "convite pendente" vinculado ao assinante. Um marco de
-negócio foi registrado em log estruturado, com identificador opaco — nunca e-mail ou nome.
+**Pós-condições.** O pedido está confirmado, com total calculado e `PrecoPraticado` gravado em cada
+item — imutável a partir daqui, mesmo que o catálogo mude. Um marco de negócio foi registrado em log
+estruturado com identificador opaco do pedido, nunca dado do comprador.
 
-**Permissões.** Apenas administrador do próprio assinante. Administrador de outro assinante recebe o
-mesmo desfecho de "não encontrado", sem revelar a existência do recurso. Usuário comum recebe 403.
+**Permissões.**
 
-**Regras aplicadas.** RN-2.
+| Ator | Pode | Desfecho quando não pode |
+|---|---|---|
+| Vendedor, pedido dele | Confirmar | — |
+| Vendedor, pedido de outro vendedor | Não | "Não encontrado" (`404`), sem revelar que o pedido existe |
+| Supervisor | Confirmar qualquer pedido do contratante | — |
+| Autenticado sem papel de venda | Não | `403` |
+| Não autenticado | Não | Redirect para login |
+
+*O isolamento entre contratantes **não** aparece nesta tabela, e a ausência é deliberada:* o pedido de
+outro contratante está em outro schema e a consulta não o alcança — a resolução acontece no
+`search_path` da conexão, a partir da claim emitida no login
+([ADR-003](../decisions/ADR-003-isolamento-multi-schema.md)). O que a tabela cobre é o que **é**
+responsabilidade do serviço: a verificação de dono **dentro** do mesmo contratante, entre vendedores.
+Essa sim é código, e essa sim vira teste.
+
+**Regras aplicadas.** RN-1, RN-3, RN-7.
 
 ## Casos de uso de leitura
 
 *Consulta e listagem também são casos de uso, e também têm permissão e estados vazios. Descreva-os de
 forma mais curta — ator, filtros disponíveis, o que o usuário vê quando não há resultado e quem pode
-ver o quê — mas não os omita: é em listagem que o vazamento de dado de outro assinante costuma
-aparecer.*
+ver o quê — mas não os omita: é em listagem que o registro que o ator não deveria ver costuma
+aparecer. Entre contratantes, o schema já barra; **dentro** do contratante, quem barra é a
+specification, e é por isso que a listagem precisa dizer de quem são as linhas que ela devolve.*
 
 ## Estados que toda tela cobre
 

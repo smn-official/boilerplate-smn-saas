@@ -62,9 +62,9 @@ public sealed class RegistroConsentimento
         CanalConsentimento canal, string origemIp, DateTimeOffset concedidoEm)
     {
         if (string.IsNullOrWhiteSpace(codigoFinalidade))
-            throw new DominioException(MensagensPrivacidade.ConsentimentoSemFinalidade);
+            throw new DomainException(MensagensPrivacidade.ConsentimentoSemFinalidade);
         if (string.IsNullOrWhiteSpace(versaoTexto))
-            throw new DominioException(MensagensPrivacidade.ConsentimentoSemVersaoTexto);
+            throw new DomainException(MensagensPrivacidade.ConsentimentoSemVersaoTexto);
 
         Id = Guid.CreateVersion7();
         TitularId = titularId;
@@ -89,7 +89,7 @@ public sealed class RegistroConsentimento
     public void Revogar(DateTimeOffset agora)
     {
         if (RevogadoEm is not null)
-            throw new DominioException(MensagensPrivacidade.ConsentimentoJaRevogado);
+            throw new DomainException(MensagensPrivacidade.ConsentimentoJaRevogado);
 
         RevogadoEm = agora;
     }

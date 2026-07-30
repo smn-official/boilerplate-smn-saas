@@ -38,6 +38,9 @@ apenas para validar a integração em si, não para repetir a regra.
 | Controller | Retorno correto por cenário e ViewModel montada com os dados certos | Regra de negócio |
 | View | HTML renderizado: elementos, textos e estrutura responsiva | Estilo visual pixel a pixel |
 | Arquitetura | Nomes de assembly e direção de dependência entre camadas | — |
+| Isolamento por cliente | **Dois clientes, o mesmo id**: grave em A, consulte autenticado como B, exija zero resultados — ver [`multi-schema`](../multi-schema/SKILL.md) | O `search_path` do PostgreSQL em si |
+| Listagem paginada | Que nenhum registro se repete nem é pulado entre páginas, com ordenação desempatada por chave — ver [`paginacao`](../paginacao/SKILL.md) | A contagem total a cada página |
+| Tarefa em segundo plano | Reexecução sobre item já processado é no-op, e cancelamento no meio do lote não deixa estado parcial — ver [`tarefas-em-segundo-plano`](../tarefas-em-segundo-plano/SKILL.md) | O agendador do host |
 
 ### Agregado
 

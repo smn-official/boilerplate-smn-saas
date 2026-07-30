@@ -130,7 +130,7 @@ Eliminação não é `Ativo = false`. Detalhes em `retencao-descarte`; o essenci
 public async Task AnonimizarAsync(Guid titularId, CancellationToken cancellationToken)
 {
     var titular = await _repositorio.ObterPorIdAsync(titularId, cancellationToken)
-        ?? throw new DominioException(MensagensPrivacidade.TitularNaoEncontrado);
+        ?? throw new DomainException(MensagensPrivacidade.TitularNaoEncontrado);
 
     titular.Anonimizar(_relogio.Agora);
 
@@ -145,7 +145,7 @@ public async Task AnonimizarAsync(Guid titularId, CancellationToken cancellation
 public void Anonimizar(DateTimeOffset agora)
 {
     if (AnonimizadoEm is not null)
-        throw new DominioException(MensagensPrivacidade.TitularJaAnonimizado);
+        throw new DomainException(MensagensPrivacidade.TitularJaAnonimizado);
 
     Nome = MensagensPrivacidade.ValorAnonimizado;
     Email = $"anonimizado-{Id:N}@invalid";

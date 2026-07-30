@@ -133,15 +133,16 @@ src/<Produto>.<Modulo>/Core/
 
 ### Agregados
 
-Herdam de uma `AggregateRoot<TId>` própria do projeto (não de um assembly externo), que expõe
-apenas `Id` com `protected init`:
+Herdam de uma `AggregateRoot<TId>` própria do projeto, não de um assembly externo. Ela expõe `Id` com
+`protected init` e implementa **igualdade por identidade** — dois carregamentos da mesma linha são o
+mesmo agregado, e sem isso `Contains`, `Distinct` e comparação em teste passam a responder por
+referência.
 
-```csharp
-public abstract class AggregateRoot<TId>
-{
-    public TId Id { get; protected init; }
-}
-```
+A definição completa e copiável está em
+[`dominio-agregados`](../skills/dominio-agregados/SKILL.md), junto de `DomainException`,
+`ISpecification<T>` e `Specification<T>`. **Não redeclare nenhuma delas aqui nem numa skill:** foi
+exatamente a duplicação parcial desses contratos que fez duas skills corretas isoladamente produzirem
+código que não compilava junto.
 
 Regras aplicadas a todo agregado:
 
@@ -155,28 +156,18 @@ Regras aplicadas a todo agregado:
 
 ### Specifications
 
-Classe abstrata que encapsula predicado, `Includes` e ordenação — consultas vivem no domínio, não em
-LINQ solto dentro dos repositórios:
+Classe abstrata que encapsula predicado, `Includes`, ordenação com desempate e paginação — consultas
+vivem no domínio, não em LINQ solto dentro dos repositórios.
 
-```csharp
-public abstract class Specification<T> : ISpecification<T>
-{
-    private readonly List<Expression<Func<T, object>>> _includes = [];
+`ISpecification<T>` e `Specification<T>` têm **uma definição canônica**, em
+[`dominio-agregados`](../skills/dominio-agregados/SKILL.md), incluindo a composição por `And` com
+rebind do parâmetro da expressão. O avaliador que a traduz para o EF Core —
+`SpecificationEvaluator`, com filtro, includes, ordenação, desempate e `Skip`/`Take` — é de
+[`persistencia-ef`](../skills/persistencia-ef/SKILL.md), porque é a camada `Data` que executa.
 
-    public abstract Expression<Func<T, bool>> ToExpression();
-    public IReadOnlyList<Expression<Func<T, object>>> Includes => _includes.AsReadOnly();
-    public Expression<Func<T, object>> OrderBy { get; private set; }
-    public bool OrdemDescendente { get; private set; }
-
-    protected void AdicionarInclude(Expression<Func<T, object>> include) => _includes.Add(include);
-
-    protected void OrdenarPor(Expression<Func<T, object>> ordenacao, bool descendente = false)
-    {
-        OrderBy = ordenacao;
-        OrdemDescendente = descendente;
-    }
-}
-```
+Uma spec composta por `And` de dois lambdas sem rebind do parâmetro compila e falha **só em runtime**:
+o EF não traduz a expressão resultante. É a razão de a composição não ser escrita à mão em cada
+projeto.
 
 ### Serviços de domínio
 
@@ -1505,22 +1496,23 @@ financeira; "quem pode acessar?" é de segurança. Cada conjunto de perguntas é
 
 ## 19. Documentação do projeto
 
-Este documento é **autossuficiente**: contém arquitetura, convenções, responsabilidades, design
-system e critérios de domínio. Um projeto novo pode ser iniciado referenciando apenas ele.
+Este documento é a **referência normativa da arquitetura**: arquitetura, convenções,
+responsabilidades, design system e critérios de domínio. Ele não é autossuficiente, e não deveria
+ser — a documentação do repositório se divide em duas árvores com perguntas diferentes:
 
-Conforme o projeto cresce, desdobre em documentos específicos apenas quando uma seção ficar grande
-demais para conviver aqui — mantendo este arquivo como índice e fonte da visão geral:
+| Árvore | Responde | Muda |
+|---|---|---|
+| [`docs/`](../../docs/README.md) | "o que construir e por quê" — domínio, regras, decisões, operação | a cada entrega do produto |
+| [`.ai/docs/`](README.md) | "como construir" — convenções válidas para qualquer projeto deste boilerplate | junto com o boilerplate |
 
-```text
-docs/
-├── gerais/
-│   ├── arquitetura.md            este esqueleto, adaptado ao projeto
-│   ├── convencoes-codigo.md      expansão da seção 13, com exemplos do projeto
-│   ├── guia-dominios.md          expansão da seção 18
-│   └── testes.md                 expansão da seção 11
-└── responsabilidades/            um arquivo por artefato, expandindo a seção 16
-```
+O [`AGENTS.md`](../../AGENTS.md) da raiz é o índice e o que vale sempre; ele aponta qual seção ler
+antes de cada tipo de tarefa. `CLAUDE.md`, `GEMINI.md` e `.github/copilot-instructions.md` são
+symlinks para ele.
+
+A documentação do produto já vive em `docs/`, com sete diretórios: `architecture/`, `domain/`,
+`development/`, `infrastructure/`, `api/`, `decisions/` e `features/<feature>/`. A lista comentada,
+com o que entra em cada um, está em [`docs/README.md`](../../docs/README.md) — é lá que se decide
+onde um documento novo mora, e não é preciso inventar estrutura paralela para acomodá-lo.
 
 Regra permanente: **se uma mudança altera convenção, responsabilidade ou estrutura, a documentação é
-atualizada na mesma entrega.** Um `AGENTS.md` na raiz consolida as regras de contribuição e aponta
-qual seção ler antes de cada tipo de tarefa.
+atualizada na mesma entrega.**

@@ -218,17 +218,13 @@ event sourcing sem problema concreto que os justifique.
 
 ## Estrutura de documentação e apoio
 
-```text
-docs/                          documentação do produto (negócio) e do projeto
-├── context/                   visão geral do domínio
-├── features/<feature>/        fluxos e regras
-├── development/               este diretório
-└── infrastructure/            banco, autenticação, integrações, deploy, configuração
+São duas árvores com propósitos distintos: `docs/` responde "o que construir e por quê"; `.ai/docs/`
+responde "como construir".
 
-.ai/                           documentação de execução para agentes
-├── skills/                    uma SKILL.md por assunto
-├── agents/                    definições de agente
-└── docs/                      estrutura-arquitetura.md, configuracao.md, gitignore.md, …
-```
-
-`docs/` responde "o que construir e por quê"; `.ai/docs/` responde "como construir".
+- **[docs/README.md](../README.md)** lista e comenta cada um dos sete diretórios de `docs/` —
+  `architecture/`, `domain/`, `development/`, `infrastructure/`, `api/`, `decisions/` e
+  `features/<feature>/`. É a lista canônica; consulte-a lá em vez de reproduzi-la aqui, para que não
+  volte a divergir do disco.
+- **[.ai/docs/README.md](../../.ai/docs/README.md)** é o índice da documentação de execução para
+  agentes, ao lado de `.ai/skills/` (uma `SKILL.md` por assunto) e `.ai/agents/` (uma definição por
+  agente).

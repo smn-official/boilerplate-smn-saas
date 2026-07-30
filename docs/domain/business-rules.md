@@ -47,6 +47,17 @@ em PRs e commits antigos aponta para outra coisa.
 Não confundir com dados reais do negócio (número de contrato, código de norma externa, centro de
 custo), que são domínio legítimo e devem ser preservados no código.
 
+### Um identificador, dois lugares
+
+`RN-*` neste documento e `regra-<feature>-<n>.md` em [../features/](../features/README.md) são **o
+mesmo sistema de identificação**, com papéis distintos: aqui fica o índice e a autoridade da
+numeração; lá fica o texto completo da regra, onde ela nasce junto da feature. O `<n>` do nome do
+arquivo é o número do id.
+
+Nunca crie uma numeração paralela por feature. Duas listas de regra com numerações independentes
+tornam impossível responder "a RN-4 é qual?" — que é a única coisa que o identificador existe para
+resolver. A regra completa do vínculo está em [../features/README.md](../features/README.md).
+
 ## Formato de uma regra
 
 *Cada regra recebe uma seção própria com os seis blocos abaixo. Bloco vazio é sinal de que a regra
@@ -66,36 +77,72 @@ não foi entendida, não de que "não se aplica" — escreva "nenhuma" explicita
 *Uma linha por regra vigente ou revogada. Ordene pelo identificador, não por relevância — a lista
 serve para localizar, e a numeração é o que se cita em PR e commit.*
 
-| Id | Enunciado resumido | Agregado que garante | Situação |
-|---|---|---|---|
-| *(exemplo — substituir)* RN-1 | Assinatura em teste expira em 14 dias corridos a partir da criação | `Assinatura` | Vigente |
-| *(exemplo — substituir)* RN-2 | Assinante inadimplente não cria novos Usuários | `Assinante` | Vigente |
+**Este índice é a autoridade da numeração, e o texto completo da regra vive no `rules/` da feature.**
+Não são dois sistemas de identificador: `RN-7` aqui e `regra-pedido-2.md` na feature são a mesma regra,
+e o `<n>` do nome do arquivo é o número do id dentro da feature. A coluna "Detalhe" torna o vínculo
+navegável nas duas direções; a regra completa desse acoplamento está em
+[../features/README.md](../features/README.md). Regra que não pertence a nenhuma feature — invariante
+de cadastro global, por exemplo — é detalhada aqui mesmo, e a coluna fica com "neste documento".
+
+| Id | Enunciado resumido | Agregado que garante | Detalhe | Situação |
+|---|---|---|---|---|
+| *(exemplo — substituir)* RN-1 | Pedido confirmado tem ao menos um item e congela o preço praticado | `Pedido` | [regra-pedido-1](../features/confirmacao-pedido/rules/regra-pedido-1.md) e neste documento | Vigente |
+| *(exemplo — substituir)* RN-3 | Pedido cancelado não recebe item novo, não é confirmado nem faturado | `Pedido` | [regra-pedido-3](../features/confirmacao-pedido/rules/regra-pedido-3.md) | Vigente |
+| *(exemplo — substituir)* RN-4 | Quantidade de item e preço de produto são maiores que zero | `Pedido`, `Produto` | neste documento | Vigente |
+| *(exemplo — substituir)* RN-5 | O mesmo produto não aparece em dois itens do mesmo pedido | `Pedido` | neste documento | Vigente |
+| *(exemplo — substituir)* RN-6 | Código de produto é único no catálogo do contratante | `Produto` | neste documento | Vigente |
+| *(exemplo — substituir)* RN-7 | Produto inativo não entra em pedido novo nem permite confirmação | `Produto`, `Pedido` | [regra-pedido-2](../features/confirmacao-pedido/rules/regra-pedido-2.md) | Vigente |
 
 ## Exemplo de regra detalhada — substituir
 
-### RN-1 — Assinatura em teste expira em 14 dias corridos
+### RN-1 — Pedido confirmado tem ao menos um item, e o preço é congelado na confirmação
 
-**Enunciado.** A assinatura criada em modalidade de teste expira 14 dias corridos após a data de
-criação, e a partir da expiração não permite acesso às funcionalidades pagas.
+*Esta é a **mesma** regra de
+[../features/confirmacao-pedido/rules/regra-pedido-1.md](../features/confirmacao-pedido/rules/regra-pedido-1.md),
+reproduzida aqui porque este documento também precisa de um exemplo detalhado do formato. **Num
+projeto real, escolha um lugar:** regra que pertence a uma feature é detalhada no `rules/` dela, e
+esta seção fica só para regra que não tem feature. Duas cópias do mesmo texto divergem — é questão de
+tempo.*
 
-**Por quê / origem.** Decisão comercial de 2026-02, registrada na ata de definição do plano de
-entrada. Prazo escolhido para cobrir dois ciclos semanais de uso sem exigir cartão na entrada.
+**Enunciado.** A confirmação de um pedido exige ao menos um item, e copia para cada item o preço de
+venda vigente do produto naquele instante. Alteração posterior do preço de catálogo não altera pedido
+já confirmado.
+
+**Por quê / origem.** Decisão comercial de 2026-03, registrada na ata de definição do fluxo de vendas.
+São duas exigências com a mesma origem e o mesmo momento de aplicação, por isso uma regra só: o
+contratante precisa poder reajustar o catálogo sem que o histórico de pedidos mude de valor
+retroativamente — o que seria, na prática, reescrever o que já foi combinado com o comprador. Pedido
+confirmado sem item é o outro lado da mesma decisão: o instante da confirmação é o único em que o
+sistema tem o que congelar.
 
 **Casos que viram teste.**
 
 | Cenário | Entrada | Resultado esperado |
 |---|---|---|
-| Dentro do prazo | Criada há 13 dias | Acesso permitido |
-| No limite | Criada há exatamente 14 dias | Acesso permitido — o 14º dia ainda é de teste |
-| Fora do prazo | Criada há 15 dias | Acesso negado, expirada |
-| Convertida antes de expirar | Criada há 10 dias, pagamento confirmado | Deixa de ser teste; a regra não se aplica |
+| Sem itens | Pedido em rascunho, zero itens, `Confirmar` | Recusado, `MsgPedidoSemItem`; permanece em rascunho |
+| No limite | Pedido em rascunho, **exatamente um** item, `Confirmar` | Confirmado — um item já satisfaz a regra |
+| Vários itens | Pedido com três itens, `Confirmar` | Confirmado; os três recebem o preço vigente |
+| Preço congelado | Item confirmado a 10,00; produto reajustado para 12,00 | O item continua 10,00; o total do pedido não muda |
+| Preço do rascunho não congela | Item adicionado a 10,00; produto vai a 12,00; **depois** `Confirmar` | O item vale 12,00 — o congelamento é na confirmação, não na inclusão |
+| Todos os itens removidos | Pedido em rascunho com um item; item removido; `Confirmar` | Recusado, `MsgPedidoSemItem` |
+| Já confirmado | Pedido confirmado, `Confirmar` de novo | Recusado; confirmação não é idempotente por decisão — repetição indica erro de fluxo |
 
-**Exceções.** Assinatura de conta interna de demonstração não expira. A exceção é uma propriedade do
-próprio agregado, não um `if` no serviço.
+*O quinto caso é o que separa esta regra de uma versão ingênua dela. "O preço é o do produto" e "o
+preço é congelado" só divergem no rascunho de vida longa — e é lá que o defeito aparece em produção.*
 
-**Impacto.** `Assinatura` garante a invariante. `Assinatura.EhTesteExpirado` calcula a decisão e
-`Assinatura.RegistrarAcesso` recusa a operação quando expirada, com a mensagem em
-`Assinatura.MsgTesteExpirado`. Contagem em dias corridos sobre `DateTimeOffset` em UTC.
+**Exceções.** Nenhuma. Não há pedido confirmado sem item, e não há recálculo retroativo de preço nem
+por operação administrativa: corrigir um pedido confirmado é cancelá-lo e criar outro, preservando o
+rastro do primeiro.
+
+**Impacto.** `Pedido` garante a invariante. `Pedido.Confirmar` recusa a operação sem itens, com a
+mensagem em `Pedido.MsgPedidoSemItem`, e é o único caminho que grava `ItemPedido.PrecoPraticado`.
+`Pedido.EhConfirmavel` expõe a decisão para a tela habilitar ou não o botão, sem reimplementar a
+regra. `PrecoPraticado` tem apenas setter privado e nenhum método público o altera — a imutabilidade
+é estrutural, não uma convenção de uso.
+
+O preço de origem vem de `Produto.PrecoDeVenda`, e `Produto` é agregado **distinto**: quem lê o preço
+e o repassa é o serviço, não o `Pedido`. Ambos vivem no schema do cliente, então nenhuma fronteira de
+schema é atravessada aqui — ver [aggregates.md](aggregates.md).
 
 **Situação.** Vigente.
 
@@ -107,3 +154,6 @@ próprio agregado, não um `if` no serviço.
   mais frequentemente falta.
 - Ao revogar, mantenha a seção com `Situação: Revogada em <data> — <motivo>` e remova o código que a
   aplicava na mesma entrega.
+- Regra nova de uma feature entra **no `rules/` da feature e nesta tabela**, na mesma entrega. Arquivo
+  em `rules/` que não está no índice é regra que ninguém encontra; linha no índice sem arquivo (nem
+  seção detalhada aqui) é enunciado resumido sem casos de teste, que não é regra.

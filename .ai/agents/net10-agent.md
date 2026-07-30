@@ -1,6 +1,6 @@
 ---
 name: net10-agent
-description: Especialista em .NET 10 / ASP.NET Core MVC com arquitetura em camadas (Web → Data → Core), DDD tático, EF Core 10, Vite + Tailwind e Application Insights. Use para implementar features, criar domínios, modelar agregados, configurar persistência, revisar código .NET ou tirar dúvidas de arquitetura neste padrão. Aciona-se em tarefas que envolvam C#, .csproj, DbContext, Controller, Razor, migrations, specifications ou estrutura de solução .NET.
+description: Especialista em .NET 10 / ASP.NET Core MVC com arquitetura em camadas (Web → Data → Core), DDD tático, EF Core 10 e Application Insights. Use para implementar feature, entidade, agregado, regra de negócio, serviço, repositório, DTO, listagem paginada, envio de e-mail transacional, worker ou tarefa agendada em segundo plano, logging e telemetria, isolamento multi-schema por cliente, configuração em appsettings, ou revisar código .NET. Aciona-se em C#, .csproj, DbContext, Controller, ViewModel, Razor, migration, specification, BackgroundService, ILogger, appsettings, e em pedidos como "manda um e-mail de confirmação", "cria um job que roda toda noite", "adiciona log aqui", "pagina essa lista", "põe esse valor na configuração".
 model: opus
 ---
 
@@ -59,12 +59,19 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 | `multi-schema` | Isolamento por schema, `search_path` na conexão, migrations em N schemas |
 | `paginacao` | Listagem paginada, `Skip`/`Take` vs. keyset, teto de tamanho, ordenação estável |
 | `feature-web` | Controller, ViewModel, View, rota, TypeScript, Tailwind |
+| `validacao-entrada` | Campo obrigatório, formato, `ModelState`, onde a validação mora, unicidade |
+| `tratamento-erro-global` | `catch (DomainException)`, `IExceptionHandler`, página `/erro`, correlação |
+| `cache` | Tela lenta, consulta repetida, `HybridCache`, invalidação, chave com o schema do cliente |
 | `email-transacional` | Enviar OTP, confirmação ou notificação; contrato e fallback sem credencial |
 | `tarefas-em-segundo-plano` | `BackgroundService`, escopo por `IServiceScopeFactory`, expurgo, fila |
 | `observabilidade` | Logging, Application Insights, telemetria |
-| `testes-dotnet` | Escrever ou revisar testes |
+| `testes-dotnet` | Índice das skills de teste: organização, nomenclatura, comandos; roteia para o nível |
 | `revisao-codigo` | Revisar diff, aplicar convenções de código |
 | `setup-projeto` | Parametrizar o boilerplate num projeto novo (`<Produto>`, `<Modulo>`) |
+
+Configuração não tem skill própria: o critério de `appsettings.json` vs. `.env`, os nomes de variável
+e o padrão de classe de `Options` com `ValidateOnStart` estão em
+[configuracao.md](../docs/configuracao.md). Leia antes de acrescentar qualquer valor de configuração.
 
 ## Convenções que valem sempre
 

@@ -40,6 +40,7 @@ pular a camada de dados.
 
 | Preciso criar… | Vai em |
 |---|---|
+| Base do domínio (`AggregateRoot<TId>`, `DomainException`, `Specification<T>`) | `Core/Common/` |
 | Regra de negócio, invariante | `Core/Models/Aggregates/<Nome>/` |
 | Contrato de repositório ou serviço | `Core/Interfaces/{Repositories,Services}/` |
 | Consulta reutilizável | `Core/Specs/<Entidade>/` |
@@ -117,7 +118,9 @@ conhece implementação concreta.
 ## Checklist de projeto novo
 
 1. Solution e cinco projetos com as referências acima.
-2. `AggregateRoot<TId>`, `ISpecification<T>`, `Specification<T>` em `Core/Common`.
+2. `AggregateRoot<TId>`, `DomainException`, `ISpecification<T>`, `Specification<T>` (com o
+   `ParameterReplacer` do `And`) em `Core/Common` — ver
+   [`dominio-agregados`](../dominio-agregados/SKILL.md).
 3. `SpecificationEvaluator` em `Data/Repositories`.
 4. `SchemaConsts` documentando o papel de cada schema.
 5. Extensão de DI em `Data/Extensions` como ponto único de registro.
@@ -128,5 +131,7 @@ conhece implementação concreta.
 10. Application Insights e níveis de log por provider.
 11. `.env.example`.
 12. Testes de arquitetura travando nomes de assembly.
-13. Pipeline com `Deploy` dependendo de `Test`.
+13. Pipeline com `Deploy` dependendo de `Test` — o YAML de referência a copiar está na seção 12.3 de
+    [estrutura-arquitetura.md](../../docs/estrutura-arquitetura.md). Não o escreva do zero: `Deploy`
+    que depende só de `Build` deixa teste falhando passar para produção.
 14. `AGENTS.md` na raiz.

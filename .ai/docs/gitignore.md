@@ -23,7 +23,7 @@ nenhuma**:
 
 É uma **referência** a uma variável de ambiente, não o valor. A credencial real vive no `.env`, que é
 ignorado. Ignorar o `.mcp.json` significaria que cada pessoa que clona o repositório teria de
-descobrir e reconfigurar os três servidores MCP do zero — perdendo justamente o que faz este
+descobrir e reconfigurar os quatro servidores MCP do zero — perdendo justamente o que faz este
 boilerplate funcionar de imediato.
 
 O mesmo vale para `.ai/` inteiro: agentes, skills e docs são configuração compartilhada. É o produto
@@ -54,7 +54,7 @@ arquivo que aponta para um segredo é seguro; um que o embute, não.
 | `*.pfx`, `*.key`, `*.pem`, `secrets.json` | Certificado e chave |
 | `bin/`, `obj/`, `artifacts/` | Saída do `dotnet build` |
 | `node_modules/`, `.vite/`, `dist/` | Reinstalável por `npm ci` |
-| `wwwroot/build/` | Assets gerados pelo Vite no build — derivado |
+| `wwwroot/dist/` | Assets gerados pelo Vite no build — derivado |
 | `*.dump`, `*.backup`, `pgdata/` | **Dump pode conter dado pessoal real** |
 | `playwright-report/`, `test-results/` | Saída de execução de teste |
 | `.playwright-mcp/` | Screenshot e trace do MCP — inspeção descartável |
@@ -83,9 +83,11 @@ repositório, inclusive os que ninguém controla. É exatamente o que
 [`dados-pessoais-modelagem`](../skills/dados-pessoais-modelagem/SKILL.md) e
 [`retencao-descarte`](../skills/retencao-descarte/SKILL.md) proíbem.
 
-**`wwwroot/build/` é derivado.** A skill [`vite-build`](../skills/vite-build/SKILL.md) amarra
-`npm run build` ao `dotnet build`, então o artefato é reproduzível. Versioná-lo gera conflito em todo
-merge, porque o hash muda a cada build.
+**`wwwroot/dist/` é derivado.** É o `outDir` declarado no `vite.config.ts`, e a skill
+[`vite-build`](../skills/vite-build/SKILL.md) amarra `npm run build` ao `dotnet build`, então o
+artefato é reproduzível. Versioná-lo gera conflito em todo merge, porque o hash muda a cada build.
+A entrada explícita é redundante com o `dist/` genérico da lista acima — que casa em qualquer nível —
+mas nomeia o caminho real, para que a regra escrita não descreva um diretório que nada gera.
 
 **`Directory.Build.props` e `.editorconfig` são versionados — são contrato, não preferência.** O
 nome do `.editorconfig` sugere ajuste de editor, e a intuição é ignorá-lo junto com `.vs/` e

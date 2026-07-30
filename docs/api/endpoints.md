@@ -35,31 +35,65 @@ pego.*
 | **Método** | `GET` ou `POST` | Leitura nunca é `POST`; escrita nunca é `GET` |
 | **Rota** | O caminho completo publicado, com parâmetros | Copiado do atributo, não reconstruído mentalmente |
 | **O que faz** | Uma frase, em linguagem de negócio | Se precisa de duas frases, provavelmente são dois endpoints |
-| **Permissão** | Papel exigido **e** o vínculo com o dono do recurso | "Autenticado" sozinho não é permissão — quem é o dono? |
+| **Permissão** | O **papel** exigido, e o vínculo com o dono do recurso **dentro** do contratante | "Autenticado" sozinho não é permissão — qual papel, e vale para recurso de qualquer colega? |
 | **Regras aplicadas** | Os `RN-*` exercitados | Vazio é resposta válida para leitura simples; suspeito em escrita |
 
-*Sobre a coluna Permissão: o item que mais escapa não é o papel, é o **vínculo**. "Administrador" não
-impede um administrador do assinante A de abrir o recurso do assinante B — o vínculo com o dono
-precisa estar escrito, porque é ele que vira verificação no serviço.*
+*Sobre a coluna Permissão: ela registra **autorização** — quem pode chamar —, não filtro de linha. O
+item que mais escapa é o **vínculo dentro do contratante**: "Vendedor" não diz se aquele vendedor pode
+abrir o pedido de outro vendedor da mesma empresa, e essa é a verificação que precisa existir no
+serviço.*
+
+### O isolamento entre contratantes não é responsabilidade da query
+
+**Nenhuma linha desta tabela precisa dizer "apenas os do próprio cliente", e escrever isso é defeito.**
+
+Dado de outro contratante não é filtrado: ele está em **outro schema do PostgreSQL**, e a conexão da
+requisição resolve o `search_path` a partir da claim emitida no login — decisão do
+[ADR-003](../decisions/ADR-003-isolamento-multi-schema.md), detalhada na skill
+[multi-schema](../../.ai/skills/multi-schema/SKILL.md). A consulta não alcança o dado do outro
+contratante nem se quiser; ela nem encontra a tabela.
+
+Por que a distinção importa nesta tabela, e não é preciosismo de redação:
+
+- **"Apenas os do próprio cliente" descreve a alternativa que o ADR-003 descartou** — coluna
+  discriminadora com filtro global de consulta. Quem lê o inventário e implementa o que está escrito
+  constrói justamente o modo de falha que a decisão existe para evitar: um `IgnoreQueryFilters()` ou
+  um `FromSql` esquecido vaza dado entre contratantes **sem erro algum**.
+- **Confunde onde a auditoria deve olhar.** Se a coluna sugere que o isolamento é da query, revisar o
+  isolamento passa a significar reler toda consulta do sistema. Com schema, a pergunta "o contratante
+  A alcança dado do B?" se responde olhando `GRANT` e o interceptor — em um lugar, não em quarenta.
+- **Esconde a permissão que realmente falta ser escrita.** O que a coluna precisa registrar é o papel
+  e o vínculo **intra**-contratante. É aí que existe IDOR de verdade neste produto, e é o que fica
+  invisível quando a célula se gasta declarando um filtro que não existe.
+
+O que **ainda** vale escrever na coluna: `Anônimo`, papel exigido (`Supervisor`), e o vínculo com o
+dono quando ele restringe dentro do contratante ("o pedido deve ser do próprio vendedor").
 
 ## Inventário
 
-### Assinaturas *(exemplo — substituir)*
+### Pedidos *(exemplo — substituir)*
 
 | Método | Rota | O que faz | Permissão | Regras aplicadas |
 |---|---|---|---|---|
-| `GET` | `/subscriptions` | Lista as assinaturas do assinante autenticado | Autenticado; **apenas** as do próprio assinante | — |
-| `GET` | `/subscriptions/new` | Abre o formulário de contratação | Administrador do assinante | — |
-| `GET` | `/subscriptions/edit?id={id}` | Abre o formulário de edição | Administrador; a assinatura deve pertencer ao assinante autenticado | — |
-| `POST` | `/subscriptions/save` | Cria ou atualiza a assinatura | Administrador do assinante dono | RN-1, RN-3 |
-| `POST` | `/subscriptions/delete` | Cancela a assinatura | Administrador do assinante dono | RN-4 |
+| `GET` | `/orders` | Lista os pedidos | Vendedor (vê os próprios); Supervisor (vê todos) | — |
+| `GET` | `/orders/new` | Abre o formulário de novo pedido | Vendedor | — |
+| `GET` | `/orders/edit?id={id}` | Abre o pedido em rascunho para edição | Vendedor, apenas o próprio pedido; Supervisor, qualquer um | — |
+| `POST` | `/orders/items/save` | Inclui ou altera um item do pedido | Vendedor, apenas o próprio pedido; Supervisor, qualquer um | RN-3, RN-4, RN-5, RN-7 |
+| `POST` | `/orders/confirm` | Confirma o pedido e congela os preços praticados | Vendedor, apenas o próprio pedido; Supervisor, qualquer um | RN-1, RN-3, RN-7 |
+| `POST` | `/orders/cancel` | Cancela o pedido | Supervisor | RN-3 |
 
-### Usuários *(exemplo — substituir)*
+### Produtos *(exemplo — substituir)*
 
 | Método | Rota | O que faz | Permissão | Regras aplicadas |
 |---|---|---|---|---|
-| `GET` | `/users` | Lista os usuários da conta | Administrador do assinante | — |
-| `POST` | `/users/save` | Cadastra usuário e dispara o convite | Administrador do assinante | RN-2 |
+| `GET` | `/products` | Lista o catálogo do contratante | Vendedor, Supervisor | — |
+| `POST` | `/products/save` | Cria ou atualiza um produto do catálogo | Supervisor | RN-4, RN-6 |
+| `POST` | `/products/deactivate` | Inativa o produto, sem removê-lo do histórico | Supervisor | RN-7 |
+
+*Repare que nenhuma célula de Permissão menciona contratante, cliente, tenant ou schema — pela razão
+da seção anterior. As duas tabelas são de entidades que vivem no **schema do cliente**
+(`Cliente (schema próprio)` em [../domain/aggregates.md](../domain/aggregates.md)), e é a conexão que
+as delimita.*
 
 ## Endpoints anônimos
 
@@ -88,3 +122,6 @@ seção vazia é ambígua.*
 - Rota removida sai daqui e some do código junto — inventário com rota morta faz duvidar do resto.
 - Mudança de permissão é mudança de inventário, mesmo quando o código muda uma linha só: é
   exatamente essa linha que a auditoria procura.
+- Célula de Permissão que fale de "próprio cliente", "próprio contratante", "tenant" ou schema é sinal
+  de que alguém está descrevendo filtro de linha onde deveria descrever papel — corrija a célula e
+  confira se o código não implementou o filtro de fato.

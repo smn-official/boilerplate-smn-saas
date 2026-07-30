@@ -107,6 +107,207 @@ A tela inteira é operável sem mouse: `Tab`/`Shift+Tab` para percorrer, `Enter`
 `Esc` para fechar sobreposição, setas dentro de menu e lista de opções. Se algo só funciona com
 clique ou hover, está quebrado.
 
+## Modal — o componente completo
+
+Modal é o componente onde mais se erra acessibilidade, porque o foco preso é trabalhoso de escrever
+à mão. O que segue é o molde copiável; **dropdown, toast, tabs e accordion se resolvem por analogia**
+— mesma decisão de elemento nativo, mesmo contrato `data-*`, mesmo retorno de foco.
+
+### A decisão: `<dialog>` nativo, não `div role="dialog"`
+
+Aplique aqui a primeira regra do ARIA. **`<dialog>` aberto com `showModal()` entrega de graça** o que
+o `div role="dialog"` exige escrever e manter:
+
+| Comportamento | `<dialog>` + `showModal()` | `div role="dialog"` |
+|---|---|---|
+| Papel de diálogo e `aria-modal` | Implícito no elemento | `role` + `aria-modal` à mão |
+| Foco entra ao abrir | O navegador move | `focus()` manual no primeiro focável |
+| **Foco preso enquanto aberto** | **O navegador prende** | Handler de `Tab`/`Shift+Tab` à mão |
+| Conteúdo de trás inerte | Implícito (top layer) | `inert` no `<main>` à mão, e desfazer ao fechar |
+| `Esc` fecha | Nativo (evento `cancel`) | Handler de `keydown` à mão |
+| Backdrop | `::backdrop`, sem elemento extra | `<div>` de overlay + `z-index` |
+| Empilhamento sobre qualquer `z-index` | Top layer do navegador | Guerra de `z-index` |
+
+Traduzido em código: a versão nativa dispensa o handler de `Tab`, o handler de `Esc`, o controle de
+`inert` e o overlay — **some a parte difícil, que é justamente onde o erro mora**. Sobra o que o
+`<dialog>` de fato não resolve sozinho:
+
+| O que `<dialog>` **não** resolve | Providência |
+|---|---|
+| Retorno do foco ao gatilho ao fechar | Não é garantido em toda versão de navegador — devolva no evento `close` |
+| Clique no backdrop fechar | Nativo não fecha; compare `evento.target` com o próprio `<dialog>` |
+| Animação de entrada/saída | `display` muda de imediato; anime com `@starting-style` e respeite `prefers-reduced-motion` |
+| Rolagem do corpo atrás do modal | Continua rolando em parte dos navegadores; trave no `<body>` se incomodar |
+| Rótulo acessível | `aria-labelledby` apontando o título continua sendo seu |
+
+Só escreva `div role="dialog"` quando um requisito concreto impedir o nativo — e então o foco preso
+volta a ser sua responsabilidade (ver o final desta seção).
+
+### A marcação — partial Razor
+
+Gatilho e diálogo são irmãos; o gatilho **é um link real** para a página de confirmação, e só vira
+botão de modal quando o script assume (ver progressive enhancement, adiante).
+
+```razor
+@model <Entidade>ViewModel
+
+<a href="@Url.Action(nameof(<Entidade>Controller.Confirmar), "<Entidade>", new { id = Model.Id })"
+   class="text-body-sm underline focus-visible:outline-2 focus-visible:outline-offset-2"
+   data-<feature>-abrir-link>Excluir</a>
+
+<button type="button" hidden
+        class="w-full sm:w-auto text-body-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+        data-<feature>-abrir>Excluir</button>
+
+<dialog class="m-auto w-full max-w-md rounded-lg border border-borda p-6 backdrop:bg-black/50"
+        aria-labelledby="titulo-<feature>"
+        aria-describedby="descricao-<feature>"
+        data-<feature>-dialogo
+        data-url-confirmar="@Url.Action(nameof(<Entidade>Controller.Excluir), "<Entidade>")">
+    <h2 id="titulo-<feature>" class="text-heading-sm">Excluir <Entidade></h2>
+    <p id="descricao-<feature>" class="mt-2 text-body">Esta ação não pode ser desfeita.</p>
+
+    <form method="post" class="mt-6 flex flex-col gap-2 sm:flex-row-reverse" data-<feature>-form>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit"
+                class="w-full sm:w-auto text-body-sm focus-visible:outline-2 focus-visible:outline-offset-2">
+            Excluir
+        </button>
+        <button type="button" formnovalidate
+                class="w-full sm:w-auto text-body-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+                data-<feature>-cancelar>
+            Cancelar
+        </button>
+    </form>
+</dialog>
+```
+
+A `action` do formulário **não** é escrita no `.ts`: chega por `data-url-confirmar`, gerada com
+`Url.Action` e `nameof`. O antiforgery token é renderizado pelo Razor e enviado no `POST` real.
+
+### O TypeScript — tudo que sobra
+
+```ts
+function inicializarModalDeConfirmacao(): void {
+    const dialogo = document.querySelector<HTMLDialogElement>("[data-<feature>-dialogo]");
+    const gatilho = document.querySelector<HTMLButtonElement>("[data-<feature>-abrir]");
+    const link = document.querySelector<HTMLAnchorElement>("[data-<feature>-abrir-link]");
+
+    if (dialogo === null || gatilho === null || link === null) {
+        return;
+    }
+
+    const urlConfirmar = dialogo.dataset.urlConfirmar;
+    const formulario = dialogo.querySelector<HTMLFormElement>("[data-<feature>-form]");
+    const cancelar = dialogo.querySelector<HTMLButtonElement>("[data-<feature>-cancelar]");
+
+    if (urlConfirmar === undefined || formulario === null || cancelar === null) {
+        return;
+    }
+
+    formulario.action = urlConfirmar;
+    link.hidden = true;
+    gatilho.hidden = false;
+
+    gatilho.addEventListener("click", () => {
+        dialogo.showModal();
+    });
+
+    cancelar.addEventListener("click", () => {
+        dialogo.close();
+    });
+
+    dialogo.addEventListener("close", () => {
+        gatilho.focus();
+    });
+
+    dialogo.addEventListener("click", (evento: MouseEvent) => {
+        if (evento.target === dialogo) {
+            dialogo.close();
+        }
+    });
+}
+
+inicializarModalDeConfirmacao();
+```
+
+Note o que **não** está aqui: nenhum handler de `Tab`, nenhum handler de `Esc`, nenhum `inert`,
+nenhum overlay. `showModal()` cobre os quatro. O `return` mora dentro da função — no topo do módulo
+seria erro de sintaxe.
+
+### Progressive enhancement
+
+**Sem JavaScript o modal não abre — e isso é aceitável, desde que a ação continue existindo.** O
+padrão é o par acima: o link é a ação real e o botão é o incremento.
+
+| Estado | O que o usuário vê | Resultado |
+|---|---|---|
+| Sem JS | O link `Excluir` (o botão nasce `hidden`) | Navega para a página de confirmação real, que tem o mesmo `POST` |
+| Com JS | O botão `Excluir` (o script esconde o link) | Abre o modal; o `POST` é o mesmo |
+
+O inverso — modal que nasce visível e é escondido por script — deixa o conteúdo piscando na tela e
+quebra sem JS. **O estado inicial correto vem do Razor**, nunca de uma classe que o script remove.
+
+### Foco preso à mão — só quando o nativo não servir
+
+Se um requisito concreto forçar `div role="dialog"`, o foco preso volta a ser seu. A regra é
+circular a tabulação: `Tab` no último focável vai para o primeiro; `Shift+Tab` no primeiro vai para o
+último. Este módulo vive em `Features/Shared/Scripts`.
+
+```ts
+const FOCAVEIS = [
+    "a[href]",
+    "button:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function prenderFoco(painel: HTMLElement, evento: KeyboardEvent): void {
+    if (evento.key !== "Tab") {
+        return;
+    }
+
+    const focaveis = Array.from(painel.querySelectorAll<HTMLElement>(FOCAVEIS));
+    const primeiro = focaveis.at(0);
+    const ultimo = focaveis.at(-1);
+
+    if (primeiro === undefined || ultimo === undefined) {
+        return;
+    }
+
+    if (evento.shiftKey && document.activeElement === primeiro) {
+        evento.preventDefault();
+        ultimo.focus();
+        return;
+    }
+
+    if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primeiro.focus();
+    }
+}
+
+export { prenderFoco };
+```
+
+Isso é só o `Tab`. Ainda faltariam `Esc`, `inert` no conteúdo de trás, o overlay e o foco inicial —
+todos já resolvidos por `showModal()`. É o argumento a favor do nativo, escrito em código.
+
+### Por analogia
+
+| Componente | Elemento e atributos | Foco |
+|---|---|---|
+| Dropdown / menu | `<button aria-expanded aria-controls>` + lista | Setas navegam; `Esc` fecha e devolve ao gatilho |
+| Toast | `role="status"` (ou `role="alert"` para erro) | **Não** rouba foco; anuncia e não interrompe |
+| Tabs | `role="tablist"` + `aria-selected` | Setas trocam a aba; `Tab` sai do conjunto |
+| Accordion | `<button aria-expanded>` + região | Foco fica no gatilho; nada de prender |
+
+❌ Toast que recebe foco e interrompe o que se digitava.
+✅ Toast em `role="status"`, lido pelo leitor de tela sem mover o foco.
+
 ### Contraste e cor
 
 - Texto normal ≥ 4.5:1 contra o fundo; texto grande (≥ 24px ou 19px em 700) ≥ 3:1.
@@ -130,6 +331,18 @@ clique ou hover, está quebrado.
 Não coloque `aria-label` em elemento que já tem texto visível — o rótulo acessível passa a divergir
 do que se vê.
 
+## Erros comuns
+
+| Sintoma | Causa | Correção |
+|---|---|---|
+| Foco vai para o topo da página ao fechar o modal | Ninguém devolveu o foco ao gatilho | `focus()` no gatilho dentro do evento `close` |
+| `Tab` escapa do modal e percorre a página atrás | `div role="dialog"` sem foco preso | `<dialog>` + `showModal()`, que prende sozinho |
+| Modal aparece atrás do cabeçalho fixo | Guerra de `z-index` num overlay próprio | `<dialog>` sobe para o top layer do navegador |
+| `Esc` não fecha a sobreposição | Handler ausente no `div role="dialog"` | `<dialog>`, que emite `cancel` nativo |
+| Modal pisca na tela ao carregar sem JS | Nasce visível e o script esconde | Estado inicial correto no Razor |
+| Leitor de tela anuncia o modal sem título | Falta `aria-labelledby` | Apontar o `id` do `<h2>` |
+| Toast interrompe a digitação | Recebeu foco | `role="status"`, sem mover o foco |
+
 ## Checklist antes de entregar
 
 - [ ] Sem overflow horizontal em 320px, 768px, 1024px e 1440px.
@@ -139,6 +352,9 @@ do que se vê.
 - [ ] Nenhuma fonte abaixo da escala para fazer conteúdo caber.
 - [ ] Navegação completa por teclado, com foco visível em cada parada.
 - [ ] Modal/offcanvas com foco preso e `Esc` funcionando.
+- [ ] Sobreposição usa `<dialog>` + `showModal()`; `div role="dialog"` só com motivo registrado.
+- [ ] Foco retorna ao gatilho ao fechar a sobreposição.
+- [ ] Ação do modal continua alcançável sem JavaScript (link para página real).
 - [ ] Contraste verificado em texto, borda e ícone.
 - [ ] Toda imagem com `alt` (vazio se decorativa); todo botão de ícone com `aria-label`.
 - [ ] Erros de formulário associados por `aria-describedby`.

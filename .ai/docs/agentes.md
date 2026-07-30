@@ -1,6 +1,6 @@
 # Agentes
 
-Nove agentes especializados. As definições vivem em [../agents/](../agents/) e as 53 skills, num
+Nove agentes especializados. As definições vivem em [../agents/](../agents/) e as 57 skills, num
 namespace plano, em [../skills/](../skills/). A base normativa de todos é
 [estrutura-arquitetura.md](estrutura-arquitetura.md) e o [AGENTS.md](../../AGENTS.md) da raiz.
 
@@ -29,6 +29,12 @@ namespace plano, em [../skills/](../skills/). A base normativa de todos é
 | Campo novo com dado pessoal, retenção, direito do titular | `lgpd-agent` |
 | Auditar implementação nova, dependência vulnerável | `security-agent` |
 | Pagamento, assinatura, plano, cobrança recorrente | `stripe-agent` |
+| Valor novo em `appsettings.json` ou `.env`, classe de `Options` | `net10-agent` — critério em [configuracao.md](configuracao.md) |
+| Enviar e-mail, worker, tarefa agendada, log e telemetria | `net10-agent` |
+| Pipeline de CI, deploy, release, tag de versão | `github-agent` — a REGRA ZERO dele cobre publicação e infra |
+| Atualizar dependência (subir versão de pacote) | `net10-agent` implementa; `security-agent` audita o resultado |
+| "A aplicação não sobe", "esta tela dá erro 500" | `codegraph-agent` localiza; o agente da camada corrige |
+| Atualizar a documentação junto com a alteração | O mesmo agente que fez a alteração — não se delega |
 
 ## Fronteiras entre agentes
 
@@ -82,12 +88,14 @@ a arquitetura ou que decide pelo usuário:
 
 ## Descoberta pelas ferramentas
 
-- **Claude Code** — o symlink `.claude/skills -> ../.ai/skills` expõe as 53 skills. Para os agentes,
-  crie `.claude/agents -> ../.ai/agents` ou copie os arquivos; ambos os diretórios são planos.
+- **Claude Code** — os symlinks `.claude/skills -> ../.ai/skills` e `.claude/agents -> ../.ai/agents`
+  já existem no repositório e expõem as 57 skills e os 9 agentes; ambos os diretórios são planos.
+  **Nada a fazer, e nada a recriar** — não apague nem substitua esses links. `rm -rf .claude/agents`
+  pode resolver o symlink e levar `.ai/agents/` inteiro com ele.
 - **Outras ferramentas** — leem o `AGENTS.md` da raiz pelo symlink correspondente
   (`CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`).
 
-**Atenção a colisão de nome de skill:** `.ai/skills/` é um namespace plano e os 50 nomes são únicos
+**Atenção a colisão de nome de skill:** `.ai/skills/` é um namespace plano e os 53 nomes são únicos
 hoje. Ao adicionar uma skill, confira que o nome não repete um existente e registre o dono em
 [skills.md](skills.md).
 
