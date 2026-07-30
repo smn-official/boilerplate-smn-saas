@@ -34,7 +34,7 @@ parecem caber) e a ordem sugerida numa entrega.
 
 ### [skills.md](skills.md)
 
-As 57 skills agrupadas por agente dono, com o que cada uma cobre e quando usar. Existe porque
+As 59 skills agrupadas por agente dono, com o que cada uma cobre e quando usar. Existe porque
 `.ai/skills/` é um namespace plano — exigência do `.claude/skills/` — e a relação skill → agente se
 perderia sem registro. A mesma informação está no campo `agent:` de cada `SKILL.md`.
 

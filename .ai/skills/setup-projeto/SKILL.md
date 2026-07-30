@@ -21,7 +21,7 @@ O repositório tem dois tipos de marcador `<...>`, e confundi-los destrói as sk
 
 `<Entidade>` aparece 119 vezes e significa "o agregado que você está escrevendo agora" — é parte da
 linguagem das skills, não um campo a preencher. Um find-and-replace cego sobre `<...>` transformaria
-as 57 skills em lixo. O script já conhece essa fronteira: sua lista de marcadores é exatamente
+as 59 skills em lixo. O script já conhece essa fronteira: sua lista de marcadores é exatamente
 `Produto` e `Modulo`, e nada deve ser acrescentado a ela.
 
 ## Procedimento
@@ -120,7 +120,7 @@ registro — agora sobre a documentação do produto, que envelhece pelos mesmos
 ## Se alguém pedir para escolher tecnologias
 
 Este boilerplate não é um menu. A stack está declarada no [AGENTS.md](../../../AGENTS.md) e sustentada
-pelos 9 agentes e 57 skills; desligar uma tecnologia exigiria podar agentes e skills e regenerar a
+pelos 9 agentes e 59 skills; desligar uma tecnologia exigiria podar agentes e skills e regenerar a
 documentação, e skill sobrevivente desatualizada passa a orientar contra o padrão vigente — pior do
 que não ter agente. Se a mudança de stack for real, ela é uma decisão de arquitetura: atualize
 `AGENTS.md`, `.ai/docs/estrutura-arquitetura.md` e as skills afetadas na mesma entrega.

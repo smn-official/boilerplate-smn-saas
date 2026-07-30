@@ -1,6 +1,6 @@
 # Mapa de skills
 
-As 57 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
+As 59 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
 `.claude/skills/`. Este arquivo registra a qual agente cada uma pertence; a mesma informação
 está no campo `agent:` do frontmatter de cada `SKILL.md`.
 
@@ -40,10 +40,12 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`transacoes-erros`](../skills/transacoes-erros/SKILL.md) | Controle transacional e tratamento de erro em procedures PostgreSQL — COMMIT/ROLLBACK no corpo, blocos EXCEPTION, SQLSTATE, savepoints implícitos, processamento em lote e locks | ao escrever procedure que grava dados, processa lote ou precisa tratar falha |
 | [`versionamento-deploy`](../skills/versionamento-deploy/SKILL.md) | Versionamento e deploy de procedures PostgreSQL — organização de arquivos .sql, idempotência do script, rollback, mudança de assinatura, integração com migration do EF Core e revisão | ao criar arquivo de procedure, alterar assinatura ou preparar deploy |
 
-## frontend-agent — 4 skills
+## frontend-agent — 6 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
+| [`design-visual`](../skills/design-visual/SKILL.md) | Direção visual e acabamento de tela — tokens semânticos de cor no Tailwind 4, disciplina de acento, hierarquia com um ponto de entrada dominante, profundidade por borda e sombra, movimento com duração definida, receitas de direção prontas e anti-padrões que denunciam tela gerada sem critério | ao criar tela nova, definir a identidade visual do produto, revisar tela sem graça ou auditar o acabamento antes de entregar |
+| [`estados-de-interface`](../skills/estados-de-interface/SKILL.md) | Os cinco estados de toda superfície de dados — carregando, vazio, erro, populado e extremo — composição de estado vazio e de erro, limiares de indicador de carregamento, estados de formulário no submit, retry com backoff e anúncio por ARIA e foco | ao criar listagem, tabela, formulário, painel ou busca, revisar tela que só mostra o caminho feliz, ou diagnosticar spinner infinito e formulário que apaga a entrada |
 | [`acessibilidade-responsivo`](../skills/acessibilidade-responsivo/SKILL.md) | Responsividade e acessibilidade — eliminar overflow horizontal, adaptar tabela extensa, colapsar grade de formulário, garantir foco visível, contraste, aria e navegação por teclado | ao criar ou alterar layout, tabela, formulário, modal, menu ou ao revisar uma tela antes de entregar |
 | [`razor-interop`](../skills/razor-interop/SKILL.md) | Contrato entre Razor e TypeScript — passar dados e URLs por atributos `data-*`, gerar rota com `Url.Action`, resolver assets pelo TagHelper do Vite e garantir progressive enhancement | ao ligar comportamento a uma view, incluir script numa página ou revisar acoplamento entre `.cshtml` e `.ts` |
 | [`typescript-estrito`](../skills/typescript-estrito/SKILL.md) | TypeScript moderno em modo estrito — fixar a versão, configurar tsconfig com `strict`/`noUnusedLocals`/`noUnusedParameters`, tipar DOM sem `any` e organizar módulos de feature | ao criar ou alterar `.ts`, `tsconfig.json`, atualizar o compilador ou revisar tipagem |

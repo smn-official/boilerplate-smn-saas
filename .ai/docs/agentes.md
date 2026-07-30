@@ -1,6 +1,6 @@
 # Agentes
 
-Nove agentes especializados. As definições vivem em [../agents/](../agents/) e as 57 skills, num
+Nove agentes especializados. As definições vivem em [../agents/](../agents/) e as 59 skills, num
 namespace plano, em [../skills/](../skills/). A base normativa de todos é
 [estrutura-arquitetura.md](estrutura-arquitetura.md) e o [AGENTS.md](../../AGENTS.md) da raiz.
 
@@ -89,7 +89,7 @@ a arquitetura ou que decide pelo usuário:
 ## Descoberta pelas ferramentas
 
 - **Claude Code** — os symlinks `.claude/skills -> ../.ai/skills` e `.claude/agents -> ../.ai/agents`
-  já existem no repositório e expõem as 57 skills e os 9 agentes; ambos os diretórios são planos.
+  já existem no repositório e expõem as 59 skills e os 9 agentes; ambos os diretórios são planos.
   **Nada a fazer, e nada a recriar** — não apague nem substitua esses links. `rm -rf .claude/agents`
   pode resolver o symlink e levar `.ai/agents/` inteiro com ele.
 - **Outras ferramentas** — leem o `AGENTS.md` da raiz pelo symlink correspondente

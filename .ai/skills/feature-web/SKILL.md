@@ -168,6 +168,10 @@ Encapsule num TagHelper: `<vite-asset src="Features/<Feature>/Scripts/<feature>.
 
 ## Design system
 
+A escala tipográfica abaixo é o contrato único de tipos e pesos. Cor, hierarquia, profundidade,
+movimento e direção visual estão em [design-visual](../design-visual/SKILL.md); os estados que toda
+tela precisa renderizar, em [estados-de-interface](../estados-de-interface/SKILL.md).
+
 ### Escala tipográfica
 
 | Token | Tamanho | Peso | Tracking | Uso |

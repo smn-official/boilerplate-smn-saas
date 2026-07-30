@@ -119,7 +119,7 @@ usuário:
 
 ## Agentes
 
-Nove agentes especializados em [.ai/agents/](.ai/agents/), com 57 skills em [.ai/skills/](.ai/skills/).
+Nove agentes especializados em [.ai/agents/](.ai/agents/), com 59 skills em [.ai/skills/](.ai/skills/).
 
 | Tarefa | Agente |
 |---|---|
@@ -269,7 +269,7 @@ projeto/
 ├── .github/copilot-instructions.md -> ../AGENTS.md
 │
 ├── .ai/
-│   ├── skills/      57 skills, cada uma com SKILL.md
+│   ├── skills/      59 skills, cada uma com SKILL.md
 │   ├── agents/      9 definições de agente
 │   ├── mcp/         servers.json
 │   ├── scripts/     init.mjs (parametrização), verificar.mjs (integridade da doc),

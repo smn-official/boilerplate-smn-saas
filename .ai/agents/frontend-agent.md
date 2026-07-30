@@ -49,6 +49,8 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 
 | Skill | Quando usar |
 |---|---|
+| `design-visual` | Direção visual, tokens de cor, hierarquia, profundidade, movimento, revisão de acabamento |
+| `estados-de-interface` | Estado vazio, erro, carregando e extremo; formulário no submit; spinner e retry |
 | `vite-build` | `vite.config.ts`, entry points, manifest, scripts npm, integração com `.csproj` |
 | `typescript-estrito` | `tsconfig.json`, versão do TS, tipagem de DOM, módulos, flags de checagem |
 | `razor-interop` | `data-*`, `Url.Action`, TagHelper de asset, progressive enhancement |
