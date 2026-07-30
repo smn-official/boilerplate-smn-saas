@@ -57,7 +57,10 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 | `dominio-agregados` | Modelar agregado, invariante, enum, DTO ou specification |
 | `persistencia-ef` | `DbContext`, configuration, migration, repositório, schema |
 | `multi-schema` | Isolamento por schema, `search_path` na conexão, migrations em N schemas |
+| `paginacao` | Listagem paginada, `Skip`/`Take` vs. keyset, teto de tamanho, ordenação estável |
 | `feature-web` | Controller, ViewModel, View, rota, TypeScript, Tailwind |
+| `email-transacional` | Enviar OTP, confirmação ou notificação; contrato e fallback sem credencial |
+| `tarefas-em-segundo-plano` | `BackgroundService`, escopo por `IServiceScopeFactory`, expurgo, fila |
 | `observabilidade` | Logging, Application Insights, telemetria |
 | `testes-dotnet` | Escrever ou revisar testes |
 | `revisao-codigo` | Revisar diff, aplicar convenções de código |

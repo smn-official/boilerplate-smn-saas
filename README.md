@@ -2,7 +2,7 @@
 
 Ponto de partida para um SaaS em .NET 10, com a arquitetura, as convenções e a orientação de IA já
 definidas. **Não há código de aplicação aqui** — o que existe é o contrato de como o código deve ser
-escrito: 9 agentes especializados, 50 skills, documentação normativa e o script de
+escrito: 9 agentes especializados, 53 skills, documentação normativa e o script de
 parametrização.
 
 A premissa: decisão de arquitetura, convenção de nome e política de LGPD custam
@@ -126,10 +126,10 @@ A referência normativa completa está em
 │
 └── .ai/                   documentação da CONSTRUÇÃO — como construir
     ├── agents/            9 definições de agente
-    ├── skills/            50 skills, cada uma com SKILL.md
+    ├── skills/            53 skills, cada uma com SKILL.md
     ├── docs/              arquitetura, agentes, skills, MCP, configuração
     ├── mcp/servers.json   codegraph, playwright, context7, postgres
-    └── scripts/           init.mjs (parametrização)
+    └── scripts/           init.mjs (parametrização), verificar.mjs (integridade)
 ```
 
 `docs/` responde "o que construir e por quê"; `.ai/docs/` responde "como construir". Elas mudam em

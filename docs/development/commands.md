@@ -75,6 +75,33 @@ quando algo está fora do padrão, sem tocar em nada. Use-o para **conferir**; u
 flag para **corrigir**, e revise o diff antes de commitar — a correção é mecânica e costuma pegar
 arquivos que a sua alteração não tinha encostado.
 
+## Documentação — norma
+
+A documentação normativa deste repositório afirma coisas sobre si mesma — quantos agentes existem,
+quais skills, quem é dono de qual. O script confere essas afirmações contra o disco:
+
+```bash
+node .ai/scripts/verificar.mjs               # relatório completo
+node .ai/scripts/verificar.mjs --silencioso  # só a saída final
+```
+
+Ele valida as contagens de agentes e skills escritas em prosa contra o `ls` real, se todo link
+markdown relativo resolve, se o frontmatter das skills (`name`, `description`, `agent`) e dos agentes
+(`name`, `description`, `model`) está completo, se `agent:` aponta para um agente existente, se
+`name:` bate com o diretório, se toda skill do disco está registrada em
+[`skills.md`](../../.ai/docs/skills.md) — e vice-versa —, se o subtotal por agente lá bate com o
+frontmatter, e se alguma referência em crase a `.ai/skills/<nome>` ou `.ai/agents/<nome>` aponta para
+o que não existe.
+
+**Sai com código 1 quando acha problema**, então serve como portão de esteira ao lado do build e dos
+testes.
+
+Ele existe porque acrescentar uma skill exige tocar seis arquivos, e o esquecimento não quebra nada
+visivelmente: só faz o agente orientar contra o padrão vigente — pior que não ter documentação. Numa
+única sessão de manutenção as contagens ficaram defasadas quatro vezes, e um link para uma skill
+removida sobreviveu a uma limpeza inteira por estar em crase, fora do alcance de qualquer checador de
+link markdown.
+
 ## Resumo
 
 | Objetivo | Comando |
@@ -84,6 +111,7 @@ arquivos que a sua alteração não tinha encostado.
 | Rodar todos os testes | `dotnet test <Produto>.slnx -c Release --no-build` |
 | Conferir formatação | `dotnet format <Produto>.slnx --verify-no-changes` |
 | Aplicar formatação | `dotnet format <Produto>.slnx` |
+| Conferir a documentação | `node .ai/scripts/verificar.mjs` |
 | Só testes unitários | `dotnet test <Produto>.slnx -c Release --no-build --filter "Category!=Integracao"` |
 | Só testes de integração | `dotnet test <Produto>.slnx -c Release --no-build --filter "Category=Integracao"` |
 | Subir a aplicação | `dotnet run --project src/<Produto>.<Modulo>.Web` |

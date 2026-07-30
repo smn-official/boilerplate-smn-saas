@@ -14,6 +14,7 @@ profundidade.
 | Decidir entre `.env` e `appsettings.json` | [configuracao.md](configuracao.md) |
 | Saber o que versionar no git | [gitignore.md](gitignore.md) |
 | Entender os servidores MCP | [mcp.md](mcp.md) |
+| Conferir se a documentação está íntegra | `node .ai/scripts/verificar.mjs` |
 
 ## Os arquivos
 
@@ -33,9 +34,13 @@ parecem caber) e a ordem sugerida numa entrega.
 
 ### [skills.md](skills.md)
 
-As 50 skills agrupadas por agente dono, com o que cada uma cobre e quando usar. Existe porque
+As 53 skills agrupadas por agente dono, com o que cada uma cobre e quando usar. Existe porque
 `.ai/skills/` é um namespace plano — exigência do `.claude/skills/` — e a relação skill → agente se
 perderia sem registro. A mesma informação está no campo `agent:` de cada `SKILL.md`.
+
+Manter os dois em dia é trabalho manual, e é exatamente o que o `verificar.mjs` cobra: ele reprova a
+skill que existe no disco sem registro aqui, o registro que aponta para skill inexistente e o
+subtotal por agente que não bate com o frontmatter.
 
 ### [configuracao.md](configuracao.md)
 
@@ -71,3 +76,20 @@ Ao mudar uma convenção, atualize na mesma entrega: o documento aqui, a skill c
 vigente — pior que não ter documentação.
 
 Ao adicionar um documento, registre-o na tabela acima e aponte a partir do `AGENTS.md`.
+
+Quem confere se isso de fato aconteceu é o script:
+
+```bash
+node .ai/scripts/verificar.mjs
+```
+
+Ele valida as contagens de agentes e skills afirmadas em prosa contra o disco, os links markdown
+relativos, o frontmatter de skills e agentes, o registro em [skills.md](skills.md) nos dois sentidos
+e as referências em crase a `.ai/skills/…` e `.ai/agents/…` — que escapam de qualquer checador de
+link. Sai com código 1 quando acha problema, então cabe na esteira ao lado do build.
+
+A razão de existir é a mesma do parágrafo acima: acrescentar uma skill exige tocar seis arquivos, e
+esquecer um deles não quebra nada visivelmente — apenas faz o agente orientar contra o padrão
+vigente. Numa única sessão de manutenção as contagens ficaram defasadas quatro vezes, e um link para
+uma skill removida sobreviveu a uma limpeza inteira por estar em crase. Rode o script antes de
+entregar qualquer alteração nesta pasta, em `.ai/skills/` ou em `.ai/agents/`.

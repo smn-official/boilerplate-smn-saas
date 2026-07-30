@@ -116,7 +116,7 @@ usuário:
 
 ## Agentes
 
-Nove agentes especializados em [.ai/agents/](.ai/agents/), com 50 skills em [.ai/skills/](.ai/skills/).
+Nove agentes especializados em [.ai/agents/](.ai/agents/), com 53 skills em [.ai/skills/](.ai/skills/).
 
 | Tarefa | Agente |
 |---|---|
@@ -227,6 +227,10 @@ verificar.
 - Não adicione dependência sem justificar qual problema resolve e por que não vale implementar.
 - Pastas nascem com o primeiro artefato real — não crie estrutura vazia antecipadamente.
 - Ao alterar convenção, responsabilidade ou estrutura, atualize a documentação na mesma entrega.
+- **Mexeu em agente, skill ou doc? Rode `node .ai/scripts/verificar.mjs` antes de entregar.** Ele
+  confere contagens, links, frontmatter e registro contra o disco. Adicionar uma skill exige tocar
+  seis arquivos; o script transforma o esquecimento em erro barulhento, em vez de deixar o agente
+  orientar contra o padrão vigente.
 
 ## Estrutura deste repositório
 
@@ -251,10 +255,10 @@ projeto/
 ├── .github/copilot-instructions.md -> ../AGENTS.md
 │
 ├── .ai/
-│   ├── skills/      50 skills, cada uma com SKILL.md
+│   ├── skills/      53 skills, cada uma com SKILL.md
 │   ├── agents/      9 definições de agente
 │   ├── mcp/         servers.json
-│   ├── scripts/     init.mjs (parametrização inicial)
+│   ├── scripts/     init.mjs (parametrização), verificar.mjs (integridade da doc)
 │   └── docs/        README.md (índice), estrutura-arquitetura.md,
 │                    agentes.md, skills.md,
 │                    mcp.md, gitignore.md, configuracao.md

@@ -1,13 +1,13 @@
 # Agentes
 
-Nove agentes especializados. As definições vivem em [../agents/](../agents/) e as 50 skills, num
+Nove agentes especializados. As definições vivem em [../agents/](../agents/) e as 53 skills, num
 namespace plano, em [../skills/](../skills/). A base normativa de todos é
 [estrutura-arquitetura.md](estrutura-arquitetura.md) e o [AGENTS.md](../../AGENTS.md) da raiz.
 
 | Agente | Escopo | Skills |
 |---|---|---|
 | `codegraph-agent` | Grafo de código — navegação e impacto | 3 |
-| `net10-agent` | .NET 10, camadas, DDD tático, EF Core | 9 |
+| `net10-agent` | .NET 10, camadas, DDD tático, EF Core | 12 |
 | `pgproc-agent` | PostgreSQL — apenas stored procedures | 9 |
 | `frontend-agent` | Vite + TypeScript sobre Razor, acessibilidade | 4 |
 | `tester-agent` | xUnit v3, Moq, FluentAssertions | 5 |
@@ -47,6 +47,8 @@ Casos em que mais de um agente parece caber:
 | Teste de procedure | `pgproc-agent` | É teste de integração com banco, no escopo dele |
 | Campo novo que guarda CPF | `lgpd-agent` antes, `net10-agent` depois | Base legal e finalidade vêm antes do schema |
 | Log que pode conter dado pessoal | `lgpd-agent` e `security-agent` | Vazamento é dos dois escopos |
+| Corpo de e-mail com dado do titular | `lgpd-agent` decide o que pode ir, `net10-agent` envia | E-mail sai do domínio do sistema e não volta |
+| Tarefa de fundo que toca dado de cliente | `net10-agent` implementa, `security-agent` audita | Worker não tem claim: o schema precisa ser resolvido à mão |
 | Cobrança que guarda CPF do titular | `lgpd-agent` antes, `stripe-agent` depois | Base legal vem antes do schema |
 | Webhook de pagamento | `stripe-agent` escreve, `security-agent` audita | Endpoint público sem autenticação de sessão |
 | Tabela de assinatura | `stripe-agent` modela, `net10-agent` integra ao domínio | Cada um na sua fronteira |
@@ -80,7 +82,7 @@ a arquitetura ou que decide pelo usuário:
 
 ## Descoberta pelas ferramentas
 
-- **Claude Code** — o symlink `.claude/skills -> ../.ai/skills` expõe as 50 skills. Para os agentes,
+- **Claude Code** — o symlink `.claude/skills -> ../.ai/skills` expõe as 53 skills. Para os agentes,
   crie `.claude/agents -> ../.ai/agents` ou copie os arquivos; ambos os diretórios são planos.
 - **Outras ferramentas** — leem o `AGENTS.md` da raiz pelo symlink correspondente
   (`CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`).

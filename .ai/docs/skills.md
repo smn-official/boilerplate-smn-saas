@@ -1,23 +1,26 @@
 # Mapa de skills
 
-As 50 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
+As 53 skills vivem num namespace plano em [../skills/](../skills/) — exigência do
 `.claude/skills/`. Este arquivo registra a qual agente cada uma pertence; a mesma informação
 está no campo `agent:` do frontmatter de cada `SKILL.md`.
 
 Um agente carrega a skill correspondente **antes** de executar a tarefa.
 
-## net10-agent — 9 skills
+## net10-agent — 12 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
 | [`arquitetura-camadas`](../skills/arquitetura-camadas/SKILL.md) | Estrutura de solução .NET 10 em camadas — criar projetos, decidir onde um artefato mora, validar direção de dependência, configurar composição da raiz e dependências essenciais | ao iniciar um projeto, adicionar um projeto novo, mover código entre camadas ou avaliar se uma dependência é permitida |
 | [`dominio-agregados`](../skills/dominio-agregados/SKILL.md) | Modelagem de domínio em .NET — criar agregados com invariantes, serviços de domínio, DTOs, enums e specifications; decidir quando separar um domínio novo | ao criar ou alterar qualquer artefato dentro da camada Core |
+| [`email-transacional`](../skills/email-transacional/SKILL.md) | Envio de e-mail transacional — contrato `IEnviadorDeEmail` em Core, implementação real e desabilitada em Data com escolha por flag na DI, falha do provedor que não derruba o caso de uso, idempotência no reenvio e template sem segredo nem dado pessoal desnecessário | ao enviar OTP, confirmação, recuperação de acesso ou qualquer notificação por e-mail, e ao revisar quem chama o envio |
 | [`feature-web`](../skills/feature-web/SKILL.md) | Camada de apresentação ASP.NET Core MVC — criar feature vertical (Controller, ViewModel, View) e definir rotas | ao criar ou alterar tela, rota ou feature da camada Web |
 | [`multi-schema`](../skills/multi-schema/SKILL.md) | Isolamento de dados por schema do PostgreSQL — resolver o schema do cliente em runtime com `SET search_path` na abertura da conexão, separar o que é do cliente do que é compartilhado, rodar migrations em N schemas, provisionar cliente novo e testar o isolamento | ao criar entidade que guarda dado de cliente, configurar DbContext e interceptor, escrever migration, provisionar cliente ou diagnosticar dado aparecendo no schema errado |
 | [`observabilidade`](../skills/observabilidade/SKILL.md) | Logging e telemetria com Azure Application Insights em .NET 10 — registro do SDK, ILogger estruturado, níveis, enriquecimento por usuário, amostragem e custo | ao configurar telemetria, adicionar log ou diagnosticar comportamento em produção |
+| [`paginacao`](../skills/paginacao/SKILL.md) | Paginação de listagem com EF Core e specifications — offset com `Skip`/`Take` versus keyset e quando cada um, paginação na specification e não no controller, `CountAsync` separado, DTO de resultado paginado, teto de tamanho vindo do cliente e ordenação estável obrigatória | ao criar listagem, grade, endpoint de busca ou ao diagnosticar registro repetido ou pulado entre páginas |
 | [`persistencia-ef`](../skills/persistencia-ef/SKILL.md) | Persistência com EF Core 10 e PostgreSQL — DbContext, IEntityTypeConfiguration, migrations, repositórios com specifications, propriedade de schema e integrações externas com fallback | ao mexer em qualquer coisa da camada Data |
 | [`revisao-codigo`](../skills/revisao-codigo/SKILL.md) | Checklist de revisão de código .NET 10 — convenções, Clean Code, SOLID, KISS, formatação, null safety e violações de camada | ao revisar um diff, PR ou antes de entregar uma alteração |
 | [`setup-projeto`](../skills/setup-projeto/SKILL.md) | Parametrização inicial do boilerplate — substitui `<Produto>` e `<Modulo>`, preservando a notação didática das skills, e cria a solução .NET | uma única vez, ao iniciar projeto novo a partir deste boilerplate |
+| [`tarefas-em-segundo-plano`](../skills/tarefas-em-segundo-plano/SKILL.md) | Trabalho fora do request com `BackgroundService` e `IHostedService` — escopo por `IServiceScopeFactory` em vez de `DbContext` injetado, shutdown gracioso, exceção que derruba o worker em silêncio, idempotência, execução duplicada em múltiplas instâncias e resolução explícita do schema | ao processar webhook fora do request, agendar expurgo de retenção, despachar e-mail ou criar qualquer worker |
 | [`testes-dotnet`](../skills/testes-dotnet/SKILL.md) | Testes automatizados em .NET 10 com xUnit v3, Moq e FluentAssertions — organização espelhando o código, nomenclatura, o que testar em agregado e serviço, e comandos de validação | ao escrever, revisar ou executar testes |
 
 ## pgproc-agent — 9 skills
