@@ -89,6 +89,64 @@ public class <Entidade>Service(
 - **Não logar e relançar** a mesma exceção. Registre onde ela é tratada, uma única vez.
 - Exceção não tratada já é capturada pelo SDK — não duplique com `try/catch` que só loga.
 
+## Quando logar
+
+**Não existe regra de "todo fluxo emite log".** Requisição, status, duração, consulta ao banco,
+chamada externa e exceção não tratada já chegam ao Application Insights sem uma linha de `ILogger` —
+ver [Coletado automaticamente](#coletado-automaticamente). Log manual repetindo isso não acrescenta
+dimensão nenhuma: custa ingestão, polui a consulta e some na amostragem junto com o resto.
+
+O critério é **o que a telemetria automática não consegue afirmar**. Logue explicitamente quando o
+evento for um destes:
+
+| Evento | Nível | Por que a coleta automática não basta |
+|---|---|---|
+| Efeito externo irreversível concluído | `Information` | E-mail enviado, cobrança criada, arquivo publicado. O SDK vê a chamada HTTP de saída; não sabe que ela representa dinheiro ou uma mensagem que não volta atrás |
+| Fallback acionado | `Warning` | A operação retorna `200` e a requisição parece sadia. Sem log não há como saber que rodou em modo degradado |
+| Autorização negada | `Warning` | O `403` aparece, mas não *quem* tentou acessar *o quê* — e é isso que distingue erro de navegação de varredura |
+| Decisão automática que o usuário vai contestar | `Information` | Plano trocado, acesso revogado, registro expurgado por retenção. Sem trilha, a pergunta "por que isso mudou?" não tem resposta |
+| Transição de estado de assinatura | `Information` | Origem em webhook, fora de qualquer requisição do usuário; reconciliar depois exige o registro |
+| Falha que o código tratou e engoliu | `Error` ou `Warning` | Exceção capturada não sobe para o SDK. Se o `catch` decide o rumo e não loga, o incidente é invisível |
+
+E **não logue**:
+
+- Entrada e saída de service ou controller — é a requisição HTTP, já coletada.
+- Sucesso de leitura, listagem ou consulta.
+- `DomainException` tratada: é validação de negócio, não incidente. Detalhe em
+  [`tratamento-erro-global`](../tratamento-erro-global/SKILL.md).
+- Qualquer coisa dentro de laço sobre N itens — logue o resultado do lote, não a iteração.
+
+```csharp
+public async Task<bool> PublicarAsync(PublicarDto dto, CancellationToken cancellationToken)
+{
+    if (!await autorizacao.PodePublicarAsync(dto.IdContexto, cancellationToken))
+    {
+        logger.LogWarning(
+            "Publicação negada para o contexto {IdContexto} pelo usuário {IdUsuario}.",
+            dto.IdContexto,
+            dto.IdUsuario);
+
+        return false;
+    }
+
+    await repository.PublicarAsync(dto.IdContexto, cancellationToken);
+
+    logger.LogInformation(
+        "<Entidade> {Codigo} publicada no contexto {IdContexto}.",
+        dto.Codigo,
+        dto.IdContexto);
+
+    return true;
+}
+```
+
+Dois logs num caso de uso inteiro — a negativa, porque o `403` sozinho não diz quem nem o quê, e a
+publicação, porque é irreversível. A leitura que antecede, a validação e o caminho feliz do
+carregamento não logam nada.
+
+Na dúvida, pergunte: **se este log não existisse, que pergunta de produção ficaria sem resposta?**
+Sem resposta concreta, não logue.
+
 ## Níveis
 
 | Nível | Uso |

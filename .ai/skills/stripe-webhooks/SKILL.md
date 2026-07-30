@@ -74,6 +74,10 @@ Pontos que não são estilo, são requisito:
 - **`[IgnoreAntiforgeryToken]`** — antiforgery bloquearia o POST externo.
 - **Nunca logue o payload inteiro**: ele contém dado pessoal do titular. Logue `evento.Id` e o tipo.
 - O `catch` retorna `BadRequest` **sem detalhe** — não devolva a mensagem da exceção a quem chamou.
+- **Transição de estado de assinatura se loga**, ao contrário do fluxo comum: ela nasce fora de
+  qualquer requisição do usuário, e reconciliar depois exige o registro. Assinatura inválida também
+  — é a única evidência de tentativa forjada. Critério geral em
+  [`observabilidade`](../observabilidade/SKILL.md).
 
 ## Corpo bruto — a armadilha do ASP.NET Core
 

@@ -142,6 +142,11 @@ Regras da rotina:
 - Monitorada. Rotina de expurgo que falha silenciosamente por meses produz retenção indevida com
   aparência de política aplicada.
 
+O log de conclusão acima é o resultado do **lote**, nunca um por titular — expurgo é decisão
+automática que o titular pode contestar, e a linha do laço não acrescenta dimensão alguma. Critério
+de quando emitir log em [`observabilidade`](../observabilidade/SKILL.md); trilha de auditoria é
+outra coisa e continua sendo por titular, em [`consentimento-auditoria`](../consentimento-auditoria/SKILL.md).
+
 ## Backup e réplica — o ponto cego
 
 Eliminação no banco primário não alcança backup, réplica de leitura, data warehouse, índice de
