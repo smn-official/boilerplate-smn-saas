@@ -1,0 +1,78 @@
+/* Estilos exclusivos do painel de documentação. NÃO faz parte do pacote distribuído. */
+
+@layer components {
+    .code-block {
+        @apply relative isolate overflow-hidden rounded-2xl bg-surface shadow-surface;
+    }
+
+    .code-block__pre {
+        @apply overflow-x-auto p-4 pe-14 text-sm leading-relaxed;
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in oklch, var(--foreground) 15%, transparent) transparent;
+    }
+
+    .code-block__pre code {
+        @apply font-mono;
+    }
+
+    .code-block__copy {
+        @apply absolute end-2 top-2 z-10 inline-flex size-8 items-center justify-center rounded-lg
+               border border-border text-muted opacity-0 outline-none no-highlight;
+
+        background-color: color-mix(in oklab, var(--surface) 80%, transparent);
+        backdrop-filter: blur(8px);
+        cursor: var(--cursor-interactive);
+        transition:
+            opacity 150ms var(--ease-out),
+            background-color 100ms var(--ease-out),
+            color 100ms var(--ease-out);
+
+        & svg {
+            @apply size-4 shrink-0;
+        }
+
+        &:focus-visible {
+            @apply status-focused opacity-100;
+        }
+    }
+
+    /* O botão só some quando o ponteiro é preciso; em touch fica sempre visível. */
+    @media (hover: hover) {
+        .code-block:hover .code-block__copy,
+        .code-block__copy:hover {
+            @apply opacity-100;
+        }
+
+        .code-block__copy:hover {
+            @apply text-foreground;
+            background-color: var(--surface-hover);
+        }
+    }
+
+    @media (hover: none) {
+        .code-block__copy {
+            @apply opacity-100;
+        }
+    }
+
+    .code-block__copy[data-copied="true"] {
+        @apply text-success-soft-foreground opacity-100;
+    }
+
+    .token-tag {
+        color: var(--code-tag);
+    }
+
+    .token-attribute {
+        color: var(--code-attribute);
+    }
+
+    .token-value {
+        color: var(--code-value);
+    }
+
+    .token-punctuation {
+        color: var(--code-punctuation);
+    }
+
+}

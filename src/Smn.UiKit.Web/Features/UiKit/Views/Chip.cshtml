@@ -1,0 +1,58 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Cores</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-chip color="Default">Default</smn-chip>
+            <smn-chip color="Accent">Accent</smn-chip>
+            <smn-chip color="Success">Success</smn-chip>
+            <smn-chip color="Warning">Warning</smn-chip>
+            <smn-chip color="Danger">Danger</smn-chip>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
+        <div class="flex flex-col gap-3">
+            <div class="flex flex-wrap items-center gap-3">
+                <smn-chip variant="Primary" color="Accent">Primary</smn-chip>
+                <smn-chip variant="Primary" color="Success">Primary</smn-chip>
+                <smn-chip variant="Primary" color="Warning">Primary</smn-chip>
+                <smn-chip variant="Primary" color="Danger">Primary</smn-chip>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <smn-chip variant="Soft" color="Accent">Soft</smn-chip>
+                <smn-chip variant="Soft" color="Success">Soft</smn-chip>
+                <smn-chip variant="Soft" color="Warning">Soft</smn-chip>
+                <smn-chip variant="Soft" color="Danger">Soft</smn-chip>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <smn-chip variant="Secondary" color="Accent">Secondary</smn-chip>
+                <smn-chip variant="Tertiary" color="Accent">Tertiary</smn-chip>
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tamanhos</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-chip size="Small" variant="Soft" color="Accent">Small</smn-chip>
+            <smn-chip size="Medium" variant="Soft" color="Accent">Medium</smn-chip>
+            <smn-chip size="Large" variant="Soft" color="Accent">Large</smn-chip>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Em uso</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-chip variant="Soft" color="Success">Pago</smn-chip>
+            <smn-chip variant="Soft" color="Warning">Aguardando</smn-chip>
+            <smn-chip variant="Soft" color="Danger">Vencido</smn-chip>
+            <smn-chip variant="Soft" color="Default">Rascunho</smn-chip>
+        </div>
+    </div>
+</div>

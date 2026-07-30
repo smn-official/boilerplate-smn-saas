@@ -1,0 +1,58 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tamanhos</p>
+        <div class="flex flex-wrap items-center gap-6">
+            <smn-spinner size="Small" color="Accent" />
+            <smn-spinner size="Medium" color="Accent" />
+            <smn-spinner size="Large" color="Accent" />
+            <smn-spinner size="ExtraLarge" color="Accent" />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Cores</p>
+        <div class="flex flex-wrap items-center gap-6">
+            <smn-spinner color="Accent" />
+            <smn-spinner color="Success" />
+            <smn-spinner color="Warning" />
+            <smn-spinner color="Danger" />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Herdando a cor do contexto</p>
+        <p class="mb-4 text-sm text-muted">
+            O padrão é <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">color="Current"</code>:
+            o spinner assume a cor do texto ao redor. É o que faz ele funcionar dentro de um botão.
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-button variant="Primary" disabled="true">
+                <smn-spinner size="Small" />
+                Salvando
+            </smn-button>
+            <smn-button variant="Outline" disabled="true">
+                <smn-spinner size="Small" />
+                Carregando
+            </smn-button>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Anunciado por leitor de tela</p>
+        <p class="mb-4 text-sm text-muted">
+            Sem <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">label</code> o spinner é
+            decorativo e fica com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">aria-hidden</code>.
+            Quando ele é a única indicação de que algo está acontecendo, informe o label — aí vira
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">role="status"</code>.
+        </p>
+        <div class="flex items-center gap-3">
+            <smn-spinner color="Accent" label="Carregando relatório" />
+            <span class="text-sm text-muted">Gerando o relatório…</span>
+        </div>
+    </div>
+</div>

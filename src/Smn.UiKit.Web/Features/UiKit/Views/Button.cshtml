@@ -1,0 +1,40 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-button variant="Primary">Primary</smn-button>
+            <smn-button variant="Secondary">Secondary</smn-button>
+            <smn-button variant="Outline">Outline</smn-button>
+            <smn-button variant="Ghost">Ghost</smn-button>
+            <smn-button variant="Danger">Danger</smn-button>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tamanhos</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-button variant="Primary" size="Small">Small</smn-button>
+            <smn-button variant="Primary" size="Medium">Medium</smn-button>
+            <smn-button variant="Primary" size="Large">Large</smn-button>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Desabilitado</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-button variant="Primary" disabled="true">Primary</smn-button>
+            <smn-button variant="Outline" disabled="true">Outline</smn-button>
+            <smn-button variant="Danger" disabled="true">Danger</smn-button>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Largura total</p>
+        <smn-button variant="Primary" full-width="true">Continuar</smn-button>
+    </div>
+</div>

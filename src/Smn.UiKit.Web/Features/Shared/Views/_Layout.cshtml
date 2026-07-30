@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] — Smn UiKit</title>
+    <vite-asset src="Features/Shared/Styles/app.css"></vite-asset>
+</head>
+<body class="min-h-screen">
+    @RenderBody()
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

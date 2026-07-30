@@ -1,0 +1,29 @@
+/*
+ * Entry point de estilo da aplicação.
+ *
+ * tokens.css e uikit.css vêm do pacote @vagnerking/smn-uikit — este projeto consome o
+ * design system como qualquer outro consumidor, sem cópia local.
+ *
+ * A ordem importa: tokens.css declara as custom properties e os @utility que
+ * uikit.css consome. Inverter deixa metade dos tokens indefinida e a tela
+ * quebra em silêncio, sem erro de build.
+ */
+@import "tailwindcss";
+
+@import "@vagnerking/smn-uikit/tokens.css";
+@import "@vagnerking/smn-uikit/uikit.css";
+
+@import "./panel.css";
+
+/*
+ * O Tailwind 4 só gera as classes que encontra varrendo os fontes. O CSS do
+ * pacote usa @apply, então as classes precisam existir no build daqui —
+ * sem esta linha os componentes saem sem estilo, e o build passa.
+ */
+@source "../../../node_modules/@vagnerking/smn-uikit";
+
+@layer base {
+    body {
+        @apply bg-background text-foreground antialiased;
+    }
+}

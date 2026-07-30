@@ -1,0 +1,60 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Composição completa</p>
+        <smn-card class="max-w-sm">
+            <smn-card-header>
+                <smn-card-title>Plano Profissional</smn-card-title>
+                <smn-card-description>
+                    Cobrança mensal, cancelamento a qualquer momento.
+                </smn-card-description>
+            </smn-card-header>
+            <smn-card-content>
+                <p class="text-sm text-muted">
+                    Inclui usuários ilimitados, relatórios avançados e suporte prioritário.
+                </p>
+            </smn-card-content>
+            <smn-card-footer class="gap-2">
+                <smn-button variant="Primary" size="Small">Assinar</smn-button>
+                <smn-button variant="Ghost" size="Small">Comparar</smn-button>
+            </smn-card-footer>
+        </smn-card>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes de superfície</p>
+        <div class="grid gap-4 sm:grid-cols-2">
+            <smn-card variant="Default">
+                <smn-card-title>Default</smn-card-title>
+                <smn-card-description>Superfície padrão, com sombra.</smn-card-description>
+            </smn-card>
+            <smn-card variant="Secondary">
+                <smn-card-title>Secondary</smn-card-title>
+                <smn-card-description>Um degrau abaixo na hierarquia.</smn-card-description>
+            </smn-card>
+            <smn-card variant="Tertiary">
+                <smn-card-title>Tertiary</smn-card-title>
+                <smn-card-description>Fundo mais denso, para aninhar.</smn-card-description>
+            </smn-card>
+            <smn-card variant="Transparent">
+                <smn-card-title>Transparent</smn-card-title>
+                <smn-card-description>Sem fundo nem sombra — só o espaçamento.</smn-card-description>
+            </smn-card>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Somente conteúdo</p>
+        <smn-card variant="Secondary" class="max-w-sm">
+            <smn-card-content>
+                <p class="text-sm">
+                    Os slots são opcionais. Um card pode ser só conteúdo, sem cabeçalho nem rodapé.
+                </p>
+            </smn-card-content>
+        </smn-card>
+    </div>
+</div>

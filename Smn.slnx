@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Smn.UiKit.Web/Smn.UiKit.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Smn.UiKit/" />
+  <Folder Name="/src/Smn.UiKit/Core/">
+    <Project Path="src/Smn.UiKit/Core/Smn.UiKit.Core.csproj" />
+  </Folder>
+  <Folder Name="/src/Smn.UiKit/Data/">
+    <Project Path="src/Smn.UiKit/Data/Smn.UiKit.Data.csproj" />
+  </Folder>
+</Solution>

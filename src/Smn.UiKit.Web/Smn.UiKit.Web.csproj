@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Smn.UiKit\Core\Smn.UiKit.Core.csproj" />
+    <ProjectReference Include="..\Smn.UiKit\Data\Smn.UiKit.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Features\**\*.cshtml" />
+    <None Include="Features\**\*.cshtml" />
+    <Content Include="Features\**\*.cshtml" />
+  </ItemGroup>
+
+  <!--
+    Durante o desenvolvimento do design system, o painel consome o UiKit por
+    ProjectReference: editar o TagHelper no ../smn-uikit reflete aqui com um
+    dotnet build, sem dotnet pack nem bump de versão a cada volta.
+
+    Antes de publicar uma versão nova, troque de volta por
+      <PackageReference Include="Smn.UiKit" Version="0.x.0" />
+    e revalide — só assim o empacotamento em si é exercitado. Foi exatamente
+    esse teste que revelou o CSS em contentFiles quebrando o build do consumidor.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\smn-uikit\src\Smn.UiKit.Components\Smn.UiKit.Components.csproj" />
+  </ItemGroup>
+
+  <Target Name="NpmInstall" BeforeTargets="Build" Inputs="package.json" Outputs="node_modules/.install-stamp">
+    <Exec Command="npm install" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
+  </Target>
+
+  <Target Name="NpmBuild" BeforeTargets="Build" DependsOnTargets="NpmInstall">
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
+</Project>

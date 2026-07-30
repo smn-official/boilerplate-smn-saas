@@ -1,0 +1,38 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface-secondary p-6">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
+        <div class="flex flex-col gap-3">
+            <smn-alert variant="Default" title="Novos recursos disponíveis">
+                Modo escuro e melhorias de acessibilidade entraram nesta versão.
+            </smn-alert>
+
+            <smn-alert variant="Accent" title="Atualização disponível">
+                Uma nova versão da aplicação está pronta. Recarregue para aplicar.
+            </smn-alert>
+
+            <smn-alert variant="Success" title="Cadastro concluído">
+                O registro foi salvo e já aparece na listagem.
+            </smn-alert>
+
+            <smn-alert variant="Warning" title="Assinatura vence em 3 dias">
+                Atualize a forma de pagamento para não perder o acesso.
+            </smn-alert>
+
+            <smn-alert variant="Danger" title="Não foi possível salvar">
+                Verifique os campos destacados e tente novamente.
+            </smn-alert>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface-secondary p-6">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Sem título</p>
+        <smn-alert variant="Accent">
+            A descrição sozinha também é um uso válido.
+        </smn-alert>
+    </div>
+</div>
