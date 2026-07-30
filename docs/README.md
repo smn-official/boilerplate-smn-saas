@@ -1,93 +1,79 @@
-# Documentação do produto
+# Documentação do projeto
 
-O que este sistema faz e por quê — em linguagem de negócio. Cresce conforme as features surgem.
+> **Template do boilerplate.** Preencha ao implementar e remova este aviso.
 
-Não confundir com [.ai/docs/](../.ai/docs/), que documenta **como construir**: arquitetura,
-convenções, agentes e ferramentas. Aqui é **o que construir e por quê**.
+Esta pasta responde **"o que construir e por quê"** — domínio, regras, decisões e operação do
+produto. O **"como construir"** (convenções que valem para qualquer projeto deste boilerplate) fica
+em [.ai/docs/](../.ai/docs/), e o que vale sempre está no [AGENTS.md](../AGENTS.md) da raiz.
 
-```text
-docs/
-├── context/
-│   └── general-vision.md      o produto, o domínio, quem usa, fronteiras
-└── features/
-    └── <nome-da-feature>/
-        ├── <nome-da-feature>.md    o que a feature faz, fluxos, dados, permissões
-        └── rules/
-            └── rule-<feature>-<n>.md   uma regra de negócio por arquivo
-```
+A divisão importa: `.ai/` acompanha o boilerplate e raramente muda; `docs/` é do produto e muda a
+cada entrega.
 
-## Quando escrever
+## Por onde começar
 
-| Momento | O que fazer |
+| Se você quer… | Leia |
 |---|---|
-| Início do projeto | Preencher [context/general-vision.md](context/general-vision.md) |
-| Feature nova aprovada | Copiar `feature-example/`, renomear, preencher **antes** de codar |
-| Regra de negócio descoberta | Novo arquivo em `rules/`, com identificador estável |
-| Regra muda | Editar o arquivo; se for substituída, marcar status e apontar a nova |
-| Feature entregue | Atualizar status e data no documento da feature |
+| Rodar o projeto pela primeira vez | [development/getting-started.md](development/getting-started.md) |
+| Entender a arquitetura | [architecture/overview.md](architecture/overview.md) |
+| Saber o que um termo significa no negócio | [domain/glossary.md](domain/glossary.md) |
+| Achar uma regra de negócio | [domain/business-rules.md](domain/business-rules.md) |
+| Saber por que algo foi decidido assim | [decisions/README.md](decisions/README.md) |
+| Conferir um comando do dia a dia | [development/commands.md](development/commands.md) |
+| Entender uma feature específica | [features/](features/) |
 
-**Documente antes de implementar, não depois.** Escrever o fluxo e as regras revela ambiguidade
-enquanto ela ainda é barata de resolver — depois do código pronto, cada descoberta custa retrabalho.
-Se ao preencher o template a resposta for "não sei", essa é exatamente a pergunta a levar ao dono do
-produto.
+## As pastas
 
-## Como criar uma feature
+### [architecture/](architecture/)
 
-```bash
-cp -R docs/features/feature-example docs/features/requisicao-material
-cd docs/features/requisicao-material
-mv feature-example.md requisicao-material.md
-mv rules/rule-feature-example-1.md rules/rule-requisicao-material-1.md
-mv rules/rule-feature-example-2.md rules/rule-requisicao-material-2.md
-```
+Como o sistema é montado: visão geral, as três camadas, direção de dependência, fluxo de uma
+requisição e diagramas. A direção `Web → Data → Core` e o fluxo canônico são **norma do
+boilerplate**, não escolha do projeto — estão escritos por extenso, não como lacuna.
 
-Nome da pasta em **kebab-case, no idioma do negócio** — `requisicao-material`, não `MaterialRequest`.
-É a mesma convenção de pastas do [AGENTS.md](../AGENTS.md).
+### [domain/](domain/)
 
-Mantenha `feature-example/` intacta: é o molde.
+O negócio: glossário, regras, agregados e casos de uso. É a pasta que envelhece pior quando ninguém
+atualiza, e a que mais custa caro quando está errada — regra documentada divergente da implementada
+faz todo mundo confiar na versão errada.
 
-## O que vai aqui e o que não vai
+### [development/](development/)
 
-| Vai | Não vai |
-|---|---|
-| Fluxo do ponto de vista de quem usa | Nome de classe, tabela, endpoint |
-| Regra de negócio e sua origem | Decisão de arquitetura ou padrão de código |
-| Permissões por perfil | Configuração, deploy, infraestrutura |
-| Termos do domínio | Detalhe de implementação |
+O trabalho diário: primeiros passos, convenções de código, estrutura de pastas, testes e comandos.
+As convenções fixas do `AGENTS.md` aparecem aqui por extenso, com o motivo de cada uma.
 
-Se o texto menciona `Controller`, `DbContext` ou `price_…`, ele provavelmente pertence a
-[.ai/docs/](../.ai/docs/) ou a uma skill — não aqui.
+### [infrastructure/](infrastructure/)
 
-O motivo é prático: documentação de produto e de implementação mudam em ritmos diferentes. Misturar
-as duas faz a de negócio envelhecer junto com o código e perder a confiança de quem a lê.
+O que sustenta o sistema: banco, autenticação, integrações externas, deploy e configuração. Inclui
+a fronteira entre `appsettings.json` e `.env`, e o que fazer quando um segredo vaza.
 
-## Identificadores de regra
+### [api/](api/)
 
-Cada regra tem um identificador estável (`RN-1`, `RN-2`) usado para referenciá-la entre documentos.
+O contrato HTTP: convenções de rota, catálogo de erros e inventário de endpoints. Rota é sempre em
+inglês kebab-case, mesmo com o domínio no idioma do negócio.
 
-**Ele nunca entra no código** — nem em mensagem de erro, constante, nome de teste ou comentário. É
-regra do [AGENTS.md](../AGENTS.md). O código expressa a regra; a rastreabilidade vive nestes
-arquivos. Sigla vazando para a interface é ruído para o usuário, e vira mentira quando a regra muda
-de número.
+### [decisions/](decisions/)
 
-## Para a IA
+Os ADRs — decisões arquiteturais com contexto e consequência. Existem para que ninguém "corrija"
+depois uma escolha deliberada sem saber por que ela foi feita. ADR aceito não se edita: cria-se
+outro que o substitui.
 
-Ao trabalhar numa tarefa deste projeto:
+### [features/](features/)
 
-1. **Leia [context/general-vision.md](context/general-vision.md) primeiro** se não conhecer o
-   domínio. Ele define o vocabulário que aparece em agregado, tabela e rota.
-2. **Procure a feature correspondente** em `features/` antes de implementar. As regras em `rules/`
-   são requisito, não sugestão.
-3. **Ao descobrir uma regra não documentada**, escreva-a — no formato de
-   [rule-feature-example-1](features/feature-example/rules/rule-feature-example-1.md), com casos no
-   limite dos dois lados.
-4. **Ao encontrar contradição** entre o código e um documento daqui, não escolha em silêncio:
-   pergunte. Documento desatualizado e código errado são problemas diferentes, com correções
-   diferentes.
-5. **Feature que toca dado pessoal** aciona o [`lgpd-agent`](../.ai/agents/lgpd-agent.md) antes do
-   schema — finalidade e base legal vêm primeiro.
+Uma pasta por feature, com fluxos e `rules/`. O formato está em
+[features/README.md](features/README.md); preencha **antes** de implementar — escrever o fluxo
+revela ambiguidade enquanto ela ainda é barata de resolver.
 
-O template preenchido em
-[rule-feature-example-2](features/feature-example/rules/rule-feature-example-2.md) mostra o nível de
-detalhe esperado: limite testado nos dois lados, origem da regra declarada e mensagem de erro que
-informa os números em vez de "valor inválido".
+## Convenções desta documentação
+
+- **Explique o porquê, não só o quê.** Regra sem motivo é ignorada na primeira vez que incomodar.
+- **Marque o que é fixo e o que é do projeto.** O leitor precisa saber o que pode mudar.
+- **Exemplos usam o domínio real**, não `foo`/`bar`.
+- **Marcadores didáticos permanecem**: `<Entidade>`, `<Feature>`, `<schema>` significam "o artefato
+  que você está escrevendo agora" e nunca são substituídos. Só `<Produto>` e `<Modulo>` são
+  identidade do projeto, trocados uma vez pelo `setup-projeto`.
+- Identificador de regra (`RN-1`) é estável e vive **só aqui** — nunca em mensagem, constante ou
+  teste.
+
+## Manutenção
+
+Ao mudar comportamento, atualize a documentação **na mesma entrega**. Documentação desatualizada é
+pior que ausente: ela é lida com confiança e orienta contra o sistema real.

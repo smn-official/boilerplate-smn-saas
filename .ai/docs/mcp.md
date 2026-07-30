@@ -18,6 +18,7 @@ indireção.
 | `playwright` | Testes de UI, ver a tela renderizada | — |
 | `context7` | Docs atualizadas de .NET 10, EF Core 10, Tailwind 4 | — |
 | `postgres` | `pgproc-agent` e suas 9 skills | `POSTGRES_CONNECTION_STRING` |
+| `codegraph` | `codegraph-agent` e suas 3 skills — navegação de código | — |
 
 ### playwright
 
@@ -25,10 +26,6 @@ Dirige um navegador real. Complementa a skill [`testes-ui`](../skills/testes-ui/
 valida HTML com HtmlAgilityPack — asserção sobre markup não pega layout quebrado nem overflow
 horizontal, e é justamente isso que
 [`acessibilidade-responsivo`](../skills/acessibilidade-responsivo/SKILL.md) exige verificar.
-
-Também é o jeito de conferir ilustração renderizada de verdade, como manda
-[`ilustracao-svg`](../skills/ilustracao-svg/SKILL.md) — ordem de pintura errada em SVG não aparece
-em revisão de código, só na imagem.
 
 Os binários dos navegadores são download à parte:
 
@@ -61,8 +58,9 @@ prova comportamento é teste automatizado, conforme [`testes-ui`](../skills/test
 
 Documentação sob demanda. Existe por um motivo específico deste stack: .NET 10, EF Core 10 e
 Tailwind 4 são recentes, e **Tailwind 4 mudou o modelo de configuração inteiro** — tokens em
-`@theme` no CSS, sem `tailwind.config.js`. Um modelo que regride para a sintaxe v3 contradiz
-[`tailwind-design`](../skills/tailwind-design/SKILL.md) e gera código que não funciona.
+`@theme` no CSS, sem `tailwind.config.js`. Um modelo que regride para a sintaxe v3 gera código que
+não funciona. Consulte a doc da versão que está no `.csproj` ou no `package.json`, não a que você
+lembra.
 
 ### postgres
 
@@ -90,7 +88,38 @@ export POSTGRES_CONNECTION_STRING="postgresql://usuario:senha@host:5432/banco?ss
 ```
 
 Ponha o `export` no seu `~/.zshrc` ou num `.env` **fora do git**. Sem a variável, o servidor sobe e
-falha ao conectar — os outros dois continuam funcionando normalmente.
+falha ao conectar — os outros três continuam funcionando normalmente.
+
+### codegraph
+
+Grafo do código em SQLite. A ferramenta `codegraph_explore` devolve o **fonte verbatim** dos símbolos
+relevantes **mais os caminhos de chamada** entre eles numa única consulta — inclusive salto por
+dispatch dinâmico, que o `grep` não segue porque acha texto, não relação.
+
+O ganho é contexto. O laço `grep` → `Read` → `grep` de novo gasta em três frentes: falso positivo,
+arquivo inteiro lido para aproveitar vinte linhas, e as idas e voltas até fechar o quadro. O
+`explore` troca esses quatro a seis round-trips por um. Ele **não** substitui o `Read` de arquivo de
+configuração, markdown ou arquivo que você vai editar inteiro — substitui a *investigação* de "como
+isso funciona" e "o que quebra se eu mudar". Como escolher entre `explore`, `query`, `node`,
+`callers` e `impact` está em
+[`codegraph-consulta`](../skills/codegraph-consulta/SKILL.md).
+
+**Exige CLI instalada na máquina.** É a diferença em relação aos outros três: eles rodam por `npx`,
+que baixa o pacote sozinho na primeira execução, enquanto aqui o `command` é o binário `codegraph`.
+Sem ele no `PATH`, o servidor nem sobe. A instalação é por script (`curl` no macOS/Linux, `irm` no
+Windows) ou `npm i -g @colbymchenry/codegraph` — passo a passo em
+[`codegraph-instalacao`](../skills/codegraph-instalacao/SKILL.md).
+
+**E exige índice por projeto.** A CLI instalada não basta: cada repositório precisa de um
+`codegraph init` na raiz, que cria `.codegraph/` — um banco SQLite derivado do código, local de cada
+máquina e ignorado pelo git (ver [gitignore.md](gitignore.md)). Rode o `init` **depois** de existir
+código: indexar boilerplate vazio produz grafo vazio, e a consulta responde "não existe" para o que
+só não foi indexado.
+
+O índice cobre **C# e TypeScript**, com roteamento de framework que entende ASP.NET — Controller,
+rota e handler entram como símbolos ligados. Ficam de fora, por não serem código: `.cshtml`, `.css`,
+`.sql`, `.json` e `.md`. Para view Razor, folha de estilo, procedure e configuração, o `grep`/`Read`
+continua sendo a ferramenta.
 
 ## Duas ressalvas sobre o servidor postgres
 
@@ -103,7 +132,7 @@ sua política jurídica for restritiva, verifique antes de adotar. Alternativa M
 O servidor "oficial" `@modelcontextprotocol/server-postgres` está **deprecado** e não deve ser usado,
 apesar de ainda aparecer na maioria dos tutoriais.
 
-**17 ferramentas em contexto.** É o servidor mais pesado dos três. Se você trabalhar semanas sem
+**17 ferramentas em contexto.** É o servidor mais pesado dos quatro. Se você trabalhar semanas sem
 tocar em procedure, vale comentar a entrada e reativar quando voltar ao banco — o custo é pago em
 toda sessão, o benefício só nas sessões de SQL.
 
@@ -127,6 +156,8 @@ com dado pessoal real é tratamento sem base legal, o que
 | `postgres` conecta e erra toda query | `POSTGRES_CONNECTION_STRING` ausente ou errada | `echo $POSTGRES_CONNECTION_STRING` no mesmo shell |
 | Variável definida e ainda falha | Exportada em outro shell | O `export` precisa valer para o processo do Claude Code |
 | `playwright` abre e não navega | Browsers não instalados | `npx playwright install chromium` |
+| `codegraph` não sobe | CLI não instalada ou fora do `PATH` | `codegraph --version`; ver [`codegraph-instalacao`](../skills/codegraph-instalacao/SKILL.md) |
+| `codegraph_explore` responde vazio | Projeto sem `.codegraph/`, ou índice defasado | `codegraph status` na raiz; `Files: 0` exige `index --force` |
 | Screenshot ou trace aparece na raiz | Sessão iniciada antes do `--output-dir`, ou servidor de usuário sobrepondo o do projeto | `git status` deve estar limpo depois de navegar; `/mcp` mostra o escopo |
 | Tudo lento ao iniciar | `npx` baixando o pacote | Normal na primeira vez; depois vem do cache |
 | Sessão com pouco contexto livre | Muitos servidores ativos | Comentar o que não estiver em uso |

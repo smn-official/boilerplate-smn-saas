@@ -1,6 +1,6 @@
 ---
 name: dependencias-vulneraveis
-description: Verificação de dependência vulnerável em .NET e npm — dotnet list package --vulnerable --include-transitive, npm audit, pin de dependência transitiva no .csproj com justificativa, Dependabot/Renovate, avaliação de severidade CVSS e alcançabilidade do caminho vulnerável, e risco de pacote abandonado. Use ao auditar alteração em .csproj, package.json ou lockfile, e periodicamente sobre a esteira.
+description: Verificação de dependência vulnerável em .NET e npm — dotnet list package --vulnerable --include-transitive e npm audit como portão da esteira do Azure DevOps, pin de dependência transitiva no .csproj com justificativa, atualização automatizada conforme a plataforma do projeto, avaliação de severidade CVSS e alcançabilidade do caminho vulnerável, e risco de pacote abandonado. Use ao auditar alteração em .csproj, package.json ou lockfile, e periodicamente sobre a esteira.
 agent: security-agent
 ---
 
@@ -97,16 +97,28 @@ referencie a data de revisão.
 
 ## Automação
 
-| Ferramenta | Papel |
-|---|---|
-| Dependabot | Abre PR por atualização; nativo no GitHub, configurável por ecossistema |
-| Renovate | Mais configurável: agrupamento, agendamento, auto-merge de patch |
-| `dotnet list --vulnerable` na esteira | Falha o build quando aparece vulnerabilidade |
-| `npm audit` na esteira | Idem para o front-end |
+A esteira alvo destes projetos é o **Azure DevOps (Azure Pipelines)** — os exemplos abaixo estão
+nessa sintaxe.
+
+Separe os dois papéis, que costumam ser confundidos:
+
+| Papel | O que é | Onde vale |
+|---|---|---|
+| **Verificação** | `dotnet list --vulnerable` e `npm audit` como passo da esteira, quebrando o build | Azure Pipelines — é o portão que vale, e independe da plataforma onde o código está hospedado |
+| **Atualização automatizada** | Abrir PR quando sai versão nova (Dependabot, Renovate) | Depende da plataforma do projeto — Dependabot é recurso do GitHub e não existe como tal no Azure DevOps |
+
+O portão é a **verificação**: ela roda na esteira, falha o build e não depende de nenhuma ferramenta
+de atualização estar disponível. Atualização automatizada é conveniência que reduz o tempo até a
+correção — boa de ter, mas nunca o que garante que a vulnerabilidade não passa.
+
+Se o projeto está no Azure DevOps e você não confirmou qual ferramenta de atualização automatizada
+está disponível ali, **não presuma nem invente**: mantenha a verificação na esteira como portão e
+trate a atualização como decisão do time, a confirmar com o usuário.
 
 Faça a verificação **falhar o pipeline**, não apenas registrar aviso:
 
 ```yaml
+# azure-pipelines.yml — passo de auditoria .NET
 - script: |
     dotnet restore $(solution)
     dotnet list $(solution) package --vulnerable --include-transitive 2>&1 | tee auditoria.txt
@@ -181,8 +193,10 @@ Ao avaliar dependência **nova** no diff, some ao exame de vulnerabilidade:
 - [ ] Cada achado avaliado por severidade **e** alcançabilidade, com justificativa registrada.
 - [ ] Nenhum CVE, versão ou nota CVSS inventado; toda referência tem link.
 - [ ] Pin transitivo com comentário de motivo, condição de remoção e data de revisão.
-- [ ] Verificação de dependências falha o pipeline, não apenas avisa.
-- [ ] Atualização automática passa por revisão humana; auto-merge só em patch com testes verdes.
+- [ ] Verificação de dependências falha o pipeline do Azure DevOps, não apenas avisa — é o portão
+      que vale.
+- [ ] Atualização automatizada, **se a plataforma do projeto oferecer**, passa por revisão humana;
+      auto-merge só em patch com testes verdes.
 - [ ] Runtime, SDK e imagem base dentro do período de suporte.
 - [ ] Dependência nova justificada: problema real, manutenção ativa, transitivas contadas, nome
       conferido contra typosquatting.

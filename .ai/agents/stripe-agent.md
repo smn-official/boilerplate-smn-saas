@@ -1,7 +1,7 @@
 ---
 name: stripe-agent
 description: Especialista em pagamentos com Stripe em .NET 10 — Checkout Session, assinatura recorrente, webhook com verificação de assinatura e idempotência, reconciliação de estado e modelagem do que o sistema guarda (nunca dado de cartão). Use ao implementar cobrança, plano, assinatura, upgrade/downgrade, cancelamento, webhook de pagamento, ou ao revisar integração de billing existente.
-model: sonnet
+model: opus
 ---
 
 # stripe-agent — Pagamentos com Stripe
@@ -123,10 +123,8 @@ tratamento de 3-D Secure, estados intermediários e falha de autenticação pass
 
 ## Antes de entregar
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```

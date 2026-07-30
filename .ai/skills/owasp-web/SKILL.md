@@ -44,6 +44,120 @@ transforma isso em padrão em vez de disciplina.
 Devolva **`NotFound`, não `Forbid`**, quando a existência do recurso já é informação — `Forbid`
 confirma que o id existe e pertence a outra pessoa.
 
+### Vazamento entre schemas — isolamento multi-tenant
+
+O isolamento entre clientes é por **schema do PostgreSQL**: a conexão executa
+`SET search_path = <schema>, public` na abertura, e o nome do schema vem de uma claim emitida no
+login a partir do vínculo usuário→cliente persistido no schema compartilhado. Isso move a fronteira
+de segurança para dentro da string de conexão — e cria uma classe de falha que nenhum `[Authorize]`
+detecta.
+
+#### O schema nunca vem de input do usuário
+
+Aceitar o schema por query string, header, campo de formulário ou rota é o equivalente multi-schema
+do IDOR: o atacante troca o valor e lê a base inteira de outro cliente.
+
+```csharp
+// ❌ O cliente escolhe de qual empresa vai ler. Um header basta para atravessar o isolamento.
+var schema = Request.Headers["X-Tenant"].ToString();
+await _resolvedorDeSchema.DefinirAsync(schema, cancellationToken);
+
+// ❌ Mesma falha por query string, mesmo "só em ambiente interno".
+var schema = Request.Query["schema"].ToString();
+
+// ✅ O schema vem da claim emitida no login, a partir do vínculo persistido.
+var schema = User.FindFirstValue(ClaimsCliente.Schema)
+    ?? throw new AcessoNegadoException(MensagensAcesso.ClienteNaoResolvido);
+```
+
+A claim é confiável porque foi emitida pelo servidor no login, não porque chegou na requisição.
+Claim ausente é erro, **não** motivo para cair num schema padrão: `?? "public"` transforma falha de
+autenticação em acesso silencioso ao schema compartilhado.
+
+Troca de cliente (usuário com vínculo em mais de um) reemite a identidade após reconferir o vínculo
+no banco — nunca aceita o novo schema direto da requisição.
+
+#### Nome de schema não é concatenado em SQL
+
+Identificador não é parametrizável. Schema vindo de string, mesmo de fonte confiável, precisa de
+lista branca ou quoting de identificador — a defesa em profundidade é o que impede que um dia o
+valor mude de origem sem ninguém revisar o interceptor.
+
+```csharp
+// ❌ Injeção direta. `schema` fecha o comando e emenda o próximo.
+await using var comando = new NpgsqlCommand($"SET search_path = {schema}, public", conexao);
+
+// ✅ Validado contra o catálogo de clientes e quotado como identificador.
+if (!_catalogoDeClientes.SchemaConhecido(schema))
+    throw new AcessoNegadoException(MensagensAcesso.SchemaDesconhecido);
+
+await using var comando = new NpgsqlCommand(
+    "SELECT set_config('search_path', quote_ident($1) || ', public', false)", conexao);
+comando.Parameters.Add(new NpgsqlParameter { Value = schema });
+```
+
+O catálogo de clientes (schema compartilhado) é a lista branca natural: se o nome não está lá, não é
+schema — é tentativa.
+
+#### Toda conexão precisa do SET antes da primeira query
+
+Esta é a falha mais perigosa do modelo porque **é silenciosa**. Conexão reusada do pool sem o
+`SET search_path` executa a query no schema que sobrou da requisição anterior: retorna dado de outro
+cliente, com sucesso, sem exceção, sem log de erro. Nada quebra — e é exatamente por isso que passa
+despercebido até virar incidente.
+
+```csharp
+// ❌ SET aplicado no primeiro uso do DbContext. A segunda conexão do pool sai sem search_path.
+if (!_jaConfigurado)
+{
+    await DefinirSearchPathAsync(conexao, cancellationToken);
+    _jaConfigurado = true;
+}
+
+// ✅ Interceptor no evento de abertura da conexão: toda conexão, sempre, antes de qualquer query.
+public sealed class SearchPathInterceptor : DbConnectionInterceptor
+{
+    public override async Task ConnectionOpenedAsync(DbConnection conexao,
+        ConnectionEndEventData dados, CancellationToken cancellationToken = default)
+    {
+        await DefinirSearchPathAsync(conexao, _contextoDoCliente.Schema, cancellationToken);
+    }
+}
+```
+
+Verificações do interceptor:
+
+- Roda em **toda** abertura, inclusive nas reabertas pelo pool e nas de retry por falha transitória.
+- Falha em resolver o schema **aborta a conexão**; nunca segue com o search_path anterior.
+- `NpgsqlDataSource` com pool compartilhado entre clientes exige o SET por abertura; pool por cliente
+  é a alternativa que remove a classe de erro, ao custo de conexões.
+- `EnlistedTransaction` e conexão externa passada ao `DbContext` fogem do interceptor — audite.
+
+#### Query bruta e procedure
+
+```sql
+-- ❌ Depende do search_path da conexão estar certo neste instante. Se não estiver, lê outro cliente.
+SELECT * FROM pedido WHERE identificador = $1;
+
+-- ✅ Qualificado, quando o schema é conhecido no ponto de uso.
+SELECT * FROM compartilhado.cliente WHERE identificador = $1;
+```
+
+Objeto do schema compartilhado (catálogo de clientes, vínculo usuário→cliente, trilha de auditoria)
+é **sempre** qualificado — depender do `public` no fim do search_path é apostar na ordem de resolução.
+
+Sem conflito com `seguranca-sql`: o search_path da **conexão** é dinâmico, resolvido por requisição a
+partir de fonte confiável; dentro da **procedure** ele continua fixo e literal no `SET search_path =
+<schema>, pg_temp` do `CREATE PROCEDURE`, como defesa contra shadowing. São camadas diferentes, e
+procedure que precise operar no schema do cliente recebe o nome como parâmetro validado, com `%I`.
+
+#### Schema isola cliente, não usuário
+
+Estar no schema certo não substitui o IDOR acima. Dentro de um mesmo cliente continuam existindo
+usuários com escopos distintos, e o id de um recurso segue exigindo verificação de propriedade na
+consulta. As duas verificações são independentes e ambas obrigatórias: o schema responde "de qual
+cliente é este dado", a specification de propriedade responde "deste cliente, é seu".
+
 ### Outras falhas da categoria
 
 | Falha | Verificação |
@@ -285,6 +399,12 @@ redirecionado para o domínio do atacante já confiando na sessão.
 - [ ] `NotFound` em vez de `Forbid` quando a existência do recurso é informação.
 - [ ] Papel e permissão vêm da sessão, nunca de campo do formulário.
 - [ ] Entrada por DTO específico; nenhuma entidade de domínio em model binding.
+- [ ] Schema do cliente vem da claim emitida no login; nunca de query string, header, form ou rota.
+- [ ] Claim de schema ausente é erro; nenhum fallback para schema padrão.
+- [ ] Nome de schema validado contra o catálogo de clientes e quotado; nunca concatenado em SQL.
+- [ ] `SET search_path` aplicado na abertura de **toda** conexão, antes da primeira query.
+- [ ] Objeto do schema compartilhado qualificado explicitamente em query bruta e procedure.
+- [ ] Verificação de propriedade mantida dentro do schema — schema isola cliente, não usuário.
 - [ ] Nenhum `FromSqlRaw`/`ExecuteSqlRaw` com interpolação ou concatenação.
 - [ ] Coluna e direção de ordenação validadas por lista branca.
 - [ ] Nenhum `@Html.Raw` sobre conteúdo de origem externa.

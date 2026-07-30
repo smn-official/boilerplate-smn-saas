@@ -6,13 +6,14 @@ está no campo `agent:` do frontmatter de cada `SKILL.md`.
 
 Um agente carrega a skill correspondente **antes** de executar a tarefa.
 
-## net10-agent — 8 skills
+## net10-agent — 9 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
 | [`arquitetura-camadas`](../skills/arquitetura-camadas/SKILL.md) | Estrutura de solução .NET 10 em camadas — criar projetos, decidir onde um artefato mora, validar direção de dependência, configurar composição da raiz e dependências essenciais | ao iniciar um projeto, adicionar um projeto novo, mover código entre camadas ou avaliar se uma dependência é permitida |
 | [`dominio-agregados`](../skills/dominio-agregados/SKILL.md) | Modelagem de domínio em .NET — criar agregados com invariantes, serviços de domínio, DTOs, enums e specifications; decidir quando separar um domínio novo | ao criar ou alterar qualquer artefato dentro da camada Core |
-| [`feature-web`](../skills/feature-web/SKILL.md) | Camada de apresentação ASP.NET Core MVC — criar feature vertical (Controller, ViewModel, View), definir rotas, configurar Vite + Tailwind, aplicar design system e tipografia | ao criar ou alterar tela, rota, TypeScript ou estilo |
+| [`feature-web`](../skills/feature-web/SKILL.md) | Camada de apresentação ASP.NET Core MVC — criar feature vertical (Controller, ViewModel, View) e definir rotas | ao criar ou alterar tela, rota ou feature da camada Web |
+| [`multi-schema`](../skills/multi-schema/SKILL.md) | Isolamento de dados por schema do PostgreSQL — resolver o schema do cliente em runtime com `SET search_path` na abertura da conexão, separar o que é do cliente do que é compartilhado, rodar migrations em N schemas, provisionar cliente novo e testar o isolamento | ao criar entidade que guarda dado de cliente, configurar DbContext e interceptor, escrever migration, provisionar cliente ou diagnosticar dado aparecendo no schema errado |
 | [`observabilidade`](../skills/observabilidade/SKILL.md) | Logging e telemetria com Azure Application Insights em .NET 10 — registro do SDK, ILogger estruturado, níveis, enriquecimento por usuário, amostragem e custo | ao configurar telemetria, adicionar log ou diagnosticar comportamento em produção |
 | [`persistencia-ef`](../skills/persistencia-ef/SKILL.md) | Persistência com EF Core 10 e PostgreSQL — DbContext, IEntityTypeConfiguration, migrations, repositórios com specifications, propriedade de schema e integrações externas com fallback | ao mexer em qualquer coisa da camada Data |
 | [`revisao-codigo`](../skills/revisao-codigo/SKILL.md) | Checklist de revisão de código .NET 10 — convenções, Clean Code, SOLID, KISS, formatação, null safety e violações de camada | ao revisar um diff, PR ou antes de entregar uma alteração |
@@ -33,15 +34,14 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`transacoes-erros`](../skills/transacoes-erros/SKILL.md) | Controle transacional e tratamento de erro em procedures PostgreSQL — COMMIT/ROLLBACK no corpo, blocos EXCEPTION, SQLSTATE, savepoints implícitos, processamento em lote e locks | ao escrever procedure que grava dados, processa lote ou precisa tratar falha |
 | [`versionamento-deploy`](../skills/versionamento-deploy/SKILL.md) | Versionamento e deploy de procedures PostgreSQL — organização de arquivos .sql, idempotência do script, rollback, mudança de assinatura, integração com migration do EF Core e revisão | ao criar arquivo de procedure, alterar assinatura ou preparar deploy |
 
-## frontend-agent — 5 skills
+## frontend-agent — 4 skills
 
 | Skill | O que cobre | Quando usar |
 |---|---|---|
-| [`acessibilidade-responsivo`](../skills/acessibilidade-responsivo/SKILL.md) | Responsividade e acessibilidade — eliminar overflow horizontal, adaptar tabela extensa, colapsar grade de formulário, dimensionar ação primária em tela estreita, garantir foco visível, contraste, aria e navegação por teclado | ao criar ou alterar layout, tabela, formulário, modal, menu ou ao revisar uma tela antes de entregar |
-| [`razor-interop`](../skills/razor-interop/SKILL.md) | Contrato entre Razor e TypeScript — passar dados e URLs por atributos data-*, gerar rota com Url.Action e nameof, resolver assets pelo TagHelper do Vite (dev server vs. manifest.json) e garantir progressive enhancement | ao ligar comportamento a uma view, incluir script numa página ou revisar acoplamento entre .cshtml e .ts |
-| [`tailwind-design`](../skills/tailwind-design/SKILL.md) | Design system em Tailwind CSS 4 — declarar tokens em @theme, aplicar a escala tipográfica de 13 tokens, definir cor, espaçamento e superfície, extrair padrão repetido para componente Razor | ao criar ou alterar estilo, token, tipografia, cor ou componente visual |
-| [`typescript-estrito`](../skills/typescript-estrito/SKILL.md) | TypeScript moderno em modo estrito — escolher e fixar a versão, configurar tsconfig com strict/noUnusedLocals/noUnusedParameters, tipar DOM sem any e organizar módulos de feature | ao criar ou alterar .ts, tsconfig.json, atualizar a versão do compilador ou revisar tipagem |
-| [`vite-build`](../skills/vite-build/SKILL.md) | Pipeline de assets com Vite — configurar vite.config.ts, declarar entry points por feature, gerar manifest com hash, definir scripts npm e amarrar o build ao .csproj | ao criar feature com script/estilo próprio, alterar build, dev server ou saída de assets |
+| [`acessibilidade-responsivo`](../skills/acessibilidade-responsivo/SKILL.md) | Responsividade e acessibilidade — eliminar overflow horizontal, adaptar tabela extensa, colapsar grade de formulário, garantir foco visível, contraste, aria e navegação por teclado | ao criar ou alterar layout, tabela, formulário, modal, menu ou ao revisar uma tela antes de entregar |
+| [`razor-interop`](../skills/razor-interop/SKILL.md) | Contrato entre Razor e TypeScript — passar dados e URLs por atributos `data-*`, gerar rota com `Url.Action`, resolver assets pelo TagHelper do Vite e garantir progressive enhancement | ao ligar comportamento a uma view, incluir script numa página ou revisar acoplamento entre `.cshtml` e `.ts` |
+| [`typescript-estrito`](../skills/typescript-estrito/SKILL.md) | TypeScript moderno em modo estrito — fixar a versão, configurar tsconfig com `strict`/`noUnusedLocals`/`noUnusedParameters`, tipar DOM sem `any` e organizar módulos de feature | ao criar ou alterar `.ts`, `tsconfig.json`, atualizar o compilador ou revisar tipagem |
+| [`vite-build`](../skills/vite-build/SKILL.md) | Pipeline de assets com Vite — configurar `vite.config.ts`, declarar entry points por feature, gerar manifest com hash, definir scripts npm e amarrar o build ao `.csproj` | ao criar feature com script próprio, alterar build, dev server ou saída de assets |
 
 ## tester-agent — 5 skills
 
@@ -61,6 +61,14 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`merge-pullrequest`](../skills/merge-pullrequest/SKILL.md) | Abertura e integração de pull request — descrição com problema e solução, checklist de build, testes e typecheck sem avisos, revisão do próprio diff e merge apenas com CI verde, preferindo merge commit | ao preparar, revisar ou integrar um PR |
 | [`padrao-commits`](../skills/padrao-commits/SKILL.md) | Conventional Commits em português brasileiro — tipos permitidos, descrição no imperativo com ~72 caracteres, corpo que explica o porquê e granularidade por intenção | ao redigir mensagem de commit, revisar histórico ou dividir um trabalho em commits |
 | [`recuperacao-git`](../skills/recuperacao-git/SKILL.md) | Recuperação de estado no Git — reflog como rede de segurança, revert versus reset, recuperar commit perdido, desfazer merge, stash e a proibição de force push em branch compartilhada | ao desfazer uma operação, recuperar trabalho aparentemente perdido ou avaliar o risco de um comando destrutivo |
+
+## codegraph-agent — 3 skills
+
+| Skill | O que cobre | Quando usar |
+|---|---|---|
+| [`codegraph-instalacao`](../skills/codegraph-instalacao/SKILL.md) | Instalação do CodeGraph e indexação de um projeto — instalar a CLI por script ou npm, registrar o servidor MCP nos agentes, rodar `codegraph init` na raiz, confirmar o índice com `status` e manter `.codegraph/` fora do git | ao preparar um projeto novo a partir deste boilerplate, quando não existir `.codegraph/` na raiz, ou quando o MCP `codegraph_explore` não aparecer nas ferramentas |
+| [`codegraph-consulta`](../skills/codegraph-consulta/SKILL.md) | Consulta ao grafo — escolher entre `explore`, `query`, `node`, `callers`, `callees` e `impact`, formular a pergunta que devolve contexto útil em uma chamada, ler a saída de blast radius e saber quando o `grep` ainda é a ferramenta certa | ao investigar como um trecho funciona, localizar um símbolo, medir o efeito de uma alteração ou substituir um laço de `grep`/`Read` que está gastando contexto |
+| [`codegraph-manutencao`](../skills/codegraph-manutencao/SKILL.md) | Manutenção do índice — sync incremental, reindexação completa com `index --force`, leitura do `status`, daemon de watcher, lock preso, upgrade da CLI e remoção com `uninit` | quando a consulta devolver código que não existe mais, quando o índice parecer vazio ou defasado, após rebase ou troca de branch com muitas mudanças, ou ao atualizar a versão do CodeGraph |
 
 ## lgpd-agent — 5 skills
 
@@ -82,13 +90,6 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`owasp-web`](../skills/owasp-web/SKILL.md) | OWASP Top 10 aplicado a ASP.NET Core MVC e EF Core — broken access control e IDOR, injeção com FromSqlRaw, XSS via Html.Raw e innerHTML, CSRF com antiforgery, SSRF, desserialização insegura, security misconfiguration e redirect aberto | ao auditar controller, rota, view, query, upload, redirect ou endpoint novo |
 | [`segredos-configuracao`](../skills/segredos-configuracao/SKILL.md) | Gestão de segredo e configuração segura — .env fora do git, resposta a segredo commitado (rotacionar primeiro), Azure Key Vault e App Settings, connection string, HTTPS obrigatório e HSTS, headers de segurança (CSP, X-Content-Type-Options, Referrer-Policy) e cookie com HttpOnly, Secure e SameSite | ao auditar appsettings, .env, pipeline, Program.cs ou configuração de cookie e header |
 
-## ilustracao-agent — 2 skills
-
-| Skill | O que cobre | Quando usar |
-|---|---|---|
-| [`ilustracao-svg`](../skills/ilustracao-svg/SKILL.md) | Desenho de SVG flat inline em partial Razor — estrutura, cores por token, personagem Corporate Memphis, sombra chapada e otimização | ao desenhar ou revisar ilustração, criar personagem ou converter SVG de terceiro |
-| [`ilustracao-tokens`](../skills/ilustracao-tokens/SKILL.md) | Camada de tokens derivada da marca com `color-mix`/`oklch` — cor, pele, neutros, geometria e tamanho por contexto | ao criar ou ajustar tokens de ilustração, verificar contraste ou dimensionar |
-
 ## stripe-agent — 6 skills
 
 | Skill | O que cobre | Quando usar |
@@ -99,12 +100,6 @@ Um agente carrega a skill correspondente **antes** de executar a tarefa.
 | [`stripe-assinaturas`](../skills/stripe-assinaturas/SKILL.md) | `Product`/`Price`/`Subscription`, trial, add-on como item, upgrade com proration, cancelamento, dunning e Customer Portal | ao implementar plano recorrente, mudança de plano ou cancelamento |
 | [`stripe-webhooks`](../skills/stripe-webhooks/SKILL.md) | Verificação de assinatura, corpo bruto, idempotência por `event.id`, responder 2xx antes de processar e ausência de ordem | ao criar ou revisar endpoint de webhook |
 | [`stripe-modelagem`](../skills/stripe-modelagem/SKILL.md) | O que persistir, agregado `Assinatura`, tabela de idempotência, EF Core e LGPD do dado de pagamento | ao criar schema de cobrança ou migration de billing |
-
-## cor-agent — 1 skill
-
-| Skill | O que cobre | Quando usar |
-|---|---|---|
-| [`cor-contexto`](../skills/cor-contexto/SKILL.md) | Escolha da cor primária a partir do contexto — setor, público, personalidade, concorrentes, calibragem de saturação e luminosidade, cores de estado e registro da decisão | ao definir identidade visual, revisar cor existente ou quando não se sabe que cor usar |
 
 ## Adicionar uma skill
 

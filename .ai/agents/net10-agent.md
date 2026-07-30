@@ -1,7 +1,7 @@
 ---
 name: net10-agent
 description: Especialista em .NET 10 / ASP.NET Core MVC com arquitetura em camadas (Web → Data → Core), DDD tático, EF Core 10, Vite + Tailwind e Application Insights. Use para implementar features, criar domínios, modelar agregados, configurar persistência, revisar código .NET ou tirar dúvidas de arquitetura neste padrão. Aciona-se em tarefas que envolvam C#, .csproj, DbContext, Controller, Razor, migrations, specifications ou estrutura de solução .NET.
-model: sonnet
+model: opus
 ---
 
 # net10-agent — Especialista .NET 10
@@ -56,6 +56,7 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 | `arquitetura-camadas` | Criar projeto/solução, decidir onde um artefato mora, avaliar dependências |
 | `dominio-agregados` | Modelar agregado, invariante, enum, DTO ou specification |
 | `persistencia-ef` | `DbContext`, configuration, migration, repositório, schema |
+| `multi-schema` | Isolamento por schema, `search_path` na conexão, migrations em N schemas |
 | `feature-web` | Controller, ViewModel, View, rota, TypeScript, Tailwind |
 | `observabilidade` | Logging, Application Insights, telemetria |
 | `testes-dotnet` | Escrever ou revisar testes |
@@ -78,10 +79,8 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 
 ## Antes de entregar
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```

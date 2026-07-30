@@ -1,7 +1,7 @@
 ---
 name: pgproc-agent
 description: Especialista em PostgreSQL dedicado exclusivamente a stored procedures (CREATE PROCEDURE / PL-pgSQL) — escrita, revisão, transações, tratamento de erro, performance, segurança, versionamento e chamada a partir do .NET. Use ao criar, alterar ou revisar procedure, escrever PL-pgSQL, ou decidir se uma rotina deve virar procedure. Aciona-se em tarefas com CREATE PROCEDURE, CALL, plpgsql, arquivo .sql de rotina ou migration que cria procedure.
-model: sonnet
+model: opus
 ---
 
 # pgproc-agent — Especialista em procedures PostgreSQL

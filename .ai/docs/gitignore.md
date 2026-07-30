@@ -41,6 +41,8 @@ arquivo que aponta para um segredo é seguro; um que o embute, não.
 | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` | Fonte da verdade e seus symlinks |
 | `.env.example` | Diz **quais** variáveis existem, sem valor |
 | `appsettings.json` | Estrutura base, sem segredo |
+| `Directory.Build.props` | Contrato de build — o que faz "sem avisos" valer para todos |
+| `.editorconfig` | Convenção verificável, não preferência de editor |
 | `.gitignore` | Óbvio, mas vale dizer: é ele que protege o resto |
 
 ## Ignorado
@@ -84,6 +86,19 @@ repositório, inclusive os que ninguém controla. É exatamente o que
 **`wwwroot/build/` é derivado.** A skill [`vite-build`](../skills/vite-build/SKILL.md) amarra
 `npm run build` ao `dotnet build`, então o artefato é reproduzível. Versioná-lo gera conflito em todo
 merge, porque o hash muda a cada build.
+
+**`Directory.Build.props` e `.editorconfig` são versionados — são contrato, não preferência.** O
+nome do `.editorconfig` sugere ajuste de editor, e a intuição é ignorá-lo junto com `.vs/` e
+`.idea/`. Mas a diferença é a mesma da regra geral: `.vs/` guarda o que *uma pessoa* prefere ver;
+estes dois definem o que *o build recusa*. O `Directory.Build.props` estende `TreatWarningsAsErrors`,
+`Nullable` e os analisadores a todos os projetos, e o `.editorconfig` — com
+`EnforceCodeStyleInBuild` ligado — transforma formatação e severidade em verificação, com `CA1068`
+(`CancellationToken` como último parâmetro) marcado como erro.
+
+Ignorá-los quebraria o repositório de um jeito silencioso: o build continuaria passando na máquina
+de quem já os tem e passaria **mais fácil** na de quem clonou, porque lá o aviso volta a ser só
+aviso. O portão de "sem erros e sem avisos" do [AGENTS.md](../../AGENTS.md) só é o mesmo portão para
+todo mundo porque estes dois arquivos viajam com o clone.
 
 **Symlink é versionado como symlink.** O git guarda o caminho de destino, não uma cópia. `CLAUDE.md`,
 `GEMINI.md` e `.mcp.json` continuam links depois do clone — a estrutura sobrevive.

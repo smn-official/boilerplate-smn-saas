@@ -1,0 +1,49 @@
+<Project>
+
+  <!--
+    Propriedades herdadas por TODO projeto da solução, sem repetir em cada .csproj.
+    O MSBuild carrega este arquivo automaticamente a partir da raiz.
+
+    O AGENTS.md exige entregar "sem erros E sem avisos". Sem este arquivo essa
+    regra dependia de disciplina manual: `dotnet new` não liga nada disso, e
+    TreatWarningsAsErrors só existia nos projetos de teste — justamente fora do
+    código que vai para produção.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Nullable como erro: referência nula é a exceção mais cara em produção. -->
+    <Nullable>enable</Nullable>
+
+    <!--
+      Aviso é erro. Aviso que não quebra o build é aviso que ninguém lê — a mesma
+      posição que `dependencias-vulneraveis` adota para a auditoria de pacote.
+    -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- Faz o .editorconfig valer no build, não só na IDE de quem tem plugin. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!--
+      CS1591 exigiria <summary> em todo membro público. A convenção deste
+      repositório é <summary> em tipos e operações públicas, não em cada
+      propriedade — manter o aviso ligado geraria ruído que ensina a ignorar erro.
+    -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    Só o projeto Web tem cultura de UI; nos demais, a invariante evita depender
+    do locale da máquina que roda o build ou o container.
+  -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' != '' AND !$(MSBuildProjectName.EndsWith('.Web'))">
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>

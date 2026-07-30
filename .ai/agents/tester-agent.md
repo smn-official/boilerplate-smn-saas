@@ -1,7 +1,7 @@
 ---
 name: tester-agent
 description: Especialista em testes automatizados .NET 10 com xUnit v3, Moq, FluentAssertions e HtmlAgilityPack — estratégia e pirâmide de testes, testes unitários de agregado e serviço, testes de integração com banco real, asserção sobre HTML renderizado e construção de dados de teste determinísticos. Use para escrever, revisar ou executar testes, decidir o que cobrir em cada artefato, reproduzir defeito antes de corrigir ou diagnosticar suíte falhando.
-model: sonnet
+model: opus
 ---
 
 # tester-agent — Especialista em testes automatizados
@@ -24,7 +24,7 @@ agente pode produzir.
 | Asserções | FluentAssertions |
 | Dublês | Moq, somente nos limites do objeto testado |
 | HTML | HtmlAgilityPack (camada Web) |
-| Compilação | `TreatWarningsAsErrors` ligado nos projetos de teste |
+| Compilação | `TreatWarningsAsErrors` em todos os projetos, pelo `Directory.Build.props` da raiz |
 
 ## Organização
 
@@ -73,10 +73,8 @@ Carregue a skill correspondente **antes** de executar a tarefa:
 
 ## Antes de entregar
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```

@@ -7,8 +7,8 @@ agent: net10-agent
 # setup-projeto — parametrização inicial
 
 Executado **uma vez**, no início de um projeto novo. A stack deste boilerplate é fixa e opinativa
-(.NET 10 em camadas, PostgreSQL, Tailwind + Vite, xUnit v3) — o setup **não** liga nem desliga
-tecnologia. Ele só troca a identidade do projeto.
+(.NET 10 em camadas, PostgreSQL, Vite, xUnit v3) — o setup **não** liga nem desliga tecnologia.
+Ele só troca a identidade do projeto.
 
 ## A distinção que importa
 
@@ -21,7 +21,7 @@ O repositório tem dois tipos de marcador `<...>`, e confundi-los destrói as sk
 
 `<Entidade>` aparece 119 vezes e significa "o agregado que você está escrevendo agora" — é parte da
 linguagem das skills, não um campo a preencher. Um find-and-replace cego sobre `<...>` transformaria
-as 40 skills em lixo. O script já conhece essa fronteira: sua lista de marcadores é exatamente
+as 50 skills em lixo. O script já conhece essa fronteira: sua lista de marcadores é exatamente
 `Produto` e `Modulo`, e nada deve ser acrescentado a ela.
 
 ## Procedimento
@@ -56,64 +56,20 @@ refletem a mudança automaticamente por serem links.
 Rodar de novo é seguro: sem marcadores nem exemplos restantes, o script informa que já foi
 parametrizado e não faz nada.
 
-**A documentação de exemplo é removida.** `docs/features/feature-example/` serve ao boilerplate, não
-ao produto — ficar num projeto real vira ruído que alguém acaba tomando por feature de verdade. Ao
-removê-la, o script:
+**A árvore de `docs/` não é descartada.** Ela nasce como template a preencher — `architecture/`,
+`domain/`, `development/`, `infrastructure/`, `api/`, `decisions/` e `features/` —, e cada arquivo
+já traz as seções esperadas com o critério do que escrever. Apagá-la tiraria do projeto justamente
+o que ele deve completar.
 
-- cria `docs/features/README.md` registrando o formato esperado do documento de feature e do
-  arquivo de regra, para o molde não se perder junto com a pasta;
-- reescreve os trechos de `docs/README.md` que apontavam para a pasta, evitando link morto e
-  instrução para copiar algo inexistente.
+Onde a regra é norma do boilerplate (direção `Web → Data → Core`, fluxo canônico, convenções de
+código), o conteúdo já vem escrito por extenso, não como lacuna. O que é decisão do projeto está
+marcado como tal. Os dois ADRs iniciais — [ADR-001](../../../docs/decisions/ADR-001-use-ddd.md) e
+[ADR-002](../../../docs/decisions/ADR-002-database-strategy.md) — já estão aceitos e registram por
+que a stack é o que é.
 
-`docs/context/general-vision.md` **não** é removido: é o arquivo que o projeto deve preencher, e o
-setup o mantém com o template dentro.
+Cada arquivo abre com um aviso de template: remova-o conforme for preenchendo.
 
-Use `--manter-exemplos` para preservar a pasta — útil apenas se este repositório continuar sendo o
-boilerplate.
-
-**4. Definir a paleta.** Os tokens de cor do design system são `#<hex>` — marcador didático, não
-paleta real. Enquanto não forem preenchidos, [`tailwind-design`](../tailwind-design/SKILL.md) e os
-tokens de ilustração não têm de onde derivar.
-
-Pergunte ao usuário: **já existe cor de marca?**
-
-- **Tem a cor** — ancore a sugestão nela:
-
-  ```bash
-  node .ai/scripts/paleta.mjs --marca "#2563EB"
-  ```
-
-- **Não tem** — **acione o [`cor-agent`](../../agents/cor-agent.md)**. Ele escolhe a partir do que o
-  produto é: setor, público, personalidade da marca e o que os concorrentes usam. Cor escolhida sem
-  contexto é chute, e trocar depois custa retrabalho em tokens, ilustração e material de marca.
-
-  Se o usuário preferir resolver rápido, as prontas atendem:
-
-  ```bash
-  node .ai/scripts/paleta.mjs --sem-api      # lista azul, verde, violeta, grafite
-  node .ai/scripts/paleta.mjs --pronta azul
-  ```
-
-- **Quer explorar** — sugestão gerada, sem âncora:
-
-  ```bash
-  node .ai/scripts/paleta.mjs
-  ```
-
-O script consulta a API do colormind.io e **corrige o contraste**: paleta crua de gerador reprova em
-WCAG com frequência, e aplicá-la direto produz design system inacessível. O ajuste mexe na
-**luminosidade, nunca no matiz** — matiz é a identidade da marca.
-
-A saída já vem no formato do `@theme`, pronta para colar em
-`Features/Shared/Styles/app.css`. Sem rede, `--sem-api` resolve com as paletas prontas.
-
-Para conferir uma paleta que o usuário trouxe pronta:
-
-```bash
-node .ai/scripts/paleta.mjs --validar "#2563EB,#FFFFFF,#8C9CB0,#0F172A,#64748B"
-```
-
-**5. Criar a solução.** O script imprime os comandos ao final:
+**4. Criar a solução.** O script imprime os comandos ao final:
 
 ```bash
 dotnet new sln -n Contoso --format slnx
@@ -122,10 +78,35 @@ dotnet new classlib -o src/Contoso.Vendas/Data
 dotnet new mvc      -o src/Contoso.Vendas.Web
 ```
 
+Os projetos criados aqui **herdam automaticamente** o `Directory.Build.props` da raiz —
+`TargetFramework`, `Nullable`, `TreatWarningsAsErrors`, `EnforceCodeStyleInBuild` e os analisadores
+já valem sem nenhuma linha a mais. Não repita essas propriedades nos `.csproj`: duplicá-las cria
+dois lugares para mudar e o `.csproj` acaba silenciosamente afrouxando o que a raiz aperta.
+
 A partir daqui, a estrutura de pastas e as referências entre projetos são responsabilidade da skill
 [`arquitetura-camadas`](../arquitetura-camadas/SKILL.md) — carregue-a para montar as camadas
 respeitando `Web → Data → Core`. Não crie pastas vazias antecipadamente: elas nascem com o primeiro
 artefato real.
+
+**5. Indexar o código com o CodeGraph.** Com a solução criada, instale a CLI e construa o índice na
+raiz do repositório:
+
+```bash
+codegraph --version   # se não existir, instale — ver codegraph-instalacao
+codegraph init
+codegraph status
+```
+
+O `.mcp.json` deste repositório já declara o servidor `codegraph`; reinicie a sessão e confirme com
+`/mcp`. A partir daí, `codegraph explore` responde "como isso funciona" e "onde fica X" numa única
+chamada, no lugar do laço `grep` → `Read` — bem mais barato em contexto.
+
+> **Esta etapa vem depois da 4, não antes.** Indexar um boilerplate ainda sem código gera um grafo
+> quase vazio, e o agente que confia nele conclui que "não existe" o que apenas não foi indexado.
+> Se o `init` já tiver rodado cedo demais, corrija com `codegraph index --force`.
+
+O passo a passo completo — instalação por sistema, registro do MCP, `.gitignore` e diagnóstico —
+está em [`codegraph-instalacao`](../codegraph-instalacao/SKILL.md).
 
 ## Depois do setup
 
@@ -135,7 +116,7 @@ Mantenha-os apenas se este repositório continuar sendo o boilerplate.
 ## Se alguém pedir para escolher tecnologias
 
 Este boilerplate não é um menu. A stack está declarada no [AGENTS.md](../../../AGENTS.md) e sustentada
-pelos 7 agentes e 40 skills; desligar uma tecnologia exigiria podar agentes e skills e regenerar a
+pelos 9 agentes e 50 skills; desligar uma tecnologia exigiria podar agentes e skills e regenerar a
 documentação, e skill sobrevivente desatualizada passa a orientar contra o padrão vigente — pior do
 que não ter agente. Se a mudança de stack for real, ela é uma decisão de arquitetura: atualize
 `AGENTS.md`, `.ai/docs/estrutura-arquitetura.md` e as skills afetadas na mesma entrega.

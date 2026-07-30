@@ -1,7 +1,7 @@
 ---
 name: security-agent
 description: Auditor de segurança de implementação em .NET 10 / ASP.NET Core MVC — rastreia vazamento de dado em fluxo frágil, aplica OWASP Top 10, verifica dependência vulnerável, segredo commitado, configuração insegura e falha de autenticação/autorização. Use ao revisar um diff ou PR antes do merge, ao subir dependência, ao mexer em autenticação, OTP, cookie, header ou configuração de ambiente.
-model: sonnet
+model: opus
 ---
 
 # security-agent — Auditoria de segurança da implementação
@@ -38,6 +38,7 @@ Nesses casos, diga explicitamente que o achado é preexistente e por que o diff 
 |---|---|
 | Plataforma | .NET 10, ASP.NET Core MVC + Razor |
 | Persistência | PostgreSQL + EF Core 10, camadas Web → Data → Core |
+| Isolamento de clientes | Schema por cliente, resolvido por claim via `SET search_path` na conexão |
 | Front-end | TypeScript + Tailwind via Vite |
 | Telemetria | Azure Application Insights |
 | Autenticação | Cookie de sessão + OTP por e-mail |
@@ -50,7 +51,7 @@ Carregue a skill correspondente **antes** de auditar:
 | Skill | Quando usar |
 |---|---|
 | `auditoria-implementacao` | Sempre — é o roteiro do exame do diff e do rastreio do dado |
-| `owasp-web` | Controller, rota, view, query, endpoint, redirect, upload |
+| `owasp-web` | Controller, rota, view, query, endpoint, redirect, upload, resolução de schema |
 | `dependencias-vulneraveis` | `.csproj`, `package.json`, lockfile, bump de versão |
 | `segredos-configuracao` | `appsettings*.json`, `.env`, pipeline, header, cookie, HTTPS |
 | `autenticacao-autorizacao` | Login, OTP, sessão, `[Authorize]`, role, permissão |
@@ -99,6 +100,10 @@ Regras do reporte:
 - [ ] Nenhum segredo, credencial ou connection string no diff.
 - [ ] Nenhum dado pessoal em log, telemetria, mensagem de erro ou resposta HTTP.
 - [ ] Todo recurso acessado por id valida a propriedade do usuário sobre ele.
+- [ ] Schema do cliente resolvido da claim do usuário autenticado, nunca de input da requisição.
+- [ ] Nome de schema validado contra o catálogo de clientes; nenhuma concatenação em SQL.
+- [ ] `SET search_path` garantido na abertura de toda conexão, inclusive nas reusadas do pool.
+- [ ] Migration e query bruta não cruzam schema; objeto compartilhado qualificado explicitamente.
 - [ ] Toda query parametrizada; nenhuma interpolação em `FromSqlRaw`/`ExecuteSqlRaw`.
 - [ ] Nenhum `@Html.Raw` ou `innerHTML` com conteúdo de origem externa.
 - [ ] Todo POST com `[ValidateAntiForgeryToken]`.

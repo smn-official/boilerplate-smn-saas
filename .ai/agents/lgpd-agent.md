@@ -1,7 +1,7 @@
 ---
 name: lgpd-agent
 description: Especialista em LGPD (Lei 13.709/2018) aplicada à implementação — princípios e bases legais, modelagem de dado pessoal e sensível, direitos do titular, retenção e descarte, consentimento e trilha de auditoria. Use ao modelar entidade que guarda dado de pessoa, definir o que logar, decidir prazo de retenção, implementar exclusão de conta, exportar dados, tratar consentimento ou revisar uma feature quanto a conformidade legal.
-model: sonnet
+model: opus
 ---
 
 # lgpd-agent — Conformidade LGPD na implementação

@@ -2,10 +2,10 @@
 
 Ponto de partida para um SaaS em .NET 10, com a arquitetura, as convenções e a orientação de IA já
 definidas. **Não há código de aplicação aqui** — o que existe é o contrato de como o código deve ser
-escrito: 10 agentes especializados, 50 skills, documentação normativa e dois scripts de
+escrito: 9 agentes especializados, 50 skills, documentação normativa e o script de
 parametrização.
 
-A premissa: decisão de arquitetura, convenção de nome, política de LGPD e critério de design custam
+A premissa: decisão de arquitetura, convenção de nome e política de LGPD custam
 mais para acertar depois do que antes. Este repositório carrega essas decisões já tomadas, escritas
 num formato que tanto pessoa quanto assistente de IA conseguem seguir.
 
@@ -39,20 +39,7 @@ node .ai/scripts/init.mjs --produto Contoso --modulo Vendas             # aplica
 Rode uma vez só. Os outros marcadores — `<Entidade>`, `<Feature>`, `<schema>`, `<tabela>` — são
 notação didática das skills e permanecem intactos de propósito.
 
-### 2. Defina a paleta
-
-Os design tokens nascem como `#<hex>`. O script sugere a paleta e **corrige o contraste** — saída
-crua de gerador reprova em WCAG com frequência.
-
-```bash
-node .ai/scripts/paleta.mjs --marca "#2563EB"   # ancora numa cor de marca existente
-node .ai/scripts/paleta.mjs --sem-api           # escolhe entre as paletas prontas
-node .ai/scripts/paleta.mjs --validar "#2563EB,#FFFFFF,#E5E7EB,#111827,#6B7280"
-```
-
-Sem cor definida? Peça ao `cor-agent`: ele decide a partir de setor, público e concorrentes.
-
-### 3. Crie a solução
+### 2. Crie a solução
 
 ```bash
 dotnet new sln -n Contoso --format slnx
@@ -60,6 +47,25 @@ dotnet new classlib -o src/Contoso.Vendas/Core
 dotnet new classlib -o src/Contoso.Vendas/Data
 dotnet new mvc      -o src/Contoso.Vendas.Web
 ```
+
+### 3. Indexe o código com o CodeGraph
+
+Com a solução criada, construa o índice na raiz do repositório:
+
+```bash
+codegraph --version   # se não existir, instale — ver codegraph-instalacao
+codegraph init
+codegraph status
+```
+
+O `.mcp.json` já declara o servidor `codegraph` — basta reiniciar a sessão para as ferramentas
+aparecerem. A partir daí, `codegraph explore` responde "como isso funciona" e "onde fica X" numa
+única chamada, no lugar do laço `grep` → `Read` — bem mais barato em contexto.
+
+Esta etapa vem **depois** de criar a solução: indexar um repositório ainda sem código gera um grafo
+vazio, e o agente que confia nele conclui que "não existe" o que apenas não foi indexado. Se o
+`init` rodou cedo demais, corrija com `codegraph index --force`. A pasta `.codegraph/` é derivada e
+local — fica fora do git.
 
 ### 4. Configure o ambiente
 
@@ -106,18 +112,24 @@ A referência normativa completa está em
 ├── .github/copilot-instructions.md -> ../AGENTS.md
 ├── .mcp.json              -> .ai/mcp/servers.json
 ├── .env.example           forma esperada do .env
+├── Directory.Build.props  aviso vira erro, nullable e analisadores em todo projeto
+├── .editorconfig          formatação e severidade de analisador (CA1068 = erro)
 │
 ├── docs/                  documentação do PRODUTO — o que construir e por quê
-│   ├── context/           visão geral do domínio
-│   ├── features/          fluxos + rules/ (uma regra de negócio por arquivo)
-│   └── components/        18 componentes do design system
+│   ├── architecture/      visão geral, camadas, dependências, fluxo, diagramas
+│   ├── domain/            glossário, regras de negócio, agregados, casos de uso
+│   ├── development/       setup, convenções, estrutura, testes, comandos
+│   ├── infrastructure/    banco, autenticação, integrações, deploy, configuração
+│   ├── api/               convenções de rota, catálogo de erros, endpoints
+│   ├── decisions/         ADRs — decisão com contexto e consequência
+│   └── features/          fluxos + rules/ (uma regra de negócio por arquivo)
 │
 └── .ai/                   documentação da CONSTRUÇÃO — como construir
-    ├── agents/            10 definições de agente
+    ├── agents/            9 definições de agente
     ├── skills/            50 skills, cada uma com SKILL.md
     ├── docs/              arquitetura, agentes, skills, MCP, configuração
-    ├── mcp/servers.json   playwright, context7, postgres
-    └── scripts/           init.mjs (parametrização), paleta.mjs (cores)
+    ├── mcp/servers.json   codegraph, playwright, context7, postgres
+    └── scripts/           init.mjs (parametrização)
 ```
 
 `docs/` responde "o que construir e por quê"; `.ai/docs/` responde "como construir". Elas mudam em
@@ -127,25 +139,24 @@ ritmos diferentes — misturá-las faz a de negócio envelhecer junto com o cód
 
 | Tarefa | Agente |
 |---|---|
+| Entender ou localizar código, medir impacto de mudança | `codegraph-agent` |
 | Criar feature, agregado, serviço, repositório | `net10-agent` |
 | Escrever ou revisar stored procedure | `pgproc-agent` |
-| Tela, componente, estilo, TypeScript | `frontend-agent` |
+| Alterar tela, componente, TypeScript, build de assets | `frontend-agent` |
 | Escrever ou revisar teste | `tester-agent` |
 | Branch, commit, merge, desfazer algo no git | `github-agent` |
 | Campo novo com dado pessoal, retenção, direito do titular | `lgpd-agent` |
 | Auditar implementação, dependência vulnerável | `security-agent` |
-| Ilustração, empty state, tela com muito espaço vazio | `ilustracao-agent` |
 | Pagamento, assinatura, plano, cobrança recorrente | `stripe-agent` |
-| Escolher a cor do produto, identidade visual | `cor-agent` |
 
 Ordem sugerida numa entrega — sequencial nas pontas, paralela no meio:
 
 ```text
 lgpd-agent                          (antes, se houver dado pessoal)
       ↓
-net10-agent ┐
-pgproc-agent├─ em paralelo, arquivos distintos
-frontend-agent ┘   (+ tester-agent, assim que o contrato existir)
+net10-agent   ┐
+pgproc-agent  ├─ em paralelo, arquivos distintos
+frontend-agent┘  (+ tester-agent, assim que o contrato existir)
       ↓
 security-agent                      (precisa do diff pronto)
       ↓
@@ -166,19 +177,20 @@ Mapa skill → agente: [.ai/docs/skills.md](.ai/docs/skills.md).
 - Early return e cláusulas de guarda em vez de `if` aninhado.
 - Domínio e pastas no idioma do negócio; configuração e rotas HTTP em inglês (kebab-case).
 - Em PostgreSQL, identificadores por extenso — sem abreviação, sigla ou diminutivo.
-- Ícones do [Lucide](https://lucide.dev), SVG inline, nunca icon font.
-- Todo componente é responsivo, validado em 320px, 768px, 1024px e 1440px.
-- Nada de visual genérico de IA — a lista completa está em
-  [.ai/docs/aparencia-generica.md](.ai/docs/aparencia-generica.md).
+
+Boa parte delas é **verificada no build**, não só em revisão: o `Directory.Build.props` estende
+`TreatWarningsAsErrors`, `Nullable` e os analisadores a todos os projetos, e o `.editorconfig` define
+formatação e severidade — `CA1068`, o `CancellationToken` por último, é erro.
 
 O conjunto normativo vive em [AGENTS.md](AGENTS.md).
 
 ## MCP
 
-Três servidores em [.ai/mcp/servers.json](.ai/mcp/servers.json), versionado:
+Quatro servidores em [.ai/mcp/servers.json](.ai/mcp/servers.json), versionado:
 
 | Servidor | Destrava |
 |---|---|
+| `codegraph` | consultar o grafo do código — símbolos, fonte e caminhos de chamada |
 | `playwright` | navegar e inspecionar a aplicação rodando |
 | `context7` | documentação atualizada de biblioteca |
 | `postgres` | consultar o schema e os dados de desenvolvimento |
@@ -214,5 +226,4 @@ guiar passo a passo. E segredo nunca é colado no chat: vai direto para o `.env`
 | Arquitetura completa | [.ai/docs/estrutura-arquitetura.md](.ai/docs/estrutura-arquitetura.md) |
 | Índice da documentação de apoio | [.ai/docs/README.md](.ai/docs/README.md) |
 | Documentação do produto | [docs/README.md](docs/README.md) |
-| Design system (18 componentes) | [docs/components/README.md](docs/components/README.md) |
 | O que versionar no git | [.ai/docs/gitignore.md](.ai/docs/gitignore.md) |

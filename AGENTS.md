@@ -64,24 +64,39 @@ Fluxo canônico: `Controller → Service → Repository → Agregado`, retornand
 - Em PostgreSQL, identificadores por extenso — sem abreviação, sigla ou diminutivo.
 - Configuração em `appsettings.json` (PascalCase); só segredo no `.env`. Sobrescrita .NET usa
   `Secao__Chave`; variável de ferramenta externa, `SCREAMING_SNAKE_CASE`.
-- **Ícone vem do [Lucide](https://lucide.dev)** (`lucide-static`), sempre SVG inline, nunca outro
-  acervo nem icon font. Detalhe e regras de acessibilidade em
-  [docs/components/icon.md](docs/components/icon.md).
-- **Nada de visual genérico de IA** — sem degradê roxo/índigo, mancha luminosa de fundo,
-  glassmorphism, card dentro de card, sombra decorativa, emoji como ícone, trio de cards ou quarteto
-  de KPIs de enfeite. Decoração não substitui informação; toda tela projeta carregamento, vazio,
-  erro e permissão. Lista completa e checklist em
-  [.ai/docs/aparencia-generica.md](.ai/docs/aparencia-generica.md).
-- **Todo componente é responsivo** em mobile, tablet e desktop — obrigatório, sem exceção e sem
-  "versão mobile depois". Mobile-first, validado em 320px, 768px, 1024px e 1440px. Regra em
-  [docs/components/README.md](docs/components/README.md); técnica em
-  [.ai/skills/acessibilidade-responsivo](.ai/skills/acessibilidade-responsivo/SKILL.md).
-- **Nunca usar badge de categoria** — nem a pílula de rótulo (`ORÇAMENTO · PILAR 1`), nem a variante
-  com dot colorido. Vale para *pill*, *chip*, *tag*, *eyebrow* e *kicker*. Badge de **estado** de
-  registro continua permitido. Alternativas em [docs/components/badge.md](docs/components/badge.md).
+- **`Directory.Build.props` e `.editorconfig` na raiz são o que torna "sem avisos" verificável** —
+  o primeiro estende `TreatWarningsAsErrors`, `Nullable` e os analisadores a **todos** os projetos;
+  o segundo codifica formatação e severidade, com `CA1068` (`CancellationToken` por último) como
+  erro. Ambos são herdados automaticamente: não repita as propriedades em cada `.csproj` nem os
+  remova do projeto derivado — sem eles a regra volta a ser prosa sem efeito.
+- **Havendo `.codegraph/` na raiz, consulte o CodeGraph antes de `grep`/`find`.** `codegraph explore`
+  (ou o MCP `codegraph_explore`) devolve o fonte dos símbolos relevantes e os caminhos de chamada
+  numa única consulta — mais barato em contexto que o laço `grep` → `Read`. O fonte devolvido **já é
+  leitura feita**: não reabra o mesmo arquivo. `grep` segue certo para string literal, comentário,
+  `.cshtml`, `.css`, `.sql` e `.md`, que ficam fora do índice. Sem `.codegraph/`, não indexe por
+  conta própria — é decisão do usuário. Regra em
+  [.ai/skills/codegraph-consulta](.ai/skills/codegraph-consulta/SKILL.md).
 - Toda saída do Playwright (screenshot, trace, PDF, download) vai para `.playwright-mcp/`, que é
   ignorada pelo git — **nunca na raiz**. Ao tirar screenshot, passe só o nome do arquivo, jamais
   caminho absoluto ou `../`. Screenshot é inspeção descartável, não artefato de entrega.
+
+## Git e DevOps — pergunte sempre antes de executar
+
+**Nenhum agente executa operação de Git ou DevOps que altere estado sem perguntar ao usuário
+imediatamente antes.** Vale para todos os agentes, não só o `github-agent`, e não admite exceção:
+nem para operação trivial, nem reversível, nem porque algo parecido já foi autorizado antes.
+
+Exige confirmação: `commit`, `amend`, `rebase`, `merge`, `revert`, `cherry-pick`, `push` (com ou sem
+`--force`), `pull`, criar/apagar/renomear branch ou tag, `reset`, `restore`, `clean`, `stash drop`,
+`git config`, abrir ou mergear PR, alterar workflow de CI, deploy, release, publicar pacote, rodar
+migration em ambiente, mexer em secret ou em recurso de infraestrutura.
+
+Não exige: leitura — `status`, `diff`, `log`, `reflog`, `show`, `branch --list`, `gh pr view`.
+
+**A autorização é pontual e não se estende.** Autorizar o commit não autoriza o push; autorizar o
+push não autoriza o merge; autorizar um commit não autoriza o próximo. "Pode organizar isso" é
+pedido de proposta, não autorização. Na dúvida, pergunte — detalhe em
+[.ai/agents/github-agent.md](.ai/agents/github-agent.md).
 
 ## Ações que dependem do usuário
 
@@ -101,20 +116,19 @@ usuário:
 
 ## Agentes
 
-Dez agentes especializados em [.ai/agents/](.ai/agents/), com 50 skills em [.ai/skills/](.ai/skills/).
+Nove agentes especializados em [.ai/agents/](.ai/agents/), com 50 skills em [.ai/skills/](.ai/skills/).
 
 | Tarefa | Agente |
 |---|---|
 | Criar feature, agregado, serviço, repositório | `net10-agent` |
+| Entender ou localizar código, medir impacto de mudança | `codegraph-agent` |
 | Escrever ou revisar stored procedure | `pgproc-agent` |
-| Tela, componente, estilo, TypeScript | `frontend-agent` |
+| Alterar tela, componente, TypeScript, build de assets | `frontend-agent` |
 | Escrever ou revisar teste | `tester-agent` |
 | Branch, commit, merge, desfazer algo no git | `github-agent` |
 | Campo novo com dado pessoal, retenção, direito do titular | `lgpd-agent` |
 | Auditar implementação nova, dependência vulnerável | `security-agent` |
-| Ilustração, empty state, tela com muito espaço vazio | `ilustracao-agent` |
 | Pagamento, assinatura, plano, cobrança recorrente | `stripe-agent` |
-| Escolher a cor do produto, identidade visual | `cor-agent` |
 
 Índice da documentação de apoio: [.ai/docs/README.md](.ai/docs/README.md).
 
@@ -132,7 +146,7 @@ Configuração — `.env` vs `appsettings.json` e nomes de variável: [.ai/docs/
 pergunta é "isso se divide?" — e não "como eu faço isso?". Fazer sequencialmente o que caberia em
 três subagentes paralelos é desperdício de tempo do usuário, não zelo.
 
-Dez agentes especializados existem exatamente para isso. Um único agente resolvendo feature de
+Nove agentes especializados existem exatamente para isso. Um único agente resolvendo feature de
 ponta a ponta é o modo mais lento e o que menos aproveita as skills.
 
 ### O ciclo
@@ -197,10 +211,8 @@ github-agent                        (commit e PR)
 
 ## Antes de entregar
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```
@@ -221,11 +233,18 @@ verificar.
 ```text
 projeto/
 ├── AGENTS.md                        fonte única da verdade
+├── Directory.Build.props            aviso vira erro, nullable e analisadores em todo projeto
+├── .editorconfig                    formatação e severidade de analisador (CA1068 = erro)
 ├── .gitignore                       versiona config, ignora segredo
 ├── .env.example                     forma esperada do .env (ignorado)
 │
 ├── docs/                            documentação do produto (negócio)
-│   ├── context/general-vision.md    o domínio, quem usa, fronteiras
+│   ├── architecture/                visão geral, camadas, dependências, fluxo
+│   ├── domain/                      glossário, regras, agregados, casos de uso
+│   ├── development/                 setup, convenções, estrutura, testes, comandos
+│   ├── infrastructure/              banco, auth, integrações, deploy, configuração
+│   ├── api/                         convenções de rota, erros, endpoints
+│   ├── decisions/                   ADRs — decisão com contexto e consequência
 │   └── features/<feature>/          fluxos + rules/ (uma regra por arquivo)
 ├── CLAUDE.md      -> AGENTS.md      (symlink)
 ├── GEMINI.md      -> AGENTS.md      (symlink)
@@ -233,7 +252,7 @@ projeto/
 │
 ├── .ai/
 │   ├── skills/      50 skills, cada uma com SKILL.md
-│   ├── agents/      10 definições de agente
+│   ├── agents/      9 definições de agente
 │   ├── mcp/         servers.json
 │   ├── scripts/     init.mjs (parametrização inicial)
 │   └── docs/        README.md (índice), estrutura-arquitetura.md,

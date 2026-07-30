@@ -26,7 +26,8 @@ src/<Produto>.<Modulo>.Web/Tests/ testes da apresentação
 └── Arquitetura/
 ```
 
-Ambos os projetos de teste ligam `TreatWarningsAsErrors` — aviso é erro.
+`TreatWarningsAsErrors` vem do `Directory.Build.props` da raiz e vale para todo projeto da solução,
+inclusive os de teste — aviso é erro.
 
 ## Nomenclatura
 

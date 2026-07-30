@@ -44,11 +44,27 @@ Consumir a mesma fonte de verdade **não é duplicá-la** — o antipadrão seri
 contexto proprietário recebe um `IDesignTimeDbContextFactory`, para o tooling do EF funcionar fora
 do host.
 
+### Schema do cliente vs. schema compartilhado
+
+Proprietário/consumidor responde *"quem é dono destas tabelas?"*. Existe um segundo eixo, ortogonal
+a esse: *"estas linhas são de um cliente ou de todos?"*. O isolamento entre clientes é por **schema
+do PostgreSQL**, resolvido em runtime por `SET search_path` na abertura da conexão — decisão no
+[ADR-003](../../../docs/decisions/ADR-003-isolamento-multi-schema.md).
+
+A consequência prática no mapeamento é direta: entidade **do cliente** é mapeada **sem schema
+explícito**, porque o schema varia por requisição e quem resolve é a conexão; entidade
+**compartilhada** (catálogo de clientes, usuário, vínculo usuário→cliente, auditoria) continua com
+schema explícito via `SchemaConsts`. Ter ou não schema no `ToTable` passa a ser a marca visível de
+qual lado da fronteira a entidade está. O detalhe — interceptor, origem da claim, provisionamento,
+teste de isolamento — é da skill [`multi-schema`](../multi-schema/SKILL.md), que é a dona do assunto.
+
 ## Configurations
 
 Uma `IEntityTypeConfiguration<T>` por entidade, aplicada explicitamente em `OnModelCreating`.
 
-- `ToTable(nameof(<Entidade>), SchemaConsts.<Schema>)` — schema sempre explícito.
+- `ToTable(nameof(<Entidade>), SchemaConsts.<Schema>)` — schema explícito para entidade
+  compartilhada ou de outro sistema. **Entidade do cliente vai sem schema:** `ToTable(nameof(<Entidade>))`,
+  resolvido pelo `search_path` da conexão — ver [`multi-schema`](../multi-schema/SKILL.md).
 - **Enums com `HasConversion<string>()`** + `HasMaxLength`, nunca inteiro.
 - Decimais e monetários com `HasPrecision`.
 - Flags booleanas com `HasDefaultValue`.
@@ -128,3 +144,19 @@ dotnet ef migrations add <Nome> --project src/<Produto>.<Modulo>/Data --context 
 - Só para contexto **proprietário**.
 - Aplicadas no startup com `MigrateAsync()`, apenas nesses contextos.
 - Revise o arquivo gerado antes de commitar — migration errada em produção é cara de reverter.
+
+### Migration de entidade do cliente
+
+Migration do contexto do cliente **não roda uma vez: roda em N schemas**, um por cliente do catálogo.
+Isso muda três coisas:
+
+- A tabela de histórico do EF precisa ficar **dentro de cada schema**
+  (`MigrationsHistoryTable("__EFMigrationsHistory", schemaDoCliente)`). Com um histórico único, o EF
+  considera tudo migrado depois do primeiro schema e os demais ficam para trás em silêncio.
+- **Migration nunca cruza schema.** A do cliente não toca o compartilhado, e vice-versa — são
+  contextos distintos, com históricos distintos.
+- A aplicação é **parcial por natureza**: falhar no cliente 40 de 100 deixa dois estados de schema em
+  produção. A rotina precisa de ordem determinística, registro de progresso e ser repetível.
+
+Rotina de aplicação, provisionamento de cliente novo e design-time em
+[`multi-schema`](../multi-schema/SKILL.md).

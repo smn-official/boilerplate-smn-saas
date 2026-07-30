@@ -237,6 +237,24 @@ Consumir a mesma fonte de verdade de outro sistema **não é duplicá-la** — o
 replicar os dados e criar uma segunda fonte. Adicione um `IDesignTimeDbContextFactory` para cada
 contexto proprietário, de modo que o tooling do EF funcione fora do host.
 
+**Segundo eixo — schema do cliente vs. compartilhado.** Proprietário/consumidor responde *"quem é
+dono destas tabelas?"*. Independente disso, o isolamento entre clientes é feito por **schema do
+PostgreSQL**, resolvido em runtime por `SET search_path` na abertura da conexão, a partir de uma
+claim do usuário autenticado ([ADR-003](../../docs/decisions/ADR-003-isolamento-multi-schema.md)).
+Os dois eixos coexistem: um mesmo sistema pode consumir schema de terceiro **e** isolar clientes por
+schema.
+
+| Eixo | Pergunta | Efeito no mapeamento |
+|---|---|---|
+| Proprietário / consumidor | Quem é dono destas tabelas? | Define se o contexto tem migrations |
+| Cliente / compartilhado | Estas linhas são de um cliente ou de todos? | Define se o `ToTable` leva schema |
+
+Entidade **do cliente** é mapeada **sem schema explícito** — o `search_path` da conexão resolve.
+Entidade **compartilhada** ou de outro sistema mantém o schema explícito via `SchemaConsts`, como
+acima; a classe de constantes continua valendo integralmente para todo schema fixo. Execução —
+interceptor, migrations em N schemas, provisionamento e teste de isolamento — na skill
+[multi-schema](../skills/multi-schema/SKILL.md).
+
 ### 5.2 Repositórios e Specifications
 
 Todo repositório recebe uma `ISpecification<T>` e delega a tradução para um `SpecificationEvaluator`
@@ -838,7 +856,8 @@ src/<Produto>.<Modulo>.Web/Tests/ testes da apresentação
 
 Convenções:
 
-- xUnit v3 + Moq + FluentAssertions; `TreatWarningsAsErrors` ligado em ambos os projetos de teste.
+- xUnit v3 + Moq + FluentAssertions. `TreatWarningsAsErrors` vem do `Directory.Build.props` da raiz
+  e vale para todos os projetos, inclusive os de teste — ver 12.2.
 - O projeto Web exclui `Tests\**` do próprio csproj (`DefaultItemExcludes`) para não compilar os
   testes dentro da aplicação.
 - Nomenclatura `Metodo_QuandoCondicao_DeveResultado`.
@@ -849,7 +868,9 @@ Convenções:
 
 ## 12. Build, CI e deploy
 
-**Validação local — ordem obrigatória antes de entregar:**
+### 12.1 Validação local
+
+Ordem obrigatória antes de entregar: **typecheck → build → test**. Em PowerShell:
 
 ```powershell
 Set-Location src/<Produto>.<Modulo>.Web
@@ -859,18 +880,185 @@ dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```
 
-Build e testes devem terminar **sem erros e sem avisos**.
+Em bash ou zsh (macOS e Linux), onde `Set-Location` não existe:
 
-**Pipeline de referência:**
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
+dotnet build <Produto>.slnx -c Release
+dotnet test <Produto>.slnx -c Release --no-build
+```
 
-| Stage | O que faz |
+Build e testes devem terminar **sem erros e sem avisos**. Se algo falhar, reporte a saída real —
+nunca declare sucesso sem executar.
+
+### 12.2 O que torna "sem avisos" verificável
+
+Duas peças na **raiz** do repositório sustentam a regra; nenhuma das duas é opcional e nenhuma deve
+ser removida do projeto derivado.
+
+| Arquivo | Papel |
 |---|---|
-| `Build` | Instala o SDK → restore → publish do projeto Web → publica artefato |
-| `Test` | Restore da solution → `dotnet test **/*Tests.csproj` com publicação de resultados |
-| `Deploy` | Publica no ambiente conforme a branch de origem (produção vs. homologação) |
+| `Directory.Build.props` | Herdado por **todo** projeto da solução: `TreatWarningsAsErrors`, `Nullable`, `LangVersion=latest`, `EnforceCodeStyleInBuild`, `AnalysisLevel=latest-recommended`, `GenerateDocumentationFile` |
+| `.editorconfig` | Traduz as convenções do `AGENTS.md` em regra de analisador — `CA1068` (`CancellationToken` por último) é `error` |
+
+`TreatWarningsAsErrors` vale para **todos** os projetos, não apenas os de teste — o código que vai
+para produção é justamente o que não pode acumular aviso. `EnforceCodeStyleInBuild` faz o
+`.editorconfig` valer no build, e não só na IDE de quem tem o plugin instalado: convenção que só a
+IDE cobra é recomendação, não norma.
+
+`CS1591` está em `NoWarn` porque a convenção do repositório é `<summary>` em tipos e operações
+públicas, não em cada propriedade. Suprimir qualquer outro diagnóstico exige justificativa escrita no
+próprio arquivo.
+
+### 12.3 Pipeline de referência — Azure Pipelines
+
+Os projetos derivados rodam em **Azure DevOps**. Este repositório não versiona um
+`azure-pipelines.yml` executável porque não tem código .NET — o YAML abaixo é a **referência a
+copiar** para a raiz do projeto derivado.
+
+| Stage | O que faz | Depende de |
+|---|---|---|
+| `Build` | SDK → restore → auditoria de dependências → `npm ci` + typecheck + build de assets → publish do Web → artefato | — |
+| `Test` | `dotnet test` da solution em Release, com publicação de resultados | `Build` |
+| `Deploy` | Publica no ambiente conforme a branch de origem | **`Test`** |
 
 **Ponto de atenção:** faça o stage `Deploy` depender de **`Test`**, não apenas de `Build` — caso
-contrário uma falha de teste não bloqueia o deploy.
+contrário uma falha de teste não bloqueia o deploy, e o pipeline fica verde onde importa.
+
+```yaml
+trigger:
+  branches:
+    include:
+      - main
+      - staging
+      - homolog
+
+variables:
+  solution: <Produto>.slnx
+  projetoWeb: src/<Produto>.<Modulo>.Web
+  buildConfiguration: Release
+
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: Compilar
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: UseDotNet@2
+            displayName: Instalar SDK .NET 10
+            inputs:
+              packageType: sdk
+              version: 10.0.x
+
+          - task: NodeTool@0
+            displayName: Instalar Node
+            inputs:
+              versionSpec: 22.x
+
+          - script: dotnet restore $(solution)
+            displayName: Restore
+
+          - script: |
+              dotnet list $(solution) package --vulnerable --include-transitive 2>&1 | tee auditoria.txt
+              if grep -q "has the following vulnerable packages" auditoria.txt; then
+                echo "Dependência vulnerável encontrada"
+                exit 1
+              fi
+            displayName: Auditoria de dependências .NET
+
+          - script: npm ci
+            workingDirectory: $(projetoWeb)
+            displayName: npm ci
+
+          - script: npm audit --audit-level=high
+            workingDirectory: $(projetoWeb)
+            displayName: Auditoria de dependências npm
+
+          - script: npm run typecheck
+            workingDirectory: $(projetoWeb)
+            displayName: Typecheck
+
+          - script: npm run build
+            workingDirectory: $(projetoWeb)
+            displayName: Build de assets
+
+          - script: dotnet build $(solution) -c $(buildConfiguration) --no-restore
+            displayName: Build da solution
+
+          - script: >-
+              dotnet publish $(projetoWeb) -c $(buildConfiguration) --no-build
+              -o $(Build.ArtifactStagingDirectory)/web
+            displayName: Publish do Web
+
+          - publish: $(Build.ArtifactStagingDirectory)/web
+            artifact: web
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Build
+    jobs:
+      - job: Testar
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: UseDotNet@2
+            displayName: Instalar SDK .NET 10
+            inputs:
+              packageType: sdk
+              version: 10.0.x
+
+          - script: dotnet restore $(solution)
+            displayName: Restore
+
+          - script: >-
+              dotnet test $(solution) -c $(buildConfiguration)
+              --logger trx --results-directory $(Agent.TempDirectory)/testes
+            displayName: Testes
+
+          - task: PublishTestResults@2
+            displayName: Publicar resultados
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: '**/*.trx'
+              searchFolder: $(Agent.TempDirectory)/testes
+              failTaskOnFailedTests: true
+
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Test
+    condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/staging', 'refs/heads/homolog'))
+    jobs:
+      - deployment: Publicar
+        pool:
+          vmImage: ubuntu-latest
+        environment: <ambiente-conforme-a-branch>
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: web
+                - task: AzureWebApp@1
+                  displayName: Publicar no App Service
+                  inputs:
+                    azureSubscription: <service-connection>
+                    appName: <nome-do-app-service>
+                    package: $(Pipeline.Workspace)/web
+```
+
+Notas normativas sobre o YAML:
+
+- A auditoria de dependência **falha o build**; aviso que não quebra o build é aviso que ninguém lê.
+  Detalhe e tratamento de exceção datada em
+  [`dependencias-vulneraveis`](../skills/dependencias-vulneraveis/SKILL.md).
+- `npm ci`, nunca `npm install`, na esteira: `ci` respeita o lockfile e falha se ele divergir do
+  `package.json`.
+- `dotnet build` sem `--no-restore` refaria o restore e mascararia divergência de pacote.
+- O artefato publicado por `Build` é o **mesmo binário** promovido entre ambientes. O que varia por
+  ambiente é configuração, não build.
 
 **Segurança de dependências:** quando um pacote transitivo tiver vulnerabilidade conhecida, adicione
 um `PackageReference` fixando a versão corrigida e **comente o motivo** no `.csproj`:

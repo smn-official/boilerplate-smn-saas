@@ -27,7 +27,8 @@ src/<Produto>.<Modulo>.Web/Tests/ testes da apresentação
 ```
 
 O projeto Web exclui `Tests\**` do próprio csproj (`DefaultItemExcludes`) para não compilar os
-testes dentro da aplicação. Ambos os projetos de teste ligam `TreatWarningsAsErrors`.
+testes dentro da aplicação. `TreatWarningsAsErrors` vem do `Directory.Build.props` da raiz e vale
+para todos os projetos.
 
 ## Ferramentas
 
@@ -78,16 +79,14 @@ public void Construtor_QuandoCodigoVazio_DeveLancarExcecao()
 
 ## Execução
 
-```powershell
+```bash
 dotnet test <Produto>.slnx -c Release
 ```
 
 Validação completa antes de entregar:
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```

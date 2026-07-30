@@ -1,6 +1,6 @@
 ---
 name: merge-pullrequest
-description: Abertura e integração de pull request — descrição com problema e solução, checklist de build, testes e typecheck sem avisos, revisão do próprio diff e merge apenas com CI verde, preferindo merge commit. Use ao preparar, revisar ou integrar um PR.
+description: Abertura e integração de pull request — descrição com problema e solução, checklist de build, testes e typecheck sem avisos, revisão do próprio diff e merge apenas com verificação verde observada (pipeline do Azure DevOps ou, sem pipeline, a validação local do AGENTS.md), preferindo merge commit. Use ao preparar, revisar ou integrar um PR.
 agent: github-agent
 ---
 
@@ -13,13 +13,17 @@ merge exige instrução explícita do usuário.** Prepare o texto e o comando, a
 
 ## Antes de abrir — checklist obrigatório
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+Da raiz do repositório, em qualquer shell — `--prefix` evita `cd` e roda igual em PowerShell,
+bash e zsh:
+
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```
+
+As duas variantes com troca de diretório estão em
+[docs/development/commands.md](../../../docs/development/commands.md).
 
 - [ ] `npm run typecheck` sem erros **e sem avisos**.
 - [ ] `dotnet build -c Release` sem erros **e sem avisos**.
@@ -88,8 +92,31 @@ Regras:
 
 ## Merge
 
-**Só com CI verde.** CI vermelha não se contorna com nova tentativa nem com merge forçado: investigue
-a causa. CI intermitente é defeito da suíte e deve ser tratado, não tolerado.
+**Só com a verificação verde — e verde é o que foi observado, nunca o que se presume.**
+
+A esteira alvo dos projetos derivados deste boilerplate é o **Azure DevOps (Azure Pipelines)**. O
+portão do merge depende de o projeto já ter pipeline configurada:
+
+| Situação do projeto | O que vale como portão |
+|---|---|
+| Pipeline no Azure DevOps configurada | O resultado da execução no **último commit da branch** |
+| Sem pipeline ainda | A validação local do AGENTS.md — `typecheck`, `build -c Release`, `test`, sem erros e sem avisos |
+
+O boilerplate em si não tem código de aplicação nem pipeline própria: nele o portão é sempre a
+validação local. Enquanto o projeto não configurar a esteira, o portão continua sendo a validação
+local — **executada de fato**, com a saída real reportada, e não um item marcado de memória.
+
+**O agente nunca declara verde o que não verificou.** Sem execução observada — resultado da pipeline
+lido ou comandos locais rodados — a resposta correta é "não verificado", não "verde". Presumir
+sucesso porque não havia o que rodar é o pior desfecho: transforma ausência de verificação em
+aprovação.
+
+Vermelho não se contorna com nova tentativa nem com merge forçado: investigue a causa. Falha
+intermitente é defeito da suíte e deve ser tratado, não tolerado.
+
+Verificação verde **não autoriza o merge**. O merge é operação que altera estado e exige
+confirmação explícita do usuário imediatamente antes, conforme a regra zero — o agente prepara o
+comando, apresenta o resultado da verificação e aguarda.
 
 | Estratégia | Uso |
 |---|---|
@@ -102,7 +129,9 @@ entender, meses depois, por que uma linha existe.
 
 Antes do merge:
 
-- [ ] CI verde no último commit da branch, não em um anterior.
+- [ ] Verificação verde no **último** commit da branch, não em um anterior — pipeline do Azure
+      DevOps, ou a validação local do AGENTS.md enquanto ela não existir.
+- [ ] O resultado acima foi observado nesta sessão, não presumido.
 - [ ] Comentários da revisão resolvidos, não apenas respondidos.
 - [ ] Branch atualizada em relação ao destino.
 - [ ] Destino correto na cadeia `main` → `staging` → `homolog`.

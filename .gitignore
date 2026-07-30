@@ -73,6 +73,15 @@ test-results/
 blob-report/
 
 # ---------------------------------------------------------------
+# CodeGraph — MCP configurado neste projeto
+# ---------------------------------------------------------------
+# Índice SQLite dos símbolos do código, derivado e local de cada
+# máquina: caminho absoluto e estado de WAL não sobrevivem à cópia.
+# Reconstrói-se com `codegraph init`. A pasta já traz o próprio
+# .gitignore; a regra aqui é explícita para quem clonar o boilerplate.
+.codegraph/
+
+# ---------------------------------------------------------------
 # PostgreSQL — dump e dado local
 # ---------------------------------------------------------------
 # Dump pode conter dado pessoal real: nunca no repositório.

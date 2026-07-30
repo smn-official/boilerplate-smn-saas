@@ -110,10 +110,8 @@ Toda tabela, diagrama ou bloco largo entra num contêiner com rolagem própria. 
 
 ## Execução
 
-```powershell
-Set-Location src/<Produto>.<Modulo>.Web
-npm run typecheck
-Set-Location ../..
+```bash
+npm --prefix src/<Produto>.<Modulo>.Web run typecheck
 dotnet build <Produto>.slnx -c Release
 dotnet test <Produto>.slnx -c Release --no-build
 ```
