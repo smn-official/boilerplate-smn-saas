@@ -391,6 +391,30 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Breadcrumbs))));
     }
 
+    /// <summary>Colour family component page.</summary>
+    [HttpGet("color")]
+    public IActionResult Color()
+    {
+        return View(new ComponentViewModel(
+            "Color",
+            "Amostra, grade, faixas de canal, área 2D e o seletor nativo do sistema.",
+            string.Empty,
+            BuildNavigation(nameof(Color)),
+            showMarkupSection: false));
+    }
+
+    /// <summary>Toolbar component page.</summary>
+    [HttpGet("toolbar")]
+    public IActionResult Toolbar()
+    {
+        return View(new ComponentViewModel(
+            "Toolbar",
+            "Agrupa controles numa faixa, com as setas percorrendo o conjunto.",
+            string.Empty,
+            BuildNavigation(nameof(Toolbar)),
+            showMarkupSection: false));
+    }
+
     /// <summary>Card component page.</summary>
     [HttpGet("card")]
     public IActionResult Card()
@@ -656,6 +680,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
             new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
+            new NavigationItemViewModel("Color", nameof(Color), activeAction == nameof(Color)),
             new NavigationItemViewModel("Drawer", nameof(Drawer), activeAction == nameof(Drawer)),
             new NavigationItemViewModel("Dropdown", nameof(Dropdown), activeAction == nameof(Dropdown)),
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
@@ -673,6 +698,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Table", nameof(Table), activeAction == nameof(Table)),
             new NavigationItemViewModel("Tabs", nameof(Tabs), activeAction == nameof(Tabs)),
             new NavigationItemViewModel("Toast", nameof(Toast), activeAction == nameof(Toast)),
+            new NavigationItemViewModel("Toolbar", nameof(Toolbar), activeAction == nameof(Toolbar)),
         ];
     }
 }

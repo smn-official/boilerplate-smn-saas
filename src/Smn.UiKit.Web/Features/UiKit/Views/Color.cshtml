@@ -1,0 +1,160 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+@{
+    const string swatchCodigo =
+"""
+<smn-color-swatch color="#3b82f6" aria-label="Azul" />
+<smn-color-swatch color="#22c55e" aria-label="Verde" />
+<smn-color-swatch color="rgba(239, 68, 68, 0.45)" aria-label="Vermelho translúcido" />
+""";
+
+    const string swatchFormasCodigo =
+"""
+<smn-color-swatch color="#8b5cf6" shape="Circle" />
+<smn-color-swatch color="#8b5cf6" shape="Square" />
+""";
+
+    const string swatchTamanhosCodigo =
+"""
+<smn-color-swatch color="#f59e0b" size="ExtraSmall" />
+<smn-color-swatch color="#f59e0b" size="Small" />
+<smn-color-swatch color="#f59e0b" size="Medium" />
+<smn-color-swatch color="#f59e0b" size="Large" />
+<smn-color-swatch color="#f59e0b" size="ExtraLarge" />
+""";
+
+    const string pickerGradeCodigo =
+"""
+<smn-color-swatch-picker name="cor-da-marca"
+                         legend="Cor da marca"
+                         colors="#3b82f6 #8b5cf6 #ec4899 #ef4444 #f59e0b #22c55e #14b8a6 #64748b"
+                         value="#8b5cf6" />
+""";
+
+    const string sliderCodigo =
+"""
+<smn-color-slider channel="Hue" label="Matiz" value="217" show-value="true" />
+<smn-color-slider channel="Saturation" label="Saturação" value="80"
+                  base-color="#3b82f6" show-value="true" />
+<smn-color-slider channel="Lightness" label="Luminosidade" value="55"
+                  base-color="#3b82f6" show-value="true" />
+<smn-color-slider channel="Alpha" label="Opacidade" value="70"
+                  base-color="#3b82f6" show-value="true" />
+""";
+
+    const string areaCodigo =
+"""
+<smn-color-area hue="217" saturation="80" lightness="55" />
+""";
+
+    const string pickerCodigo =
+"""
+<smn-color-picker name="cor-destaque" label="Cor de destaque" value="#3b82f6" />
+""";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Color swatch</p>
+        <p class="mb-4 text-sm text-muted">
+            Mostra uma cor. O xadrez por baixo denuncia transparência — sem ele, uma cor com alfa
+            pareceria sólida sobre o fundo do card. Compare a terceira.
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-color-swatch color="#3b82f6" aria-label="Azul" />
+            <smn-color-swatch color="#22c55e" aria-label="Verde" />
+            <smn-color-swatch color="rgba(239, 68, 68, 0.45)" aria-label="Vermelho translúcido" />
+        </div>
+        @await Html.PartialAsync("_Codigo", swatchCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Formas</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-color-swatch color="#8b5cf6" shape="Circle" />
+            <smn-color-swatch color="#8b5cf6" shape="Square" />
+        </div>
+        @await Html.PartialAsync("_Codigo", swatchFormasCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tamanhos</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-color-swatch color="#f59e0b" size="ExtraSmall" />
+            <smn-color-swatch color="#f59e0b" size="Small" />
+            <smn-color-swatch color="#f59e0b" size="Medium" />
+            <smn-color-swatch color="#f59e0b" size="Large" />
+            <smn-color-swatch color="#f59e0b" size="ExtraLarge" />
+        </div>
+        @await Html.PartialAsync("_Codigo", swatchTamanhosCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Grade de amostras</p>
+        <p class="mb-4 text-sm text-muted">
+            Cada opção é um <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">input type="radio"</code>
+            escondido com a amostra por cima: a escolha vai no formulário e as setas percorrem o
+            grupo, sem JavaScript. Navegue com Tab e depois com as setas.
+        </p>
+        <smn-color-swatch-picker name="cor-da-marca"
+                                 legend="Cor da marca"
+                                 colors="#3b82f6 #8b5cf6 #ec4899 #ef4444 #f59e0b #22c55e #14b8a6 #64748b"
+                                 value="#8b5cf6" />
+        @await Html.PartialAsync("_Codigo", pickerGradeCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Faixas de canal</p>
+        <p class="mb-4 text-sm text-muted">
+            Cada faixa é um <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">input type="range"</code>
+            com o gradiente do canal no fundo — arrastar, setas e Home/End continuam do navegador.
+        </p>
+        <div class="flex max-w-sm flex-col gap-5">
+            <smn-color-slider channel="Hue" label="Matiz" value="217" show-value="true" />
+            <smn-color-slider channel="Saturation" label="Saturação" value="80"
+                              base-color="#3b82f6" show-value="true" />
+            <smn-color-slider channel="Lightness" label="Luminosidade" value="55"
+                              base-color="#3b82f6" show-value="true" />
+            <smn-color-slider channel="Alpha" label="Opacidade" value="70"
+                              base-color="#3b82f6" show-value="true" />
+        </div>
+        @await Html.PartialAsync("_Codigo", sliderCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Área de cor</p>
+        <p class="mb-4 text-sm text-muted">
+            Saturação no eixo horizontal, luminosidade no vertical. Arraste, ou use as setas com a
+            área focada — sem teclado ela seria inalcançável para quem não usa ponteiro.
+        </p>
+        <smn-color-area hue="217" saturation="80" lightness="55" />
+        @await Html.PartialAsync("_Codigo", areaCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Color picker</p>
+        <p class="mb-4 text-sm text-muted">
+            É o <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;input type="color"&gt;</code>
+            nativo: abre o seletor do sistema, traz o conta-gotas em quem suporta e o valor vai no
+            formulário. Refazer isso à mão custa caro e sai pior.
+        </p>
+        <smn-color-picker name="cor-destaque" label="Cor de destaque" value="#3b82f6" />
+        @await Html.PartialAsync("_Codigo", pickerCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">O que ficou de fora</p>
+        <p class="text-sm text-muted">
+            O HeroUI ainda traz <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">color-field</code> e
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">color-input-group</code>,
+            que são campos de texto para digitar o valor por canal. Aqui isso é
+            <smn-link href="@Url.Action("Input", "UiKit")" variant="Accent">&lt;smn-input&gt;</smn-link>
+            com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">type="color"</code>
+            ou <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">type="text"</code> —
+            não precisam de componente próprio.
+        </p>
+    </div>
+</div>

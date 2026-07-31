@@ -1,0 +1,100 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+@{
+    const string toolbarCodigo =
+"""
+<smn-toolbar aria-label="Formatação" attached="true">
+    <smn-button-group aria-label="Estilo">
+        <smn-toggle-button pressed="true" aria-label="Negrito">B</smn-toggle-button>
+        <smn-toggle-button aria-label="Itálico">I</smn-toggle-button>
+        <smn-toggle-button aria-label="Sublinhado">U</smn-toggle-button>
+    </smn-button-group>
+
+    <smn-separator orientation="Vertical" />
+
+    <smn-button-group aria-label="Alinhamento">
+        <smn-toggle-button pressed="true" aria-label="À esquerda">←</smn-toggle-button>
+        <smn-toggle-button aria-label="Centralizado">↔</smn-toggle-button>
+        <smn-toggle-button aria-label="À direita">→</smn-toggle-button>
+    </smn-button-group>
+</smn-toolbar>
+""";
+
+    const string toolbarSoltaCodigo =
+"""
+<smn-toolbar aria-label="Ações da fatura">
+    <smn-button variant="Outline" size="Small">Ver</smn-button>
+    <smn-button variant="Outline" size="Small">Baixar</smn-button>
+    <smn-separator orientation="Vertical" />
+    <smn-button variant="Ghost" size="Small">Cancelar</smn-button>
+</smn-toolbar>
+""";
+
+    const string toolbarVerticalCodigo =
+"""
+<smn-toolbar aria-label="Ferramentas" orientation="Vertical" attached="true">
+    <smn-toggle-button pressed="true" aria-label="Selecionar">▲</smn-toggle-button>
+    <smn-toggle-button aria-label="Mover">✥</smn-toggle-button>
+    <smn-toggle-button aria-label="Zoom">⌕</smn-toggle-button>
+</smn-toolbar>
+""";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Toolbar</p>
+        <p class="mb-4 text-sm text-muted">
+            Agrupa controles relacionados numa faixa. O Tab entra e sai do conjunto inteiro; entre
+            os controles quem anda são as <strong class="font-medium text-foreground">setas</strong> —
+            é o padrão ARIA de toolbar, o mesmo raciocínio da lista de abas. Navegue com Tab até
+            aqui e experimente.
+        </p>
+        <smn-toolbar aria-label="Formatação" attached="true">
+            <smn-button-group aria-label="Estilo">
+                <smn-toggle-button pressed="true" aria-label="Negrito">B</smn-toggle-button>
+                <smn-toggle-button aria-label="Itálico">I</smn-toggle-button>
+                <smn-toggle-button aria-label="Sublinhado">U</smn-toggle-button>
+            </smn-button-group>
+
+            <smn-separator orientation="Vertical" />
+
+            <smn-button-group aria-label="Alinhamento">
+                <smn-toggle-button pressed="true" aria-label="À esquerda">←</smn-toggle-button>
+                <smn-toggle-button aria-label="Centralizado">↔</smn-toggle-button>
+                <smn-toggle-button aria-label="À direita">→</smn-toggle-button>
+            </smn-button-group>
+        </smn-toolbar>
+        @await Html.PartialAsync("_Codigo", toolbarCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Sem superfície</p>
+        <p class="mb-4 text-sm text-muted">
+            Sem <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">attached</code> a
+            faixa não desenha fundo — serve dentro de um card que já tem o seu.
+        </p>
+        <smn-toolbar aria-label="Ações da fatura">
+            <smn-button variant="Outline" size="Small">Ver</smn-button>
+            <smn-button variant="Outline" size="Small">Baixar</smn-button>
+            <smn-separator orientation="Vertical" />
+            <smn-button variant="Ghost" size="Small">Cancelar</smn-button>
+        </smn-toolbar>
+        @await Html.PartialAsync("_Codigo", toolbarSoltaCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Vertical</p>
+        <p class="mb-4 text-sm text-muted">
+            Na vertical as setas que andam são ↑/↓, não ←/→.
+        </p>
+        <smn-toolbar aria-label="Ferramentas" orientation="Vertical" attached="true">
+            <smn-toggle-button pressed="true" aria-label="Selecionar">▲</smn-toggle-button>
+            <smn-toggle-button aria-label="Mover">✥</smn-toggle-button>
+            <smn-toggle-button aria-label="Zoom">⌕</smn-toggle-button>
+        </smn-toolbar>
+        @await Html.PartialAsync("_Codigo", toolbarVerticalCodigo)
+    </div>
+</div>

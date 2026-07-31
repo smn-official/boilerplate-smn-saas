@@ -646,10 +646,125 @@ function restoreChosenTheme(): void {
         });
 }
 
+function initializeColorAreas(): void {
+    for (const area of document.querySelectorAll<HTMLElement>("[data-smn-color-area]")) {
+        const thumb = area.querySelector<HTMLElement>(".color-area__thumb");
+
+        if (thumb === null) {
+            continue;
+        }
+
+        const place = (clientX: number, clientY: number): void => {
+            const box = area.getBoundingClientRect();
+            const saturation = Math.min(100, Math.max(0, ((clientX - box.left) / box.width) * 100));
+            const lightness = Math.min(100, Math.max(0, 100 - ((clientY - box.top) / box.height) * 100));
+            const hue = area.dataset.hue ?? "217";
+
+            thumb.style.left = `${saturation}%`;
+            thumb.style.top = `${100 - lightness}%`;
+            area.style.setProperty(
+                "--color-area-thumb-color",
+                `hsl(${hue} ${saturation}% ${lightness}%)`,
+            );
+
+            area.dispatchEvent(
+                new CustomEvent("smn-color-change", { detail: { saturation, lightness } }),
+            );
+        };
+
+        area.addEventListener("pointerdown", (event: PointerEvent) => {
+            area.setPointerCapture(event.pointerId);
+            place(event.clientX, event.clientY);
+        });
+
+        area.addEventListener("pointermove", (event: PointerEvent) => {
+            if (area.hasPointerCapture(event.pointerId)) {
+                place(event.clientX, event.clientY);
+            }
+        });
+
+        // Sem teclado a área seria inalcançável para quem não usa ponteiro.
+        area.addEventListener("keydown", (event: KeyboardEvent) => {
+            const box = area.getBoundingClientRect();
+            const stepX = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+            const stepY = event.key === "ArrowDown" ? 1 : event.key === "ArrowUp" ? -1 : 0;
+
+            if (stepX === 0 && stepY === 0) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const current = thumb.getBoundingClientRect();
+            place(
+                current.left + current.width / 2 + stepX * (box.width / 50),
+                current.top + current.height / 2 + stepY * (box.height / 50),
+            );
+        });
+    }
+}
+
+function initializeColorPickers(): void {
+    for (const picker of document.querySelectorAll<HTMLElement>("[data-smn-color-picker]")) {
+        const input = picker.querySelector<HTMLInputElement>(".color-picker__nativo");
+        const label = picker.querySelector<HTMLElement>("[data-color-valor]");
+
+        input?.addEventListener("input", () => {
+            if (label !== null) {
+                label.textContent = input.value;
+            }
+        });
+    }
+}
+
+/**
+ * Numa toolbar o Tab entra e sai do conjunto; entre os controles são as setas.
+ * É o mesmo padrão da lista de abas.
+ */
+function initializeToolbars(): void {
+    for (const toolbar of document.querySelectorAll<HTMLElement>("[data-smn-toolbar]")) {
+        const vertical = toolbar.getAttribute("aria-orientation") === "vertical";
+        const controls = [
+            ...toolbar.querySelectorAll<HTMLElement>("button, a[href], input, select"),
+        ].filter((control) => !(control as HTMLButtonElement).disabled);
+
+        controls.forEach((control, index) => {
+            control.tabIndex = index === 0 ? 0 : -1;
+
+            control.addEventListener("keydown", (event: KeyboardEvent) => {
+                const forwardKey = vertical ? "ArrowDown" : "ArrowRight";
+                const backwardKey = vertical ? "ArrowUp" : "ArrowLeft";
+                const step = event.key === forwardKey ? 1 : event.key === backwardKey ? -1 : 0;
+
+                if (step === 0) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const target = controls[(index + step + controls.length) % controls.length];
+
+                if (target === undefined) {
+                    return;
+                }
+
+                for (const item of controls) {
+                    item.tabIndex = item === target ? 0 : -1;
+                }
+
+                target.focus();
+            });
+        });
+    }
+}
+
 initializeThemeToggle();
 revealActiveMenuItem();
 initializeThemes();
 restoreChosenTheme();
+initializeColorAreas();
+initializeColorPickers();
+initializeToolbars();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();
