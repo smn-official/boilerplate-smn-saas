@@ -203,6 +203,20 @@ public sealed class UiKitController : Controller
         </smn-modal>
         """;
 
+    private const string SelectUsage =
+        """
+        <smn-select name="estado" label="Estado" required="true">
+            <option value="">Selecione…</option>
+            <option value="sp">São Paulo</option>
+            <option value="rj">Rio de Janeiro</option>
+        </smn-select>
+
+        <smn-pagination current="5"
+                        total="10"
+                        href-template="?pagina={page}"
+                        summary="Mostrando 81 a 100 de 195" />
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -338,6 +352,17 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Progress))));
     }
 
+    /// <summary>Select and pagination component page.</summary>
+    [HttpGet("select")]
+    public IActionResult Select()
+    {
+        return View(new ComponentViewModel(
+            "Select",
+            "Escolhe uma opção de uma lista; a paginação percorre resultados por link.",
+            SelectUsage,
+            BuildNavigation(nameof(Select))));
+    }
+
     /// <summary>Separator component page.</summary>
     [HttpGet("separator")]
     public IActionResult Separator()
@@ -455,6 +480,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
             new NavigationItemViewModel("Modal", nameof(Modal), activeAction == nameof(Modal)),
             new NavigationItemViewModel("Progress", nameof(Progress), activeAction == nameof(Progress)),
+            new NavigationItemViewModel("Select", nameof(Select), activeAction == nameof(Select)),
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),
             new NavigationItemViewModel("Skeleton", nameof(Skeleton), activeAction == nameof(Skeleton)),
             new NavigationItemViewModel("Spinner", nameof(Spinner), activeAction == nameof(Spinner)),

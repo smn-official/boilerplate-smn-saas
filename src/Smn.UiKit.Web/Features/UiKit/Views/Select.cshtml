@@ -1,0 +1,97 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Select</p>
+        <p class="mb-4 text-sm text-muted">
+            É o <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;select&gt;</code>
+            nativo. Ganha de graça o teclado, o seletor em roda do celular e o envio no formulário —
+            nada disso é barato de refazer com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">div</code>.
+        </p>
+        <div class="flex max-w-sm flex-col gap-5">
+            <smn-select name="estado" label="Estado" description="Onde a nota será emitida.">
+                <option value="">Selecione…</option>
+                <option value="sp">São Paulo</option>
+                <option value="rj">Rio de Janeiro</option>
+                <option value="mg">Minas Gerais</option>
+            </smn-select>
+
+            <smn-select name="plano" label="Plano" required="true">
+                <option value="basico">Básico</option>
+                <option value="pro" selected>Profissional</option>
+                <option value="enterprise">Enterprise</option>
+            </smn-select>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Estados</p>
+        <div class="flex max-w-sm flex-col gap-5">
+            <smn-select name="com-erro" label="Com erro" error="Escolha uma opção.">
+                <option value="">Selecione…</option>
+                <option value="a">Opção A</option>
+            </smn-select>
+
+            <smn-select name="select-desabilitado" label="Desabilitado" disabled="true">
+                <option>Indisponível</option>
+            </smn-select>
+
+            <smn-select name="secundario" variant="Secondary" label="Variante secondary">
+                <option value="a">Opção A</option>
+                <option value="b">Opção B</option>
+            </smn-select>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Com grupos</p>
+        <div class="max-w-sm">
+            <smn-select name="agrupado" label="Fuso horário">
+                <optgroup label="Brasil">
+                    <option value="sp">Brasília (GMT-3)</option>
+                    <option value="mao">Manaus (GMT-4)</option>
+                </optgroup>
+                <optgroup label="Europa">
+                    <option value="lis">Lisboa (GMT+0)</option>
+                    <option value="ber">Berlim (GMT+1)</option>
+                </optgroup>
+            </smn-select>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Paginação</p>
+        <p class="mb-4 text-sm text-muted">
+            Cada página é um link de verdade: dá para compartilhar o endereço, abrir em outra aba e
+            voltar pelo botão do navegador. Paginação feita só com clique em
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">button</code> perde as três coisas.
+        </p>
+        <div class="flex flex-col gap-8">
+            <smn-pagination current="1"
+                            total="10"
+                            href-template="?pagina={page}"
+                            summary="Mostrando 1 a 20 de 195" />
+
+            <smn-pagination current="5"
+                            total="10"
+                            href-template="?pagina={page}"
+                            summary="Mostrando 81 a 100 de 195" />
+
+            <smn-pagination current="10"
+                            total="10"
+                            href-template="?pagina={page}"
+                            summary="Mostrando 181 a 195 de 195" />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Poucas páginas</p>
+        <p class="mb-4 text-sm text-muted">
+            Sem folga para abreviar, mostrar tudo sai menor que usar reticências.
+        </p>
+        <smn-pagination current="2" total="4" href-template="?pagina={page}" />
+    </div>
+</div>
