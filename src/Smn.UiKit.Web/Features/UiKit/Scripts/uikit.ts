@@ -180,7 +180,66 @@ function initializeModals(): void {
     }
 }
 
+function initializeInputOtp(): void {
+    const groups = document.querySelectorAll<HTMLElement>("[data-smn-input-otp]");
+
+    for (const group of groups) {
+        const boxes = [...group.querySelectorAll<HTMLInputElement>(".input-otp__slot")];
+
+        boxes.forEach((box, index) => {
+            box.addEventListener("input", () => {
+                box.value = box.value.replace(/\D/g, "").slice(0, 1);
+
+                if (box.value !== "") {
+                    boxes[index + 1]?.focus();
+                }
+            });
+
+            box.addEventListener("keydown", (event: KeyboardEvent) => {
+                // Backspace numa casa vazia volta para a anterior, senão o
+                // usuário fica preso apagando o nada.
+                if (event.key === "Backspace" && box.value === "") {
+                    event.preventDefault();
+                    const previous = boxes[index - 1];
+                    previous?.focus();
+
+                    if (previous !== undefined) {
+                        previous.value = "";
+                    }
+                }
+            });
+
+            box.addEventListener("paste", (event: ClipboardEvent) => {
+                event.preventDefault();
+
+                const digits = (event.clipboardData?.getData("text") ?? "").replace(/\D/g, "");
+
+                digits.split("").forEach((digit, offset) => {
+                    const target = boxes[index + offset];
+
+                    if (target !== undefined) {
+                        target.value = digit;
+                    }
+                });
+
+                const filled = Math.min(index + digits.length, boxes.length - 1);
+                boxes[filled]?.focus();
+            });
+        });
+    }
+}
+
+function initializeToasts(): void {
+    for (const button of document.querySelectorAll<HTMLElement>("[data-toast-close]")) {
+        button.addEventListener("click", () => {
+            button.closest<HTMLElement>(".toast")?.remove();
+        });
+    }
+}
+
 initializeThemeToggle();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();
+initializeInputOtp();
+initializeToasts();

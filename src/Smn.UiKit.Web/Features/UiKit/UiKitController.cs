@@ -217,6 +217,19 @@ public sealed class UiKitController : Controller
                         summary="Mostrando 81 a 100 de 195" />
         """;
 
+    private const string ToastUsage =
+        """
+        <smn-toast-region placement="BottomEnd">
+            <smn-toast variant="Success" title="Pagamento confirmado">
+                A fatura de agosto foi baixada.
+            </smn-toast>
+        </smn-toast-region>
+
+        <smn-input-otp name="codigo"
+                       label="Código enviado por e-mail"
+                       description="Seis dígitos, válidos por 10 minutos." />
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -440,6 +453,17 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Link))));
     }
 
+    /// <summary>Toast and one-time code component page.</summary>
+    [HttpGet("toast")]
+    public IActionResult Toast()
+    {
+        return View(new ComponentViewModel(
+            "Toast",
+            "Avisa o que já aconteceu e some; o input de código recebe OTP dígito a dígito.",
+            ToastUsage,
+            BuildNavigation(nameof(Toast))));
+    }
+
     /// <summary>Table component page.</summary>
     [HttpGet("table")]
     public IActionResult Table()
@@ -487,6 +511,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Switch", nameof(Switch), activeAction == nameof(Switch)),
             new NavigationItemViewModel("Table", nameof(Table), activeAction == nameof(Table)),
             new NavigationItemViewModel("Tabs", nameof(Tabs), activeAction == nameof(Tabs)),
+            new NavigationItemViewModel("Toast", nameof(Toast), activeAction == nameof(Toast)),
         ];
     }
 }

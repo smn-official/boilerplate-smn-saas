@@ -1,0 +1,81 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
+        <p class="mb-4 text-sm text-muted">
+            Aqui os toasts aparecem no fluxo da página só para você ver o desenho. Em uso real eles
+            vão dentro de um <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;smn-toast-region&gt;</code>,
+            que fica fixo num canto.
+        </p>
+        <div class="flex max-w-md flex-col gap-3">
+            <smn-toast title="Cadastro salvo">O registro já aparece na listagem.</smn-toast>
+            <smn-toast variant="Success" title="Pagamento confirmado">
+                A fatura de agosto foi baixada.
+            </smn-toast>
+            <smn-toast variant="Warning" title="Quota quase no limite">
+                Você usou 87% do armazenamento do plano.
+            </smn-toast>
+            <smn-toast variant="Danger" title="Falha ao enviar" assertive="true">
+                Não conseguimos falar com o servidor. Tente de novo.
+            </smn-toast>
+            <smn-toast variant="Accent" title="Nova versão disponível" dismissible="false">
+                Recarregue a página para atualizar.
+            </smn-toast>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Toast ou alert?</p>
+        <p class="text-sm text-muted">
+            O toast conta o que <strong class="font-medium text-foreground">já aconteceu</strong> e
+            some sozinho. Se o usuário precisa <strong class="font-medium text-foreground">fazer
+            alguma coisa</strong> com a informação, ela não pode desaparecer — use o
+            <smn-link href="@Url.Action("Alert", "UiKit")" variant="Accent">alert</smn-link> na
+            página. Erro de validação de formulário nunca vai em toast.
+        </p>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Código de uso único</p>
+        <p class="mb-4 text-sm text-muted">
+            Um <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">input</code> nativo
+            por dígito: o valor vai no submit, o celular abre o teclado numérico e colar o código
+            inteiro distribui entre as casas. Tente colar
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">123456</code> na
+            primeira caixa.
+        </p>
+        <div class="flex flex-col gap-6">
+            <smn-input-otp name="codigo"
+                           label="Código enviado por e-mail"
+                           description="Seis dígitos, válidos por 10 minutos." />
+
+            <smn-input-otp name="codigo-dividido"
+                           length="6"
+                           split="true"
+                           label="Com separador no meio" />
+
+            <smn-input-otp name="codigo-curto"
+                           length="4"
+                           label="Quatro dígitos"
+                           error="Código inválido ou expirado." />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Região fixa</p>
+        <p class="text-sm text-muted">
+            Coloque um <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;smn-toast-region&gt;</code>
+            por página, no fim do <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">body</code>,
+            e insira os toasts dentro dele. O canto vem de
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">placement</code>:
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">Top</code>,
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">TopEnd</code>,
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">Bottom</code> ou
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">BottomEnd</code>.
+        </p>
+    </div>
+</div>
