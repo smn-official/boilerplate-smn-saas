@@ -87,6 +87,20 @@ public sealed class UiKitController : Controller
         <smn-skeleton animation="Pulse" class="size-10 rounded-3xl" />
         """;
 
+    private const string InputUsage =
+        """
+        <smn-input name="email"
+                   type="email"
+                   label="E-mail"
+                   placeholder="voce@empresa.com.br"
+                   description="Usamos só para enviar o recibo."
+                   required="true" />
+
+        <smn-input name="cpf" label="CPF" error="CPF inválido." />
+
+        <smn-textarea name="observacao" label="Observação" rows="4" />
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -189,6 +203,17 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Separator))));
     }
 
+    /// <summary>Input component page.</summary>
+    [HttpGet("input")]
+    public IActionResult Input()
+    {
+        return View(new ComponentViewModel(
+            "Input",
+            "Recebe texto do usuário, com rótulo, descrição e erro já amarrados por aria.",
+            InputUsage,
+            BuildNavigation(nameof(Input))));
+    }
+
     /// <summary>Kbd component page.</summary>
     [HttpGet("kbd")]
     public IActionResult Kbd()
@@ -232,6 +257,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Button", nameof(Button), activeAction == nameof(Button)),
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
+            new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),
