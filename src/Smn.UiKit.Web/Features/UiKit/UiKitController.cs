@@ -328,7 +328,7 @@ public sealed class UiKitController : Controller
     public IActionResult GetStarted()
     {
         return View(new ComponentViewModel(
-            "Get started",
+            "Instalação",
             "Instalar, registrar e usar o design system em quatro passos.",
             GetStartedUsage,
             BuildNavigation(nameof(GetStarted)),
@@ -626,7 +626,7 @@ public sealed class UiKitController : Controller
         return
         [
             new NavigationItemViewModel(
-                "Get started",
+                "Instalação",
                 nameof(GetStarted),
                 activeAction == nameof(GetStarted),
                 "Começar"),
