@@ -368,8 +368,288 @@ function revealActiveMenuItem(): void {
     }
 }
 
+type ThemeTokens = Record<string, string>;
+
+interface CatalogTheme {
+    slug: string;
+    nome: string;
+    claro: ThemeTokens;
+    escuro: ThemeTokens;
+}
+
+const ThemeChoiceKey = "smn-uikit-tema";
+const ThemeStyleId = "smn-uikit-tema-aplicado";
+
+/**
+ * Escreve os tokens do tema numa folha de estilo própria, em vez de mexer no
+ * style inline do <html>. Assim a alternância claro/escuro continua sendo só a
+ * classe .dark, e restaurar o padrão é remover um elemento.
+ */
+function applyThemeTokens(theme: CatalogTheme | null): void {
+    document.getElementById(ThemeStyleId)?.remove();
+
+    if (theme === null) {
+        return;
+    }
+
+    const toBlock = (tokens: ThemeTokens): string =>
+        Object.entries(tokens)
+            .map(([name, value]) => `--${name}:${value};`)
+            .join("");
+
+    const style = document.createElement("style");
+    style.id = ThemeStyleId;
+    style.textContent =
+        `:root{${toBlock(theme.claro)}}` + `.dark{${toBlock(theme.escuro)}}`;
+
+    document.head.append(style);
+}
+
+function readStoredTheme2(catalog: CatalogTheme[]): CatalogTheme | null {
+    const slug = localStorage.getItem(ThemeChoiceKey);
+
+    return catalog.find((theme) => theme.slug === slug) ?? null;
+}
+
+/** Amostras de cor que resumem o tema no card e no cabeçalho. */
+function swatches(theme: CatalogTheme, dark: boolean): string {
+    const tokens = dark ? theme.escuro : theme.claro;
+    const keys = ["accent", "surface", "default", "danger", "foreground"];
+
+    return keys
+        .map((key) => {
+            const color = tokens[key] ?? "transparent";
+            return `<span class="tema__amostra" style="background:${color}"></span>`;
+        })
+        .join("");
+}
+
+function initializeThemes(): void {
+    const root = document.querySelector<HTMLElement>("[data-smn-temas]");
+
+    if (root === null) {
+        return;
+    }
+
+    const grid = root.querySelector<HTMLElement>("[data-tema-grade]");
+    const empty = root.querySelector<HTMLElement>("[data-tema-vazio]");
+    const count = root.querySelector<HTMLElement>("[data-tema-contagem]");
+    const search = root.querySelector<HTMLInputElement>("[data-tema-busca] input");
+    const currentName = root.querySelector<HTMLElement>("[data-tema-atual-nome]");
+    const currentDescription = root.querySelector<HTMLElement>("[data-tema-atual-descricao]");
+    const currentSwatches = root.querySelector<HTMLElement>("[data-tema-atual-amostras]");
+    const restore = root.querySelector<HTMLElement>("[data-tema-restaurar]");
+
+    const dialog = document.getElementById("modal-tema");
+    const preview = document.querySelector<HTMLElement>("[data-tema-preview]");
+    const apply = document.querySelector<HTMLElement>("[data-tema-aplicar]");
+    const cancel = document.querySelector<HTMLElement>("[data-tema-cancelar]");
+
+    if (grid === null || dialog === null || preview === null) {
+        return;
+    }
+
+    let catalog: CatalogTheme[] = [];
+    let staged: CatalogTheme | null = null;
+    let committed: CatalogTheme | null = null;
+
+    const isDark = (): boolean => document.documentElement.classList.contains("dark");
+
+    const describeCurrent = (): void => {
+        const active = committed;
+
+        if (currentName !== null) {
+            currentName.textContent = active?.nome ?? "Padrão do UiKit";
+        }
+
+        if (currentDescription !== null) {
+            currentDescription.textContent =
+                active === null
+                    ? "Os tokens que vêm no tokens.css."
+                    : `Tema "${active.nome}" aplicado sobre os tokens do UiKit.`;
+        }
+
+        if (currentSwatches !== null) {
+            currentSwatches.innerHTML = active === null ? "" : swatches(active, isDark());
+        }
+
+        restore?.toggleAttribute("hidden", active === null);
+    };
+
+    const render = (term: string): void => {
+        const needle = term.trim().toLowerCase();
+        const visible = catalog.filter((theme) => theme.nome.toLowerCase().includes(needle));
+
+        grid.innerHTML = visible
+            .map(
+                (theme) => `
+                <button type="button" class="tema-card" data-tema-slug="${theme.slug}">
+                    <span class="tema-card__amostras">${swatches(theme, isDark())}</span>
+                    <span class="tema-card__nome">${theme.nome}</span>
+                </button>`,
+            )
+            .join("");
+
+        empty?.classList.toggle("hidden", visible.length > 0);
+
+        if (count !== null) {
+            count.textContent = `(${visible.length})`;
+        }
+    };
+
+    const openPreview = (theme: CatalogTheme): void => {
+        staged = theme;
+        applyThemeTokens(theme);
+
+        preview.innerHTML = `
+            <p class="mb-3 text-sm font-medium">${theme.nome}</p>
+            <p class="mb-4 text-sm text-muted">
+                O painel inteiro já está com este tema. Confirme para manter, ou cancele para voltar.
+            </p>
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="button button--primary">Primary</span>
+                <span class="button button--secondary">Secondary</span>
+                <span class="button button--outline">Outline</span>
+                <span class="button button--danger">Danger</span>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-2">
+                <span class="chip chip--accent chip--soft chip--md"><span class="chip__label">Accent</span></span>
+                <span class="chip chip--success chip--soft chip--md"><span class="chip__label">Success</span></span>
+                <span class="chip chip--warning chip--soft chip--md"><span class="chip__label">Warning</span></span>
+                <span class="chip chip--danger chip--soft chip--md"><span class="chip__label">Danger</span></span>
+            </div>`;
+
+        if (dialog instanceof HTMLDialogElement) {
+            dialog.showModal();
+        }
+    };
+
+    // Fechar sem confirmar volta ao tema que estava valendo — a pré-visualização
+    // não pode virar aplicação por acidente.
+    const revert = (): void => {
+        staged = null;
+        applyThemeTokens(committed);
+    };
+
+    grid.addEventListener("click", (event: MouseEvent) => {
+        const card = (event.target as HTMLElement).closest<HTMLElement>("[data-tema-slug]");
+        const theme = catalog.find((item) => item.slug === card?.dataset.temaSlug);
+
+        if (theme !== undefined) {
+            openPreview(theme);
+        }
+    });
+
+    apply?.addEventListener("click", () => {
+        if (staged !== null) {
+            committed = staged;
+            localStorage.setItem(ThemeChoiceKey, committed.slug);
+            staged = null;
+            describeCurrent();
+        }
+
+        if (dialog instanceof HTMLDialogElement) {
+            dialog.close();
+        }
+    });
+
+    // Escolher no painel é metade do caminho: o projeto precisa do CSS em disco.
+    // Aqui sai o arquivo pronto para colar depois do tokens.css.
+    const exportButton = document.querySelector<HTMLElement>("[data-tema-exportar]");
+
+    exportButton?.addEventListener("click", () => {
+        if (staged === null) {
+            return;
+        }
+
+        const block = (tokens: ThemeTokens): string =>
+            Object.entries(tokens)
+                .map(([name, value]) => `    --${name}: ${value};`)
+                .join("\n");
+
+        const css =
+            `/* ${staged.nome} — tema do tweakcn adaptado ao vocabulário do UiKit.\n` +
+            ` * Importe DEPOIS de tokens.css: sobrescreve os tokens base e deixa\n` +
+            ` * intactos os derivados (--accent-hover, --accent-soft) que o color-mix calcula.\n` +
+            ` */\n\n` +
+            `:root {\n${block(staged.claro)}\n}\n\n` +
+            `.dark {\n${block(staged.escuro)}\n}\n`;
+
+        void navigator.clipboard.writeText(css).then(
+            () => {
+                exportButton.textContent = "CSS copiado";
+                window.setTimeout(() => {
+                    exportButton.textContent = "Copiar CSS";
+                }, 2000);
+            },
+            () => {
+                exportButton.textContent = "Não foi possível copiar";
+            },
+        );
+    });
+
+    cancel?.addEventListener("click", revert);
+    dialog.addEventListener("close", () => {
+        if (staged !== null) {
+            revert();
+        }
+    });
+
+    restore?.addEventListener("click", () => {
+        committed = null;
+        localStorage.removeItem(ThemeChoiceKey);
+        applyThemeTokens(null);
+        describeCurrent();
+        render(search?.value ?? "");
+    });
+
+    search?.addEventListener("input", () => render(search.value));
+
+    // As amostras mudam de cor com o tema claro/escuro do painel.
+    new MutationObserver(() => {
+        describeCurrent();
+        render(search?.value ?? "");
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    void fetch("/temas.json")
+        .then((response) => response.json() as Promise<{ temas: CatalogTheme[] }>)
+        .then((data) => {
+            catalog = data.temas;
+            committed = readStoredTheme2(catalog);
+            describeCurrent();
+            render("");
+        })
+        .catch(() => {
+            grid.innerHTML =
+                '<p class="text-sm text-danger">Não foi possível carregar o catálogo de temas.</p>';
+        });
+}
+
+/**
+ * Reaplica o tema escolhido em toda página do painel, não só na de temas —
+ * senão navegar para outro componente voltaria ao padrão.
+ */
+function restoreChosenTheme(): void {
+    const slug = localStorage.getItem(ThemeChoiceKey);
+
+    if (slug === null || document.querySelector("[data-smn-temas]") !== null) {
+        return;
+    }
+
+    void fetch("/temas.json")
+        .then((response) => response.json() as Promise<{ temas: CatalogTheme[] }>)
+        .then((data) => {
+            applyThemeTokens(data.temas.find((theme) => theme.slug === slug) ?? null);
+        })
+        .catch(() => {
+            // Sem catálogo o painel fica no tema padrão, que é aceitável.
+        });
+}
+
 initializeThemeToggle();
 revealActiveMenuItem();
+initializeThemes();
+restoreChosenTheme();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();

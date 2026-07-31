@@ -1,6 +1,48 @@
 /* Estilos exclusivos do painel de documentação. NÃO faz parte do pacote distribuído. */
 
 @layer components {
+    .tema-card {
+        @apply flex w-full flex-col items-start gap-3 rounded-2xl border border-border
+               bg-surface-secondary p-4 text-start outline-none;
+
+        cursor: var(--cursor-interactive);
+        transition:
+            border-color 120ms var(--ease-out),
+            background-color 120ms var(--ease-out);
+
+        @apply motion-reduce:transition-none;
+
+        &:focus-visible {
+            @apply status-focused;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                @apply border-focus bg-surface-tertiary;
+            }
+        }
+    }
+
+    .tema-card__amostras {
+        @apply flex w-full gap-1;
+    }
+
+    .tema-card__nome {
+        @apply text-sm font-medium text-foreground;
+    }
+
+    /*
+      A amostra mostra a cor crua do tema, então não pode herdar token nenhum —
+      o valor vem inline, do catálogo.
+    */
+    .tema__amostra {
+        @apply h-6 flex-1 rounded-lg border border-border/40;
+    }
+
+    [data-tema-atual-amostras] .tema__amostra {
+        @apply size-5 flex-none rounded-md;
+    }
+
     /* Barra de rolagem discreta no menu lateral, para não competir com o conteúdo. */
     .panel-sidebar {
         scrollbar-width: thin;

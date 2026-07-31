@@ -323,6 +323,18 @@ public sealed class UiKitController : Controller
         return RedirectToAction(nameof(GetStarted));
     }
 
+    /// <summary>Theme catalogue — pick one and apply it over the tokens.</summary>
+    [HttpGet("temas")]
+    public IActionResult Temas()
+    {
+        return View(new ComponentViewModel(
+            "Temas",
+            "Escolha uma paleta e veja o painel inteiro assumir os tokens dela.",
+            string.Empty,
+            BuildNavigation(nameof(Temas)),
+            showMarkupSection: false));
+    }
+
     /// <summary>Installation and first use of the design system.</summary>
     [HttpGet("get-started")]
     public IActionResult GetStarted()
@@ -629,6 +641,11 @@ public sealed class UiKitController : Controller
                 "Instalação",
                 nameof(GetStarted),
                 activeAction == nameof(GetStarted),
+                "Começar"),
+            new NavigationItemViewModel(
+                "Temas",
+                nameof(Temas),
+                activeAction == nameof(Temas),
                 "Começar"),
             new NavigationItemViewModel("Accordion", nameof(Accordion), activeAction == nameof(Accordion)),
             new NavigationItemViewModel("Alert", nameof(Alert), activeAction == nameof(Alert)),

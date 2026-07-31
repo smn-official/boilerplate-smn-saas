@@ -1,0 +1,69 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6" data-smn-temas>
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tema em uso</p>
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="min-w-0">
+                <p class="text-sm font-medium" data-tema-atual-nome>Padrão do UiKit</p>
+                <p class="mt-1 text-sm text-muted" data-tema-atual-descricao>
+                    Os tokens que vêm no <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">tokens.css</code>.
+                </p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="flex items-center gap-1" data-tema-atual-amostras aria-hidden="true"></span>
+                <smn-button variant="Outline" size="Small" data-tema-restaurar hidden>
+                    Restaurar padrão
+                </smn-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Como funciona</p>
+        <p class="text-sm text-muted">
+            Todo componente do UiKit lê de custom property — nenhum tem cor fixa. Trocar de tema é
+            reescrever os tokens em
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">:root</code>, e a
+            interface inteira acompanha sem recompilar nada. Os temas vêm do
+            <smn-link href="https://tweakcn.com/community" external="true" variant="Accent">tweakcn</smn-link>,
+            traduzidos do vocabulário shadcn para o do UiKit.
+        </p>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <p class="text-xs font-medium tracking-wide text-muted uppercase">
+                Catálogo <span data-tema-contagem></span>
+            </p>
+            <div class="w-full max-w-xs">
+                <smn-search-field name="busca-tema"
+                                  placeholder="Buscar tema…"
+                                  aria-label="Buscar tema"
+                                  data-tema-busca />
+            </div>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-tema-grade>
+            <p class="text-sm text-muted">Carregando os temas…</p>
+        </div>
+
+        <p class="mt-4 hidden text-sm text-muted" data-tema-vazio>
+            Nenhum tema com esse nome.
+        </p>
+    </div>
+</div>
+
+<smn-modal id="modal-tema" title="Pré-visualização" description="Como o painel fica com este tema.">
+    <smn-modal-body>
+        <div data-tema-preview></div>
+    </smn-modal-body>
+    <smn-modal-footer>
+        <smn-button variant="Ghost" data-modal-close="true" data-tema-cancelar>Cancelar</smn-button>
+        <smn-button variant="Outline" data-tema-exportar>Copiar CSS</smn-button>
+        <smn-button variant="Primary" data-tema-aplicar>Usar este tema</smn-button>
+    </smn-modal-footer>
+</smn-modal>
