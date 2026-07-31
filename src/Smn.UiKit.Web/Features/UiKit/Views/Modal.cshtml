@@ -1,0 +1,87 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Confirmação</p>
+        <p class="mb-4 text-sm text-muted">
+            Renderiza o <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;dialog&gt;</code>
+            nativo: o navegador cuida do foco preso, do Esc e do fundo. Refazer isso em script é
+            justamente como modal acaba deixando o foco escapar para trás.
+        </p>
+        <smn-button variant="Danger" data-modal-open="modal-excluir">Excluir conta</smn-button>
+
+        <smn-modal id="modal-excluir"
+                   title="Excluir a conta?"
+                   description="Some tudo: faturas, relatórios e histórico. Não dá para desfazer.">
+            <smn-modal-body>
+                <p>Digite o nome da empresa para confirmar.</p>
+                <div class="mt-3">
+                    <smn-input name="confirmacao" placeholder="Acme Ltda" />
+                </div>
+            </smn-modal-body>
+            <smn-modal-footer>
+                <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
+                <smn-button variant="Danger" data-modal-close="true">Excluir</smn-button>
+            </smn-modal-footer>
+        </smn-modal>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Formulário</p>
+        <smn-button variant="Primary" data-modal-open="modal-convidar">Convidar pessoa</smn-button>
+
+        <smn-modal id="modal-convidar"
+                   title="Convidar para a equipe"
+                   description="A pessoa recebe um e-mail com o link de acesso.">
+            <smn-modal-body>
+                <div class="flex flex-col gap-4">
+                    <smn-input name="convite-email"
+                               type="email"
+                               label="E-mail"
+                               placeholder="pessoa@empresa.com.br"
+                               required="true" />
+                    <smn-radio-group legend="Permissão">
+                        <smn-radio name="permissao" value="leitura" label="Somente leitura" checked="true" />
+                        <smn-radio name="permissao" value="edicao" label="Pode editar" />
+                        <smn-radio name="permissao" value="admin" label="Administrador" />
+                    </smn-radio-group>
+                </div>
+            </smn-modal-body>
+            <smn-modal-footer>
+                <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
+                <smn-button variant="Primary" data-modal-close="true">Enviar convite</smn-button>
+            </smn-modal-footer>
+        </smn-modal>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Só conteúdo</p>
+        <smn-button variant="Outline" data-modal-open="modal-simples">Ver detalhes</smn-button>
+
+        <smn-modal id="modal-simples" title="Sobre o cálculo">
+            <smn-modal-body>
+                <p>O valor considera os usuários ativos no fechamento do ciclo, não o total
+                   cadastrado. Quem entrou no meio do mês entra proporcional.</p>
+            </smn-modal-body>
+            <smn-modal-footer>
+                <smn-button variant="Primary" data-modal-close="true">Entendi</smn-button>
+            </smn-modal-footer>
+        </smn-modal>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">O que o navegador já faz</p>
+        <ul class="flex list-disc flex-col gap-2 ps-5 text-sm text-muted">
+            <li>Prende o foco dentro do diálogo enquanto ele está aberto.</li>
+            <li>Fecha no <smn-kbd>Esc</smn-kbd> sem precisar de listener.</li>
+            <li>Marca o resto da página como inerte para leitor de tela.</li>
+            <li>Devolve o foco para quem abriu, ao fechar.</li>
+        </ul>
+        <p class="mt-4 text-sm text-muted">
+            O script da página só abre, fecha no botão e fecha no clique fora — o resto é nativo.
+        </p>
+    </div>
+</div>

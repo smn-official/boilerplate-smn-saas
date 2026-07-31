@@ -170,6 +170,39 @@ public sealed class UiKitController : Controller
         </smn-tabs>
         """;
 
+    private const string AccordionUsage =
+        """
+        <smn-accordion variant="Surface" name="faq">
+            <smn-accordion-item title="Como funciona a cobrança?" open="true">
+                A cobrança é mensal, no mesmo dia da contratação.
+            </smn-accordion-item>
+            <smn-accordion-item title="Posso cancelar quando quiser?">
+                Pode, sem multa.
+            </smn-accordion-item>
+        </smn-accordion>
+
+        <smn-tooltip id="dica-exportar" text="Gera um CSV com as linhas filtradas">
+            <smn-button aria-describedby="dica-exportar">Exportar</smn-button>
+        </smn-tooltip>
+        """;
+
+    private const string ModalUsage =
+        """
+        <smn-button data-modal-open="modal-excluir">Excluir conta</smn-button>
+
+        <smn-modal id="modal-excluir"
+                   title="Excluir a conta?"
+                   description="Some tudo. Não dá para desfazer.">
+            <smn-modal-body>
+                Digite o nome da empresa para confirmar.
+            </smn-modal-body>
+            <smn-modal-footer>
+                <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
+                <smn-button variant="Danger" data-modal-close="true">Excluir</smn-button>
+            </smn-modal-footer>
+        </smn-modal>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -193,6 +226,17 @@ public sealed class UiKitController : Controller
             "Dispara uma ação. A variante comunica a importância e o risco da ação.",
             ButtonUsage,
             BuildNavigation(nameof(Button))));
+    }
+
+    /// <summary>Accordion and tooltip component page.</summary>
+    [HttpGet("accordion")]
+    public IActionResult Accordion()
+    {
+        return View(new ComponentViewModel(
+            "Accordion",
+            "Recolhe seções longas; o tooltip dá a dica curta no hover e no foco.",
+            AccordionUsage,
+            BuildNavigation(nameof(Accordion))));
     }
 
     /// <summary>Alert component page.</summary>
@@ -270,6 +314,17 @@ public sealed class UiKitController : Controller
             "Indica que algo está em andamento sem que se saiba quanto falta.",
             SpinnerUsage,
             BuildNavigation(nameof(Spinner))));
+    }
+
+    /// <summary>Modal component page.</summary>
+    [HttpGet("modal")]
+    public IActionResult Modal()
+    {
+        return View(new ComponentViewModel(
+            "Modal",
+            "Interrompe o fluxo para uma decisão, sobre o dialog nativo do navegador.",
+            ModalUsage,
+            BuildNavigation(nameof(Modal))));
     }
 
     /// <summary>Progress bar and meter component page.</summary>
@@ -386,6 +441,7 @@ public sealed class UiKitController : Controller
     {
         return
         [
+            new NavigationItemViewModel("Accordion", nameof(Accordion), activeAction == nameof(Accordion)),
             new NavigationItemViewModel("Alert", nameof(Alert), activeAction == nameof(Alert)),
             new NavigationItemViewModel("Avatar", nameof(Avatar), activeAction == nameof(Avatar)),
             new NavigationItemViewModel("Badge", nameof(Badge), activeAction == nameof(Badge)),
@@ -397,6 +453,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
+            new NavigationItemViewModel("Modal", nameof(Modal), activeAction == nameof(Modal)),
             new NavigationItemViewModel("Progress", nameof(Progress), activeAction == nameof(Progress)),
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),
             new NavigationItemViewModel("Skeleton", nameof(Skeleton), activeAction == nameof(Skeleton)),

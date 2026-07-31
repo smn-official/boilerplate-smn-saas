@@ -147,6 +147,40 @@ function initializeTabs(): void {
     }
 }
 
+function initializeModals(): void {
+    const openers = document.querySelectorAll<HTMLElement>("[data-modal-open]");
+
+    for (const opener of openers) {
+        opener.addEventListener("click", () => {
+            const id = opener.dataset.modalOpen;
+            const dialog = id === undefined ? null : document.getElementById(id);
+
+            if (dialog instanceof HTMLDialogElement) {
+                dialog.showModal();
+            }
+        });
+    }
+
+    const closers = document.querySelectorAll<HTMLElement>("[data-modal-close]");
+
+    for (const closer of closers) {
+        closer.addEventListener("click", () => {
+            closer.closest("dialog")?.close();
+        });
+    }
+
+    // Clicar fora fecha: o ::backdrop conta como clique no próprio <dialog>,
+    // então comparar o alvo com ele distingue fora de dentro.
+    for (const dialog of document.querySelectorAll<HTMLDialogElement>("dialog.modal")) {
+        dialog.addEventListener("click", (event: MouseEvent) => {
+            if (event.target === dialog) {
+                dialog.close();
+            }
+        });
+    }
+}
+
 initializeThemeToggle();
 initializeCodeCopy();
 initializeTabs();
+initializeModals();

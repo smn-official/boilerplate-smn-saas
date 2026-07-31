@@ -1,0 +1,82 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Accordion</p>
+        <p class="mb-4 text-sm text-muted">
+            Usa <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;details&gt;</code>
+            nativo: abre, fecha e responde ao teclado sem uma linha de JavaScript. Continua
+            funcionando mesmo se o script da página falhar.
+        </p>
+        <smn-accordion variant="Surface">
+            <smn-accordion-item title="Como funciona a cobrança?" open="true">
+                <p>A cobrança é mensal, no mesmo dia da contratação. O valor é fechado na virada
+                   do ciclo, considerando os usuários ativos no período.</p>
+            </smn-accordion-item>
+            <smn-accordion-item title="Posso cancelar quando quiser?">
+                <p>Pode. O acesso continua até o fim do período já pago e não há multa.</p>
+            </smn-accordion-item>
+            <smn-accordion-item title="Vocês emitem nota fiscal?">
+                <p>Sim, automaticamente, a cada pagamento confirmado.</p>
+            </smn-accordion-item>
+        </smn-accordion>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Uma seção por vez</p>
+        <p class="mb-4 text-sm text-muted">
+            Com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">name</code>, abrir
+            uma seção fecha a outra — quem resolve isso é o próprio navegador.
+        </p>
+        <smn-accordion variant="Surface" name="faq-exclusivo">
+            <smn-accordion-item title="Primeira seção">
+                <p>Abrir a segunda fecha esta aqui.</p>
+            </smn-accordion-item>
+            <smn-accordion-item title="Segunda seção">
+                <p>E abrir a primeira fecha esta.</p>
+            </smn-accordion-item>
+        </smn-accordion>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Sem superfície</p>
+        <smn-accordion>
+            <smn-accordion-item title="Detalhes técnicos">
+                <p>A variante padrão não desenha fundo — serve para aninhar dentro de um card
+                   que já tem o seu.</p>
+            </smn-accordion-item>
+            <smn-accordion-item title="Requisitos">
+                <p>.NET 10 e um navegador com suporte a details, que é praticamente universal.</p>
+            </smn-accordion-item>
+        </smn-accordion>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tooltip</p>
+        <p class="mb-4 text-sm text-muted">
+            Aparece no hover <em>e</em> no foco — só <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">:hover</code>
+            deixaria o conteúdo inalcançável por teclado. O gatilho aponta para o texto por
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">aria-describedby</code>,
+            senão a dica seria só visual.
+        </p>
+        <div class="flex flex-wrap items-center gap-6">
+            <smn-tooltip id="dica-exportar" text="Gera um CSV com as linhas filtradas">
+                <smn-button variant="Outline" size="Small" aria-describedby="dica-exportar">
+                    Exportar
+                </smn-button>
+            </smn-tooltip>
+            <smn-tooltip id="dica-abaixo" text="Esta aparece embaixo" placement="Bottom">
+                <smn-button variant="Ghost" size="Small" aria-describedby="dica-abaixo">
+                    Embaixo
+                </smn-button>
+            </smn-tooltip>
+        </div>
+        <p class="mt-4 text-sm text-muted">
+            Não coloque em tooltip o que o usuário precisa ler para decidir: em tela de toque não
+            existe hover, e a dica nunca aparece.
+        </p>
+    </div>
+</div>
