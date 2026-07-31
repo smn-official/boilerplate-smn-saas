@@ -119,6 +119,27 @@ public sealed class UiKitController : Controller
                     checked="true" />
         """;
 
+    private const string ProgressUsage =
+        """
+        <smn-progress-bar value="60" label="Processando" show-value="true" />
+        <smn-progress-bar label="Sincronizando" />
+
+        <smn-meter value="3.2" maximum="10" label="Armazenamento" value-text="3,2 de 10 GB" />
+        """;
+
+    private const string BreadcrumbsUsage =
+        """
+        <smn-breadcrumbs>
+            <smn-breadcrumb href="/">Início</smn-breadcrumb>
+            <smn-breadcrumb href="/clientes">Clientes</smn-breadcrumb>
+            <smn-breadcrumb current="true">Acme Ltda</smn-breadcrumb>
+        </smn-breadcrumbs>
+
+        <smn-empty-state title="Nenhuma fatura por aqui">
+            As faturas aparecem assim que a primeira cobrança for gerada.
+        </smn-empty-state>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -153,6 +174,17 @@ public sealed class UiKitController : Controller
             "Exibe mensagem e notificação ao usuário com indicador de estado.",
             AlertUsage,
             BuildNavigation(nameof(Alert))));
+    }
+
+    /// <summary>Breadcrumbs and empty state component page.</summary>
+    [HttpGet("breadcrumbs")]
+    public IActionResult Breadcrumbs()
+    {
+        return View(new ComponentViewModel(
+            "Breadcrumbs",
+            "Mostra onde o usuário está e o caminho de volta.",
+            BreadcrumbsUsage,
+            BuildNavigation(nameof(Breadcrumbs))));
     }
 
     /// <summary>Card component page.</summary>
@@ -208,6 +240,17 @@ public sealed class UiKitController : Controller
             "Indica que algo está em andamento sem que se saiba quanto falta.",
             SpinnerUsage,
             BuildNavigation(nameof(Spinner))));
+    }
+
+    /// <summary>Progress bar and meter component page.</summary>
+    [HttpGet("progress")]
+    public IActionResult Progress()
+    {
+        return View(new ComponentViewModel(
+            "Progress",
+            "Acompanha uma tarefa em andamento; o meter mede quantidade numa faixa conhecida.",
+            ProgressUsage,
+            BuildNavigation(nameof(Progress))));
     }
 
     /// <summary>Separator component page.</summary>
@@ -294,6 +337,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Alert", nameof(Alert), activeAction == nameof(Alert)),
             new NavigationItemViewModel("Avatar", nameof(Avatar), activeAction == nameof(Avatar)),
             new NavigationItemViewModel("Badge", nameof(Badge), activeAction == nameof(Badge)),
+            new NavigationItemViewModel("Breadcrumbs", nameof(Breadcrumbs), activeAction == nameof(Breadcrumbs)),
             new NavigationItemViewModel("Button", nameof(Button), activeAction == nameof(Button)),
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
             new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
@@ -301,6 +345,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
+            new NavigationItemViewModel("Progress", nameof(Progress), activeAction == nameof(Progress)),
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),
             new NavigationItemViewModel("Skeleton", nameof(Skeleton), activeAction == nameof(Skeleton)),
             new NavigationItemViewModel("Spinner", nameof(Spinner), activeAction == nameof(Spinner)),
