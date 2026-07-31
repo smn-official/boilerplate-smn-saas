@@ -237,9 +237,38 @@ function initializeToasts(): void {
     }
 }
 
+function initializeToggleButtons(): void {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(".toggle-button")) {
+        button.addEventListener("click", () => {
+            const pressed = button.getAttribute("aria-pressed") === "true";
+            button.setAttribute("aria-pressed", pressed ? "false" : "true");
+        });
+    }
+}
+
+function initializeSliderOutputs(): void {
+    for (const slider of document.querySelectorAll<HTMLElement>("[data-slider-output]")) {
+        const input = slider.querySelector<HTMLInputElement>(".slider__input");
+        const output = slider.querySelector<HTMLElement>(".slider__output");
+
+        if (input === null || output === null) {
+            continue;
+        }
+
+        const suffix = slider.dataset.sliderSuffix ?? "";
+
+        input.addEventListener("input", () => {
+            output.textContent = `${input.value}${suffix}`;
+            input.setAttribute("aria-valuetext", `${input.value}${suffix}`);
+        });
+    }
+}
+
 initializeThemeToggle();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();
 initializeInputOtp();
 initializeToasts();
+initializeToggleButtons();
+initializeSliderOutputs();

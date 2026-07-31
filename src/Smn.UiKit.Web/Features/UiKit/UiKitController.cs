@@ -230,6 +230,26 @@ public sealed class UiKitController : Controller
                        description="Seis dígitos, válidos por 10 minutos." />
         """;
 
+    private const string DrawerUsage =
+        """
+        <smn-button data-modal-open="drawer-filtros">Filtros</smn-button>
+
+        <smn-drawer id="drawer-filtros" placement="Right" title="Filtros">
+            <smn-drawer-body>
+                <smn-select name="situacao" label="Situação">
+                    <option value="">Todas</option>
+                </smn-select>
+            </smn-drawer-body>
+            <smn-drawer-footer>
+                <smn-button variant="Primary" data-modal-close="true">Aplicar</smn-button>
+            </smn-drawer-footer>
+        </smn-drawer>
+
+        <smn-slider name="volume" label="Volume" value="60" value-text="60%" />
+
+        <smn-toggle-button pressed="true">Negrito</smn-toggle-button>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -409,6 +429,17 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Switch))));
     }
 
+    /// <summary>Drawer, slider and toggle button component page.</summary>
+    [HttpGet("drawer")]
+    public IActionResult Drawer()
+    {
+        return View(new ComponentViewModel(
+            "Drawer",
+            "Painel ancorado numa borda; traz junto o slider e o botão de alternar.",
+            DrawerUsage,
+            BuildNavigation(nameof(Drawer))));
+    }
+
     /// <summary>Input component page.</summary>
     [HttpGet("input")]
     public IActionResult Input()
@@ -499,6 +530,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
             new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
+            new NavigationItemViewModel("Drawer", nameof(Drawer), activeAction == nameof(Drawer)),
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
