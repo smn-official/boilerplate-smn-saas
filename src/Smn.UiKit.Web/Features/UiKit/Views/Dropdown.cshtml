@@ -1,0 +1,96 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Dropdown</p>
+        <p class="mb-4 text-sm text-muted">
+            O menu é um <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">popover</code>
+            nativo: o navegador fecha ao clicar fora, fecha no Esc e desenha na camada de topo —
+            sem briga de <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">z-index</code>
+            nem listener no documento. O gatilho aponta pelo
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">popovertarget</code>,
+            então abre sem JavaScript nenhum.
+        </p>
+        <div class="flex flex-wrap gap-3">
+            <smn-dropdown>
+                <smn-button variant="Outline" popovertarget="menu-acoes" aria-haspopup="menu">
+                    Ações
+                </smn-button>
+                <smn-menu id="menu-acoes" aria-label="Ações da fatura">
+                    <smn-menu-item>Ver detalhes</smn-menu-item>
+                    <smn-menu-item>Baixar PDF</smn-menu-item>
+                    <smn-menu-item>Enviar por e-mail</smn-menu-item>
+                    <smn-menu-separator />
+                    <smn-menu-item danger="true">Cancelar fatura</smn-menu-item>
+                </smn-menu>
+            </smn-dropdown>
+
+            <smn-dropdown>
+                <smn-button variant="Secondary" popovertarget="menu-conta" aria-haspopup="menu">
+                    Minha conta
+                </smn-button>
+                <smn-menu id="menu-conta" aria-label="Conta">
+                    <smn-menu-section label="Sessão">
+                        <smn-menu-item href="#">Perfil</smn-menu-item>
+                        <smn-menu-item href="#">Preferências</smn-menu-item>
+                    </smn-menu-section>
+                    <smn-menu-separator />
+                    <smn-menu-section label="Organização">
+                        <smn-menu-item href="#">Equipe</smn-menu-item>
+                        <smn-menu-item href="#" disabled="true">Faturamento</smn-menu-item>
+                    </smn-menu-section>
+                    <smn-menu-separator />
+                    <smn-menu-item danger="true">Sair</smn-menu-item>
+                </smn-menu>
+            </smn-dropdown>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Item de ação ou de navegação</p>
+        <p class="text-sm text-muted">
+            Com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">href</code> o item
+            vira link — abre em nova aba, aparece na barra de status, é indexável. Sem
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">href</code>, vira
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">button</code>, que é o
+            certo para o que executa uma ação em vez de levar a algum lugar.
+        </p>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Sombra de rolagem</p>
+        <p class="mb-4 text-sm text-muted">
+            A sombra aparece na borda que ainda esconde conteúdo e some ao chegar no fim. É
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">background-attachment: local</code>,
+            então não mede nada em script. Role a lista abaixo.
+        </p>
+        <smn-scroll-shadow class="max-h-48 rounded-2xl bg-surface-secondary p-4">
+            <ul class="flex flex-col gap-2 text-sm">
+                @for (var i = 1; i <= 14; i++)
+                {
+                    <li class="flex items-center justify-between">
+                        <span>Fatura NF-2026-0001@i.ToString("00")</span>
+                        <span class="tabular-nums text-muted">R$ @((i * 137).ToString("N2"))</span>
+                    </li>
+                }
+            </ul>
+        </smn-scroll-shadow>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Rolagem horizontal</p>
+        <smn-scroll-shadow horizontal="true" class="rounded-2xl bg-surface-secondary p-4">
+            <div class="flex w-max gap-3">
+                @for (var i = 1; i <= 10; i++)
+                {
+                    <div class="flex size-24 shrink-0 items-center justify-center rounded-xl bg-surface text-sm">
+                        Card @i
+                    </div>
+                }
+            </div>
+        </smn-scroll-shadow>
+    </div>
+</div>

@@ -250,6 +250,25 @@ public sealed class UiKitController : Controller
         <smn-toggle-button pressed="true">Negrito</smn-toggle-button>
         """;
 
+    private const string DropdownUsage =
+        """
+        <smn-dropdown>
+            <smn-button variant="Outline" popovertarget="menu-acoes" aria-haspopup="menu">
+                Ações
+            </smn-button>
+            <smn-menu id="menu-acoes" aria-label="Ações da fatura">
+                <smn-menu-item>Ver detalhes</smn-menu-item>
+                <smn-menu-item href="/faturas/1.pdf">Baixar PDF</smn-menu-item>
+                <smn-menu-separator />
+                <smn-menu-item danger="true">Cancelar fatura</smn-menu-item>
+            </smn-menu>
+        </smn-dropdown>
+
+        <smn-scroll-shadow class="max-h-48">
+            <!-- lista longa -->
+        </smn-scroll-shadow>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -440,6 +459,17 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Drawer))));
     }
 
+    /// <summary>Dropdown, menu and scroll shadow component page.</summary>
+    [HttpGet("dropdown")]
+    public IActionResult Dropdown()
+    {
+        return View(new ComponentViewModel(
+            "Dropdown",
+            "Abre um menu de opções sobre o popover nativo, sem briga de z-index.",
+            DropdownUsage,
+            BuildNavigation(nameof(Dropdown))));
+    }
+
     /// <summary>Input component page.</summary>
     [HttpGet("input")]
     public IActionResult Input()
@@ -531,6 +561,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
             new NavigationItemViewModel("Drawer", nameof(Drawer), activeAction == nameof(Drawer)),
+            new NavigationItemViewModel("Dropdown", nameof(Dropdown), activeAction == nameof(Dropdown)),
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
