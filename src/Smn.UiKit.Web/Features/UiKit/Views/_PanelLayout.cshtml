@@ -9,7 +9,15 @@
 }
 
 <div class="flex min-h-screen flex-col lg:flex-row">
-    <aside class="shrink-0 border-b border-border px-4 py-6 lg:w-64 lg:border-e lg:border-b-0 lg:px-6">
+    @*
+        No desktop a barra fica presa no topo com a altura da viewport e rolagem
+        própria: o menu tem 27 itens e o conteúdo é bem mais alto, então rolar os
+        dois juntos deixava a lateral vazia por metade da página. No mobile ela
+        volta a ser uma faixa horizontal no fluxo normal.
+    *@
+    <aside class="shrink-0 border-b border-border px-4 py-6 lg:sticky lg:top-0 lg:h-screen
+                  lg:w-64 lg:overflow-y-auto lg:overscroll-contain lg:border-e lg:border-b-0
+                  lg:px-6 panel-sidebar">
         <a href="@Url.Action(nameof(UiKitController.Index), "UiKit")"
            class="mb-6 block text-sm font-semibold tracking-tight">
             Smn UiKit

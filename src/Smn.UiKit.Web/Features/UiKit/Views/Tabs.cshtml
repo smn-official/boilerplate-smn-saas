@@ -55,6 +55,24 @@
 </smn-tabs>
 """;
 
+    const string verticalCodigo =
+"""
+<smn-tabs id="ajustes" aria-label="Ajustes" vertical="true">
+    <smn-tab key="geral" label="Geral">
+        <p class="text-sm">Nome da organização e fuso horário.</p>
+    </smn-tab>
+    <smn-tab key="membros" label="Membros">
+        <p class="text-sm">Quem tem acesso e com qual permissão.</p>
+    </smn-tab>
+    <smn-tab key="integracoes" label="Integrações">
+        <p class="text-sm">Conexões com outros sistemas.</p>
+    </smn-tab>
+    <smn-tab key="avancado" label="Avançado">
+        <p class="text-sm">Exportação, API e exclusão da conta.</p>
+    </smn-tab>
+</smn-tabs>
+""";
+
     const string abaDesabilitadaCodigo =
 """
 <smn-tabs id="etapas" aria-label="Etapas do cadastro">
@@ -127,6 +145,29 @@
             </smn-tab>
         </smn-tabs>
         @await Html.PartialAsync("_Codigo", larguraTotalCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Vertical</p>
+        <p class="mb-4 text-sm text-muted">
+            Com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">vertical</code> as
+            abas ficam ao lado dos painéis. A navegação por teclado acompanha: ↑/↓ em vez de ←/→.
+        </p>
+        <smn-tabs id="ajustes" aria-label="Ajustes" vertical="true">
+            <smn-tab key="geral" label="Geral">
+                <p class="text-sm">Nome da organização e fuso horário.</p>
+            </smn-tab>
+            <smn-tab key="membros" label="Membros">
+                <p class="text-sm">Quem tem acesso e com qual permissão.</p>
+            </smn-tab>
+            <smn-tab key="integracoes" label="Integrações">
+                <p class="text-sm">Conexões com outros sistemas.</p>
+            </smn-tab>
+            <smn-tab key="avancado" label="Avançado">
+                <p class="text-sm">Exportação, API e exclusão da conta.</p>
+            </smn-tab>
+        </smn-tabs>
+        @await Html.PartialAsync("_Codigo", verticalCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">

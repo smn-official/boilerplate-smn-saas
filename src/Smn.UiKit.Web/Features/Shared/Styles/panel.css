@@ -1,6 +1,12 @@
 /* Estilos exclusivos do painel de documentação. NÃO faz parte do pacote distribuído. */
 
 @layer components {
+    /* Barra de rolagem discreta no menu lateral, para não competir com o conteúdo. */
+    .panel-sidebar {
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in oklch, var(--foreground) 12%, transparent) transparent;
+    }
+
     /*
       O código de cada exemplo nasce recolhido: o olho bate primeiro no
       resultado, e quem quer replicar abre e copia.
@@ -69,8 +75,13 @@
         @apply relative isolate overflow-hidden rounded-2xl bg-surface shadow-surface;
     }
 
-    /* Dentro do card, que já é bg-surface, o bloco precisa de um degrau a mais. */
-    .exemplo__codigo .code-block {
+    /*
+      Dentro de um card (que já é bg-surface) o bloco precisa de um degrau a
+      mais, senão o código se confunde com o fundo. Vale tanto para o "Ver
+      código" dos exemplos quanto para os blocos soltos da Instalação.
+    */
+    .exemplo__codigo .code-block,
+    .rounded-2xl.bg-surface .code-block {
         @apply bg-surface-secondary shadow-none;
     }
 

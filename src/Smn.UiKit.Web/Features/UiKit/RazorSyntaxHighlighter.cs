@@ -16,6 +16,86 @@ public static class RazorSyntaxHighlighter
         AttributeValue,
     }
 
+    /// <summary>
+    /// Highlights a shell command line — the executable, then its arguments.
+    /// The markup highlighter would leave it flat, since there is no tag to find.
+    /// </summary>
+    public static IHtmlContent HighlightShell(string snippet)
+    {
+        ArgumentNullException.ThrowIfNull(snippet);
+
+        var builder = new StringBuilder(snippet.Length * 2);
+
+        foreach (var line in snippet.Split('\n'))
+        {
+            if (builder.Length > 0)
+            {
+                builder.Append('\n');
+            }
+
+            if (line.Trim().Length == 0)
+            {
+                continue;
+            }
+
+            var parts = line.Split(' ', 2);
+
+            builder.Append("<span class=\"token-tag\">")
+                .Append(HtmlEncoder.Default.Encode(parts[0]))
+                .Append("</span>");
+
+            if (parts.Length > 1)
+            {
+                builder.Append(' ')
+                    .Append("<span class=\"token-value\">")
+                    .Append(HtmlEncoder.Default.Encode(parts[1]))
+                    .Append("</span>");
+            }
+        }
+
+        return new HtmlString(builder.ToString());
+    }
+
+    /// <summary>
+    /// Highlights CSS at-rules — <c>@import</c> and the string that follows it.
+    /// </summary>
+    public static IHtmlContent HighlightCss(string snippet)
+    {
+        ArgumentNullException.ThrowIfNull(snippet);
+
+        var builder = new StringBuilder(snippet.Length * 2);
+
+        foreach (var line in snippet.Split('\n'))
+        {
+            if (builder.Length > 0)
+            {
+                builder.Append('\n');
+            }
+
+            if (line.Trim().Length == 0)
+            {
+                continue;
+            }
+
+            var quote = line.IndexOf('"', StringComparison.Ordinal);
+
+            if (quote < 0)
+            {
+                builder.Append(HtmlEncoder.Default.Encode(line));
+                continue;
+            }
+
+            builder.Append("<span class=\"token-attribute\">")
+                .Append(HtmlEncoder.Default.Encode(line[..quote]))
+                .Append("</span>")
+                .Append("<span class=\"token-value\">")
+                .Append(HtmlEncoder.Default.Encode(line[quote..]))
+                .Append("</span>");
+        }
+
+        return new HtmlString(builder.ToString());
+    }
+
     /// <summary>Highlights the snippet, encoding every value it emits.</summary>
     public static IHtmlContent Highlight(string snippet)
     {

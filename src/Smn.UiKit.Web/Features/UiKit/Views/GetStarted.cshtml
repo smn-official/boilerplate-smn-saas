@@ -28,8 +28,7 @@
                     <path d="M20 6 9 17l-5-5" />
                 </svg>
             </button>
-            <pre class="code-block__pre"><code data-code-source="dotnet add package Smn.UiKit&#10;npm install @@vagnerking/smn-uikit">dotnet add package Smn.UiKit
-npm install @@vagnerking/smn-uikit</code></pre>
+            <pre class="code-block__pre"><code data-code-source="dotnet add package Smn.UiKit&#10;npm install @@vagnerking/smn-uikit">@RazorSyntaxHighlighter.HighlightShell("dotnet add package Smn.UiKit\nnpm install @vagnerking/smn-uikit")</code></pre>
             <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
         </div>
     </div>
@@ -58,7 +57,7 @@ npm install @@vagnerking/smn-uikit</code></pre>
                     <path d="M20 6 9 17l-5-5" />
                 </svg>
             </button>
-            <pre class="code-block__pre"><code data-code-source="@@addTagHelper *, Smn.UiKit.Components">@@addTagHelper *, Smn.UiKit.Components</code></pre>
+            <pre class="code-block__pre"><code data-code-source="@@addTagHelper *, Smn.UiKit.Components">@RazorSyntaxHighlighter.HighlightShell("@addTagHelper *, Smn.UiKit.Components")</code></pre>
             <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
         </div>
     </div>
@@ -90,10 +89,7 @@ npm install @@vagnerking/smn-uikit</code></pre>
                     <path d="M20 6 9 17l-5-5" />
                 </svg>
             </button>
-            <pre class="code-block__pre"><code data-code-source="@@import &quot;tailwindcss&quot;;&#10;&#10;@@import &quot;@@vagnerking/smn-uikit/tokens.css&quot;;&#10;@@import &quot;@@vagnerking/smn-uikit/uikit.css&quot;;">@@import "tailwindcss";
-
-@@import "@@vagnerking/smn-uikit/tokens.css";
-@@import "@@vagnerking/smn-uikit/uikit.css";</code></pre>
+            <pre class="code-block__pre"><code data-code-source="@@import &quot;tailwindcss&quot;;&#10;&#10;@@import &quot;@@vagnerking/smn-uikit/tokens.css&quot;;&#10;@@import &quot;@@vagnerking/smn-uikit/uikit.css&quot;;">@RazorSyntaxHighlighter.HighlightCss("@import \"tailwindcss\";\n\n@import \"@vagnerking/smn-uikit/tokens.css\";\n@import \"@vagnerking/smn-uikit/uikit.css\";")</code></pre>
             <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
         </div>
         <p class="mt-3 text-sm text-muted">
@@ -147,7 +143,24 @@ npm install @@vagnerking/smn-uikit</code></pre>
             declara os dois. O escuro ativa por classe no elemento raiz:
         </p>
         <div class="code-block mb-3" data-code-block>
-            <pre class="code-block__pre"><code data-code-source="&lt;html class=&quot;dark&quot;&gt;">&lt;html class="dark"&gt;</code></pre>
+            <button type="button"
+                    class="code-block__copy"
+                    data-copy-code
+                    aria-label="Copiar código para a área de transferência">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="idle">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="done" hidden>
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <pre class="code-block__pre"><code data-code-source="&lt;html class=&quot;dark&quot;&gt;">@RazorSyntaxHighlighter.Highlight("<html class=\"dark\">")</code></pre>
+            <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
         </div>
         <p class="text-sm text-muted">
             Mudar a cor da marca é mudar <strong class="font-medium text-foreground">um</strong> token —

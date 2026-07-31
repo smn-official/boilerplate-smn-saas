@@ -100,6 +100,26 @@ function initializeCodeCopy(): void {
     }
 }
 
+/**
+ * Move o fundo da aba ativa até ela. As medidas vão para custom properties e o
+ * CSS anima a transição — assim o fundo desliza de uma aba para a outra em vez
+ * de sumir de uma e aparecer na outra.
+ */
+function moveTabIndicator(tabs: HTMLElement): void {
+    const list = tabs.querySelector<HTMLElement>(".tabs__list");
+    const active = list?.querySelector<HTMLElement>("[role='tab'][aria-selected='true']");
+
+    if (list === null || list === undefined || active === null || active === undefined) {
+        return;
+    }
+
+    list.style.setProperty("--tabs-indicator-x", `${active.offsetLeft}px`);
+    list.style.setProperty("--tabs-indicator-y", `${active.offsetTop}px`);
+    list.style.setProperty("--tabs-indicator-width", `${active.offsetWidth}px`);
+    list.style.setProperty("--tabs-indicator-height", `${active.offsetHeight}px`);
+    list.setAttribute("data-tabs-ready", "true");
+}
+
 function selectTab(tabs: HTMLElement, target: HTMLElement): void {
     const buttons = tabs.querySelectorAll<HTMLButtonElement>("[role='tab']");
 
@@ -112,6 +132,8 @@ function selectTab(tabs: HTMLElement, target: HTMLElement): void {
         button.tabIndex = isTarget ? 0 : -1;
         panel?.toggleAttribute("hidden", !isTarget);
     }
+
+    moveTabIndicator(tabs);
 }
 
 function initializeTabs(): void {
@@ -119,12 +141,27 @@ function initializeTabs(): void {
 
     for (const tabs of groups) {
         const buttons = [...tabs.querySelectorAll<HTMLButtonElement>("[role='tab']")];
+        const vertical = tabs.dataset.orientation === "vertical";
+
+        moveTabIndicator(tabs);
+
+        // Fontes carregando depois mudam a largura das abas; sem remedir, o
+        // indicador fica desalinhado do texto.
+        if (typeof ResizeObserver !== "undefined") {
+            const list = tabs.querySelector<HTMLElement>(".tabs__list");
+
+            if (list !== null) {
+                new ResizeObserver(() => moveTabIndicator(tabs)).observe(list);
+            }
+        }
 
         for (const button of buttons) {
             button.addEventListener("click", () => selectTab(tabs, button));
 
             button.addEventListener("keydown", (event: KeyboardEvent) => {
-                const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+                const forwardKey = vertical ? "ArrowDown" : "ArrowRight";
+                const backwardKey = vertical ? "ArrowUp" : "ArrowLeft";
+                const step = event.key === forwardKey ? 1 : event.key === backwardKey ? -1 : 0;
 
                 if (step === 0) {
                     return;
@@ -312,7 +349,27 @@ function initializeSearchFields(): void {
     }
 }
 
+function revealActiveMenuItem(): void {
+    const sidebar = document.querySelector<HTMLElement>(".panel-sidebar");
+    const active = sidebar?.querySelector<HTMLElement>("[aria-current='page']");
+
+    if (sidebar === undefined || sidebar === null || active === undefined || active === null) {
+        return;
+    }
+
+    // Só rola quando o item ativo está fora da área visível do menu. Em página
+    // do fim da lista ele nasceria abaixo do corte, e o usuário não veria onde está.
+    const fits =
+        active.offsetTop >= sidebar.scrollTop &&
+        active.offsetTop + active.offsetHeight <= sidebar.scrollTop + sidebar.clientHeight;
+
+    if (!fits) {
+        sidebar.scrollTop = active.offsetTop - sidebar.clientHeight / 2 + active.offsetHeight / 2;
+    }
+}
+
 initializeThemeToggle();
+revealActiveMenuItem();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();
