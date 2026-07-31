@@ -4,12 +4,16 @@ namespace Smn.UiKit.Web.Features.UiKit;
 public sealed class NavigationItemViewModel
 {
     /// <summary>Creates the item with its display name and target action.</summary>
-    public NavigationItemViewModel(string name, string action, bool active)
+    public NavigationItemViewModel(string name, string action, bool active, string group = "Componentes")
     {
         Name = name;
         Action = action;
         Active = active;
+        Group = group;
     }
+
+    /// <summary>Heading this item is listed under.</summary>
+    public string Group { get; }
 
     /// <summary>Name shown in the navigation.</summary>
     public string Name { get; }
@@ -29,13 +33,21 @@ public sealed class ComponentViewModel
         string name,
         string description,
         string usageMarkup,
-        IReadOnlyList<NavigationItemViewModel> navigation)
+        IReadOnlyList<NavigationItemViewModel> navigation,
+        bool showMarkupSection = true)
     {
         Name = name;
         Description = description;
         UsageMarkup = usageMarkup;
         Navigation = navigation;
+        ShowMarkupSection = showMarkupSection;
     }
+
+    /// <summary>
+    /// Whether the layout renders the markup section. The opening page shows the
+    /// snippet inside its own steps, so it would come out twice.
+    /// </summary>
+    public bool ShowMarkupSection { get; }
 
     /// <summary>Component name.</summary>
     public string Name { get; }

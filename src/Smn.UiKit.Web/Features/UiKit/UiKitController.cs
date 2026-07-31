@@ -309,11 +309,30 @@ public sealed class UiKitController : Controller
         <smn-link href="#" variant="Muted" disabled="true">Indisponível</smn-link>
         """;
 
-    /// <summary>Redirects to the first component of the panel.</summary>
+    private const string GetStartedUsage =
+        """
+        <smn-button variant="Primary">Salvar</smn-button>
+        <smn-button variant="Outline" size="Small">Cancelar</smn-button>
+        <smn-chip color="Success" variant="Soft">Funcionando</smn-chip>
+        """;
+
+    /// <summary>Redirects to the opening page of the panel.</summary>
     [HttpGet("")]
     public IActionResult Index()
     {
-        return RedirectToAction(nameof(Button));
+        return RedirectToAction(nameof(GetStarted));
+    }
+
+    /// <summary>Installation and first use of the design system.</summary>
+    [HttpGet("get-started")]
+    public IActionResult GetStarted()
+    {
+        return View(new ComponentViewModel(
+            "Get started",
+            "Instalar, registrar e usar o design system em quatro passos.",
+            GetStartedUsage,
+            BuildNavigation(nameof(GetStarted)),
+            showMarkupSection: false));
     }
 
     /// <summary>Button component page.</summary>
@@ -606,6 +625,11 @@ public sealed class UiKitController : Controller
     {
         return
         [
+            new NavigationItemViewModel(
+                "Get started",
+                nameof(GetStarted),
+                activeAction == nameof(GetStarted),
+                "Começar"),
             new NavigationItemViewModel("Accordion", nameof(Accordion), activeAction == nameof(Accordion)),
             new NavigationItemViewModel("Alert", nameof(Alert), activeAction == nameof(Alert)),
             new NavigationItemViewModel("Avatar", nameof(Avatar), activeAction == nameof(Avatar)),

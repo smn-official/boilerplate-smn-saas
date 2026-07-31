@@ -1,0 +1,162 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">1. Instalar os pacotes</p>
+        <p class="mb-3 text-sm text-muted">
+            São dois: os TagHelpers vêm do NuGet, o CSS vem do npm. Os dois registries são privados,
+            então é preciso autenticar antes — o passo a passo, incluindo a criação do token, está no
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">INSTALL.md</code>.
+        </p>
+        <div class="code-block" data-code-block>
+            <button type="button"
+                    class="code-block__copy"
+                    data-copy-code
+                    aria-label="Copiar código para a área de transferência">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="idle">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="done" hidden>
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <pre class="code-block__pre"><code data-code-source="dotnet add package Smn.UiKit&#10;npm install @@vagnerking/smn-uikit">dotnet add package Smn.UiKit
+npm install @@vagnerking/smn-uikit</code></pre>
+            <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">2. Registrar o assembly</p>
+        <p class="mb-3 text-sm text-muted">
+            Em <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">Features/_ViewImports.cshtml</code>.
+            Nada precisa ir no <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">Program.cs</code> —
+            TagHelper não usa injeção de dependência.
+        </p>
+        <div class="code-block" data-code-block>
+            <button type="button"
+                    class="code-block__copy"
+                    data-copy-code
+                    aria-label="Copiar código para a área de transferência">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="idle">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="done" hidden>
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <pre class="code-block__pre"><code data-code-source="@@addTagHelper *, Smn.UiKit.Components">@@addTagHelper *, Smn.UiKit.Components</code></pre>
+            <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">3. Importar o CSS</p>
+        <p class="mb-3 text-sm text-muted">
+            <strong class="font-medium text-foreground">Nesta ordem.</strong>
+            O <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">tokens.css</code>
+            declara as custom properties e os
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">@@utility</code> que o
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">uikit.css</code> consome —
+            inverter deixa metade dos tokens indefinida e a tela quebra em silêncio, sem erro de build.
+        </p>
+        <div class="code-block" data-code-block>
+            <button type="button"
+                    class="code-block__copy"
+                    data-copy-code
+                    aria-label="Copiar código para a área de transferência">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="idle">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="done" hidden>
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <pre class="code-block__pre"><code data-code-source="@@import &quot;tailwindcss&quot;;&#10;&#10;@@import &quot;@@vagnerking/smn-uikit/tokens.css&quot;;&#10;@@import &quot;@@vagnerking/smn-uikit/uikit.css&quot;;">@@import "tailwindcss";
+
+@@import "@@vagnerking/smn-uikit/tokens.css";
+@@import "@@vagnerking/smn-uikit/uikit.css";</code></pre>
+            <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+        </div>
+        <p class="mt-3 text-sm text-muted">
+            O CSS vem do npm, e não dentro do <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">.nupkg</code>,
+            porque o Tailwind precisa enxergar o arquivo em disco para fazer tree-shaking das classes.
+            Arquivo dentro do pacote NuGet fica invisível para ele.
+        </p>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">4. Usar</p>
+        <p class="mb-3 text-sm text-muted">
+            O valor do atributo é o nome do membro do enum, em
+            <strong class="font-medium text-foreground">PascalCase</strong> —
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">variant="Primary"</code>,
+            não <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">"primary"</code>.
+            O Razor compila o enum literalmente: valor inválido é erro de compilação, não falha
+            silenciosa em runtime.
+        </p>
+        <div class="code-block mb-4" data-code-block>
+            <button type="button"
+                    class="code-block__copy"
+                    data-copy-code
+                    aria-label="Copiar código para a área de transferência">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="idle">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                     data-copy-icon="done" hidden>
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <pre class="code-block__pre"><code data-code-source="@Model.UsageMarkup">@RazorSyntaxHighlighter.Highlight(Model.UsageMarkup)</code></pre>
+            <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-button variant="Primary">Salvar</smn-button>
+            <smn-button variant="Outline" size="Small">Cancelar</smn-button>
+            <smn-chip color="Success" variant="Soft">Funcionando</smn-chip>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tema claro e escuro</p>
+        <p class="mb-3 text-sm text-muted">
+            O <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">tokens.css</code>
+            declara os dois. O escuro ativa por classe no elemento raiz:
+        </p>
+        <div class="code-block mb-3" data-code-block>
+            <pre class="code-block__pre"><code data-code-source="&lt;html class=&quot;dark&quot;&gt;">&lt;html class="dark"&gt;</code></pre>
+        </div>
+        <p class="text-sm text-muted">
+            Mudar a cor da marca é mudar <strong class="font-medium text-foreground">um</strong> token —
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">--accent</code>. O
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">color-mix</code> recalcula
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">--accent-hover</code>,
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">--accent-soft</code> e
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">--accent-soft-foreground</code>
+            sozinho.
+        </p>
+    </div>
+</div>

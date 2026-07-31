@@ -15,23 +15,28 @@
             Smn UiKit
         </a>
 
-        <nav aria-label="Componentes">
-            <p class="mb-2 text-xs font-medium tracking-wide text-muted uppercase">Componentes</p>
-            <ul class="flex flex-row gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
-                @foreach (var item in Model.Navigation)
-                {
-                    <li>
-                        <a href="@Url.Action(item.Action, "UiKit")"
-                           class="block rounded-xl px-3 py-2 text-sm whitespace-nowrap transition-colors
-                                  @(item.Active
-                                      ? "bg-surface font-medium text-foreground"
-                                      : "text-muted hover:bg-surface-hover hover:text-foreground")"
-                           @(item.Active ? "aria-current=page" : null)>
-                            @item.Name
-                        </a>
-                    </li>
-                }
-            </ul>
+        <nav aria-label="Seções do painel">
+            @foreach (var group in Model.Navigation.GroupBy(item => item.Group))
+            {
+                <p class="mb-2 text-xs font-medium tracking-wide text-muted uppercase lg:mt-6 lg:first:mt-0">
+                    @group.Key
+                </p>
+                <ul class="mb-1 flex flex-row gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
+                    @foreach (var item in group)
+                    {
+                        <li>
+                            <a href="@Url.Action(item.Action, "UiKit")"
+                               class="block rounded-xl px-3 py-2 text-sm whitespace-nowrap transition-colors
+                                      @(item.Active
+                                          ? "bg-surface font-medium text-foreground"
+                                          : "text-muted hover:bg-surface-hover hover:text-foreground")"
+                               @(item.Active ? "aria-current=page" : null)>
+                                @item.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
         </nav>
     </aside>
 
@@ -50,33 +55,12 @@
                 </smn-button>
             </header>
 
-            <section class="mb-10" aria-labelledby="install-title">
-                <h2 id="install-title" class="mb-3 text-xl font-semibold tracking-tight">
-                    Instalação
+            @if (Model.ShowMarkupSection)
+            {
+            <section class="mb-10" aria-labelledby="markup-title">
+                <h2 id="markup-title" class="mb-3 text-xl font-semibold tracking-tight">
+                    Marcação
                 </h2>
-                <p class="mb-3 text-sm text-muted">
-                    Instale os dois pacotes e registre o assembly em
-                    <code class="rounded bg-surface px-1.5 py-0.5 text-xs">Features/_ViewImports.cshtml</code>:
-                </p>
-                <div class="code-block mb-3" data-code-block>
-                    <pre class="code-block__pre"><code data-code-source="dotnet add package Smn.UiKit&#10;npm install @@smn/uikit">dotnet add package Smn.UiKit
-npm install @@smn/uikit</code></pre>
-                </div>
-                <div class="code-block mb-3" data-code-block>
-                    <pre class="code-block__pre"><code data-code-source="@@addTagHelper *, Smn.UiKit.Components&#10;&#10;@@import &quot;@@smn/uikit/tokens.css&quot;;&#10;@@import &quot;@@smn/uikit/uikit.css&quot;;">@@addTagHelper *, Smn.UiKit.Components
-
-@@import "@@smn/uikit/tokens.css";
-@@import "@@smn/uikit/uikit.css";</code></pre>
-                </div>
-                <p class="mb-3 text-sm text-muted">
-                    O CSS vem do npm porque o Tailwind precisa enxergar o arquivo em disco para
-                    fazer tree-shaking. A ordem do <code class="rounded bg-surface px-1.5 py-0.5 text-xs">@@import</code>
-                    é obrigatória — <code class="rounded bg-surface px-1.5 py-0.5 text-xs">tokens.css</code>
-                    declara o que <code class="rounded bg-surface px-1.5 py-0.5 text-xs">uikit.css</code> consome.
-                    Passo a passo completo, com autenticação no registry privado, em
-                    <code class="rounded bg-surface px-1.5 py-0.5 text-xs">INSTALL.md</code>.
-                    Depois disso, use a tag direto na view:
-                </p>
                 <div class="code-block" data-code-block>
                     <button type="button"
                             class="code-block__copy"
@@ -98,9 +82,13 @@ npm install @@smn/uikit</code></pre>
                     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
                 </div>
             </section>
+            }
 
-            <section aria-labelledby="usage-title">
-                <h2 id="usage-title" class="mb-3 text-xl font-semibold tracking-tight">Uso</h2>
+            <section @(Model.ShowMarkupSection ? "aria-labelledby=usage-title" : null)>
+                @if (Model.ShowMarkupSection)
+                {
+                    <h2 id="usage-title" class="mb-3 text-xl font-semibold tracking-tight">Uso</h2>
+                }
                 @RenderBody()
             </section>
         </div>
