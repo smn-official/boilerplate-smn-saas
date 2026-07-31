@@ -67,6 +67,33 @@ public sealed class UiKitController : Controller
         </smn-button>
         """;
 
+    private const string SeparatorUsage =
+        """
+        <smn-separator />
+        <smn-separator orientation="Vertical" />
+        <smn-separator variant="Secondary">ou</smn-separator>
+        """;
+
+    private const string KbdUsage =
+        """
+        <smn-kbd>K</smn-kbd>
+        <smn-kbd keys="command">K</smn-kbd>
+        <smn-kbd keys="command shift" variant="Light">P</smn-kbd>
+        """;
+
+    private const string SkeletonUsage =
+        """
+        <smn-skeleton class="h-4 w-full" />
+        <smn-skeleton animation="Pulse" class="size-10 rounded-3xl" />
+        """;
+
+    private const string LinkUsage =
+        """
+        <smn-link href="/faturas">Ver faturas</smn-link>
+        <smn-link href="https://heroui.com" external="true">Documentação</smn-link>
+        <smn-link href="#" variant="Muted" disabled="true">Indisponível</smn-link>
+        """;
+
     /// <summary>Redirects to the first component of the panel.</summary>
     [HttpGet("")]
     public IActionResult Index()
@@ -151,6 +178,50 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Spinner))));
     }
 
+    /// <summary>Separator component page.</summary>
+    [HttpGet("separator")]
+    public IActionResult Separator()
+    {
+        return View(new ComponentViewModel(
+            "Separator",
+            "Divide seções de conteúdo, com ou sem rótulo no meio da linha.",
+            SeparatorUsage,
+            BuildNavigation(nameof(Separator))));
+    }
+
+    /// <summary>Kbd component page.</summary>
+    [HttpGet("kbd")]
+    public IActionResult Kbd()
+    {
+        return View(new ComponentViewModel(
+            "Kbd",
+            "Mostra a tecla ou o atalho que dispara uma ação.",
+            KbdUsage,
+            BuildNavigation(nameof(Kbd))));
+    }
+
+    /// <summary>Skeleton component page.</summary>
+    [HttpGet("skeleton")]
+    public IActionResult Skeleton()
+    {
+        return View(new ComponentViewModel(
+            "Skeleton",
+            "Ocupa o lugar do conteúdo que ainda está carregando, sem deixar o layout pular.",
+            SkeletonUsage,
+            BuildNavigation(nameof(Skeleton))));
+    }
+
+    /// <summary>Link component page.</summary>
+    [HttpGet("link")]
+    public IActionResult Link()
+    {
+        return View(new ComponentViewModel(
+            "Link",
+            "Leva o usuário a outro lugar, sinalizando quando o destino é externo.",
+            LinkUsage,
+            BuildNavigation(nameof(Link))));
+    }
+
     private static IReadOnlyList<NavigationItemViewModel> BuildNavigation(string activeAction)
     {
         return
@@ -161,6 +232,10 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Button", nameof(Button), activeAction == nameof(Button)),
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
+            new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
+            new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
+            new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),
+            new NavigationItemViewModel("Skeleton", nameof(Skeleton), activeAction == nameof(Skeleton)),
             new NavigationItemViewModel("Spinner", nameof(Spinner), activeAction == nameof(Spinner)),
         ];
     }

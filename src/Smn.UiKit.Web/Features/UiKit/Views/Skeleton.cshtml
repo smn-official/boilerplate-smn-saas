@@ -1,0 +1,65 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Animações</p>
+        <div class="flex flex-col gap-4">
+            <div>
+                <p class="mb-2 text-xs text-muted">Shimmer (padrão)</p>
+                <smn-skeleton animation="Shimmer" class="h-4 w-full" />
+            </div>
+            <div>
+                <p class="mb-2 text-xs text-muted">Pulse</p>
+                <smn-skeleton animation="Pulse" class="h-4 w-full" />
+            </div>
+            <div>
+                <p class="mb-2 text-xs text-muted">None</p>
+                <smn-skeleton animation="None" class="h-4 w-full" />
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Forma do conteúdo</p>
+        <p class="mb-4 text-sm text-muted">
+            O tamanho vem de classe utilitária na própria tag. O esqueleto deve ter a forma do que
+            vai chegar — assim o layout não pula quando o conteúdo real substitui o placeholder.
+        </p>
+        <div class="flex items-center gap-3">
+            <smn-skeleton class="size-10 rounded-3xl" />
+            <div class="flex flex-1 flex-col gap-2">
+                <smn-skeleton class="h-4 w-32" />
+                <smn-skeleton class="h-3 w-48" />
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Listagem carregando</p>
+        <div class="flex flex-col gap-4">
+            @for (var i = 0; i < 3; i++)
+            {
+                <div class="flex items-center gap-3">
+                    <smn-skeleton class="size-8 rounded-2xl" />
+                    <smn-skeleton class="h-4 flex-1" />
+                    <smn-skeleton class="h-4 w-16" />
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Card inteiro</p>
+        <smn-card variant="Secondary" class="max-w-sm">
+            <smn-skeleton class="h-32 w-full rounded-2xl" />
+            <div class="flex flex-col gap-2">
+                <smn-skeleton class="h-4 w-2/3" />
+                <smn-skeleton class="h-3 w-full" />
+                <smn-skeleton class="h-3 w-4/5" />
+            </div>
+        </smn-card>
+    </div>
+</div>

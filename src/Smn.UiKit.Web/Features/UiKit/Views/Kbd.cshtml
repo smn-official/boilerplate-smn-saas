@@ -1,0 +1,50 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tecla simples</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-kbd>K</smn-kbd>
+            <smn-kbd>Enter</smn-kbd>
+            <smn-kbd>Esc</smn-kbd>
+            <smn-kbd>/</smn-kbd>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Com modificador</p>
+        <p class="mb-4 text-sm text-muted">
+            O atributo <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">keys</code>
+            aceita os nomes separados por espaço, vírgula ou <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">+</code>
+            e os traduz para o símbolo — <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">command</code>
+            vira ⌘. O nome fica no <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">title</code>
+            do <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;abbr&gt;</code>,
+            então o leitor de tela anuncia por extenso.
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-kbd keys="command">K</smn-kbd>
+            <smn-kbd keys="command shift">P</smn-kbd>
+            <smn-kbd keys="ctrl alt">Delete</smn-kbd>
+            <smn-kbd keys="shift">Tab</smn-kbd>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variante light</p>
+        <div class="flex flex-wrap items-center gap-3">
+            <smn-kbd variant="Light" keys="command">K</smn-kbd>
+            <smn-kbd variant="Light" keys="command shift">P</smn-kbd>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Em uso</p>
+        <div class="flex items-center justify-between rounded-xl bg-surface-secondary px-4 py-3">
+            <span class="text-sm">Busca rápida</span>
+            <smn-kbd keys="command">K</smn-kbd>
+        </div>
+    </div>
+</div>

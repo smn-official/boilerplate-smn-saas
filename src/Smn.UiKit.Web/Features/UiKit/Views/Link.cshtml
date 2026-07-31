@@ -1,0 +1,57 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
+        <div class="flex flex-wrap items-center gap-4">
+            <smn-link href="#">Default</smn-link>
+            <smn-link href="#" variant="Accent">Accent</smn-link>
+            <smn-link href="#" variant="Muted">Muted</smn-link>
+            <smn-link href="#" disabled="true">Desabilitado</smn-link>
+        </div>
+        <p class="mt-4 text-sm text-muted">
+            O sublinhado aparece no hover e no estado pressionado, não em repouso — passe o mouse
+            para ver. O anel de foco segue a mesma regra do resto do sistema.
+        </p>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Externo</p>
+        <p class="mb-4 text-sm text-muted">
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">external</code> abre em
+            nova aba, acrescenta <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">rel="noopener noreferrer"</code>
+            e mostra a seta. Sem o <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">rel</code>
+            a página de destino consegue alcançar a nossa por
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">window.opener</code>.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+            <smn-link href="https://heroui.com" external="true">Documentação do HeroUI</smn-link>
+            <smn-link href="https://github.com" external="true" variant="Accent">GitHub</smn-link>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Seta sem abrir nova aba</p>
+        <p class="mb-4 text-sm text-muted">
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">show-icon</code> controla
+            a seta independentemente do destino.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+            <smn-link href="#" show-icon="true">Ver detalhes</smn-link>
+            <smn-link href="https://heroui.com" external="true" show-icon="false">Sem seta</smn-link>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">No meio do texto</p>
+        <p class="text-sm">
+            O componente é <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">inline-flex</code>,
+            então acompanha a linha do parágrafo. Leia a
+            <smn-link href="#" variant="Accent">política de privacidade</smn-link>
+            antes de continuar.
+        </p>
+    </div>
+</div>
