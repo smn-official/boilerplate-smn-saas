@@ -415,6 +415,18 @@ public sealed class UiKitController : Controller
             showMarkupSection: false));
     }
 
+    /// <summary>Calendar and date picker component page.</summary>
+    [HttpGet("calendar")]
+    public IActionResult Calendar()
+    {
+        return View(new ComponentViewModel(
+            "Calendar",
+            "Grade de mês para escolher data, e o campo que a abre num popover.",
+            string.Empty,
+            BuildNavigation(nameof(Calendar)),
+            showMarkupSection: false));
+    }
+
     /// <summary>Card component page.</summary>
     [HttpGet("card")]
     public IActionResult Card()
@@ -677,6 +689,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Badge", nameof(Badge), activeAction == nameof(Badge)),
             new NavigationItemViewModel("Breadcrumbs", nameof(Breadcrumbs), activeAction == nameof(Breadcrumbs)),
             new NavigationItemViewModel("Button", nameof(Button), activeAction == nameof(Button)),
+            new NavigationItemViewModel("Calendar", nameof(Calendar), activeAction == nameof(Calendar)),
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
             new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),

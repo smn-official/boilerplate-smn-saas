@@ -1,0 +1,128 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+    var hoje = DateOnly.FromDateTime(DateTime.Today);
+
+    // Os exemplos ancoram no mês seguinte para caber inteiros na grade — perto do
+    // fim do mês, "hoje + 9 dias" cairia fora do mês exibido e o intervalo sumiria.
+    var mesExemplo = new DateOnly(hoje.Year, hoje.Month, 1).AddMonths(1);
+}
+
+@{
+    const string calendarioCodigo =
+"""
+<smn-calendar name="vencimento" />
+""";
+
+    const string selecionadoCodigo =
+"""
+<smn-calendar name="entrega"
+              value="2026-08-14"
+              month="2026-08-01" />
+""";
+
+    const string limitesCodigo =
+"""
+<smn-calendar name="agendamento"
+              minimum="2026-08-05"
+              maximum="2026-08-22"
+              month="2026-08-01" />
+""";
+
+    const string intervaloCodigo =
+"""
+<smn-calendar range-start="2026-08-08"
+              range-end="2026-08-19"
+              month="2026-08-01" />
+""";
+
+    const string datePickerCodigo =
+"""
+<smn-date-picker id="vencimento"
+                 name="vencimento"
+                 label="Vencimento"
+                 description="A fatura é gerada neste dia." />
+""";
+
+    const string nativoCodigo =
+"""
+<smn-input name="data-simples" type="date" label="Data" />
+""";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Calendário</p>
+        <p class="mb-4 text-sm text-muted">
+            É uma <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;table&gt;</code>
+            de verdade: o leitor de tela anuncia a coluna do dia da semana e a linha da semana ao
+            navegar, o que uma grade de <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">div</code>
+            não dá. O mês inicial vem pronto do servidor; navegar entre meses é no navegador.
+        </p>
+        <smn-calendar name="vencimento" />
+        @await Html.PartialAsync("_Codigo", calendarioCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Com data escolhida</p>
+        <smn-calendar name="entrega" value="@mesExemplo.AddDays(13)" month="@mesExemplo" />
+        @await Html.PartialAsync("_Codigo", selecionadoCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Com limites</p>
+        <p class="mb-4 text-sm text-muted">
+            Fora da faixa o dia fica riscado e não recebe clique — o
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">disabled</code> é do
+            próprio <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;button&gt;</code>,
+            então o teclado também o pula.
+        </p>
+        <smn-calendar name="agendamento"
+                      minimum="@mesExemplo.AddDays(4)"
+                      maximum="@mesExemplo.AddDays(21)"
+                      month="@mesExemplo" />
+        @await Html.PartialAsync("_Codigo", limitesCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Intervalo</p>
+        <p class="mb-4 text-sm text-muted">
+            Extremos e miolo são desenhados de forma diferente: as pontas mantêm o arredondamento
+            do lado de fora, o meio fica reto para a faixa parecer contínua.
+        </p>
+        <smn-calendar range-start="@mesExemplo.AddDays(7)"
+                      range-end="@mesExemplo.AddDays(18)"
+                      month="@mesExemplo" />
+        @await Html.PartialAsync("_Codigo", intervaloCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Date picker</p>
+        <p class="mb-4 text-sm text-muted">
+            Campo que abre o calendário num popover nativo — fecha ao clicar fora e no Esc, sem
+            listener no documento. O calendário só é montado quando o painel abre: desenhar seis
+            semanas para cada campo que talvez nem seja usado é desperdício.
+        </p>
+        <div class="max-w-xs">
+            <smn-date-picker id="vencimento"
+                             name="vencimento-fatura"
+                             label="Vencimento"
+                             description="A fatura é gerada neste dia." />
+        </div>
+        @await Html.PartialAsync("_Codigo", datePickerCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Quando não usar</p>
+        <p class="mb-4 text-sm text-muted">
+            Para uma data comum, sem grade estilizada,
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;smn-input type="date"&gt;</code>
+            é mais leve e traz o seletor do sistema — no celular, o de roda. Só troque pelo
+            date-picker quando precisar do calendário desenhado, de intervalo ou de dias bloqueados.
+        </p>
+        <div class="max-w-xs">
+            <smn-input name="data-simples" type="date" label="Data" />
+        </div>
+        @await Html.PartialAsync("_Codigo", nativoCodigo)
+    </div>
+</div>

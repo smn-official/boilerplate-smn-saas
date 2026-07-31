@@ -762,9 +762,232 @@ initializeThemeToggle();
 revealActiveMenuItem();
 initializeThemes();
 restoreChosenTheme();
+/**
+ * Redesenha a grade do mês. O servidor entrega o mês inicial pronto; a partir
+ * daí é o navegador que monta, para navegar mês a mês sem ida ao servidor.
+ */
+function renderCalendarMonth(calendar: HTMLElement, month: Date): void {
+    const culture = calendar.dataset.culture ?? "pt-BR";
+    const selected = calendar.dataset.value ?? "";
+    const minimum = calendar.dataset.minimum ?? "";
+    const maximum = calendar.dataset.maximum ?? "";
+
+    const title = calendar.querySelector<HTMLElement>("[data-calendar-titulo]");
+    const body = calendar.querySelector<HTMLElement>("tbody");
+
+    if (title === null || body === null) {
+        return;
+    }
+
+    const monthName = new Intl.DateTimeFormat(culture, {
+        month: "long",
+        year: "numeric",
+    }).format(month);
+
+    title.textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+    calendar.dataset.month = toIso(month);
+
+    const first = new Date(month.getFullYear(), month.getMonth(), 1);
+    const lead = first.getDay();
+    const cursor = new Date(first);
+    cursor.setDate(cursor.getDate() - lead);
+
+    const today = toIso(new Date());
+    const rows: string[] = [];
+
+    for (let week = 0; week < 6; week++) {
+        const cells: string[] = [];
+
+        for (let day = 0; day < 7; day++) {
+            const iso = toIso(cursor);
+            const outside = cursor.getMonth() !== month.getMonth();
+            const disabled =
+                (minimum !== "" && iso < minimum) || (maximum !== "" && iso > maximum);
+
+            const flags =
+                (outside ? ' data-outside-month="true"' : "") +
+                (iso === today ? ' data-today="true"' : "") +
+                (iso === selected ? ' data-selected="true" aria-pressed="true"' : "") +
+                (disabled ? " disabled" : "");
+
+            const label = new Intl.DateTimeFormat(culture, { dateStyle: "full" }).format(cursor);
+
+            cells.push(
+                `<td class="calendar__celula"><button type="button" class="calendar__dia"` +
+                    ` data-date="${iso}"${flags} aria-label="${label}">${cursor.getDate()}</button></td>`,
+            );
+
+            cursor.setDate(cursor.getDate() + 1);
+        }
+
+        rows.push(`<tr>${cells.join("")}</tr>`);
+
+        if (cursor.getMonth() !== month.getMonth() && cursor > first) {
+            break;
+        }
+    }
+
+    body.innerHTML = rows.join("");
+}
+
+function toIso(date: Date): string {
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+
+    return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function initializeCalendars(): void {
+    for (const calendar of document.querySelectorAll<HTMLElement>("[data-smn-calendar]")) {
+        bindCalendar(calendar);
+    }
+}
+
+/**
+ * O painel do date-picker nasce vazio: montar o calendário só quando ele abre
+ * evita desenhar seis semanas para cada campo que talvez nem seja usado.
+ */
+function initializeDatePickers(): void {
+    for (const picker of document.querySelectorAll<HTMLElement>("[data-smn-date-picker]")) {
+        const panel = picker.querySelector<HTMLElement>(".date-picker__painel");
+        const trigger = picker.querySelector<HTMLElement>(".date-picker__campo");
+        const hidden = picker.querySelector<HTMLInputElement>("[data-date-picker-valor]");
+
+        if (panel === null || trigger === null) {
+            continue;
+        }
+
+        panel.addEventListener("toggle", () => {
+            if (!panel.matches(":popover-open") || panel.dataset.montado === "true") {
+                return;
+            }
+
+            panel.dataset.montado = "true";
+
+            const culture = panel.dataset.culture ?? "pt-BR";
+            const weekdays: string[] = [];
+            const reference = new Date(2024, 0, 7);
+
+            for (let day = 0; day < 7; day++) {
+                weekdays.push(
+                    new Intl.DateTimeFormat(culture, { weekday: "short" })
+                        .format(reference)
+                        .slice(0, 3),
+                );
+                reference.setDate(reference.getDate() + 1);
+            }
+
+            panel.innerHTML =
+                '<div class="calendar" data-smn-calendar="true"' +
+                ` data-culture="${culture}"` +
+                (panel.dataset.value === undefined ? "" : ` data-value="${panel.dataset.value}"`) +
+                (panel.dataset.minimum === undefined ? "" : ` data-minimum="${panel.dataset.minimum}"`) +
+                (panel.dataset.maximum === undefined ? "" : ` data-maximum="${panel.dataset.maximum}"`) +
+                '><div class="calendar__header">' +
+                '<button type="button" class="calendar__nav" data-calendar-prev aria-label="Mês anterior">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>' +
+                '<span class="calendar__titulo" data-calendar-titulo></span>' +
+                '<button type="button" class="calendar__nav" data-calendar-next aria-label="Próximo mês">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>' +
+                '</div><table class="calendar__grade"><thead><tr>' +
+                weekdays
+                    .map((name) => `<th class="calendar__dia-semana" scope="col">${name}</th>`)
+                    .join("") +
+                "</tr></thead><tbody></tbody></table></div>";
+
+            const calendar = panel.querySelector<HTMLElement>("[data-smn-calendar]");
+
+            if (calendar === null) {
+                return;
+            }
+
+            const start = panel.dataset.value ?? toIso(new Date());
+            const parts = start.split("-").map(Number);
+
+            renderCalendarMonth(
+                calendar,
+                new Date(parts[0] ?? 2026, (parts[1] ?? 1) - 1, 1),
+            );
+
+            bindCalendar(calendar);
+
+            calendar.addEventListener("smn-date-change", ((event: CustomEvent) => {
+                const iso = String(event.detail.value);
+                const culture2 = panel.dataset.culture ?? "pt-BR";
+                const parsed = iso.split("-").map(Number);
+                const date = new Date(parsed[0] ?? 0, (parsed[1] ?? 1) - 1, parsed[2] ?? 1);
+
+                const text = picker.querySelector<HTMLElement>(".date-picker__valor");
+
+                if (text !== null) {
+                    text.textContent = new Intl.DateTimeFormat(culture2).format(date);
+                    text.classList.remove("date-picker__vazio");
+                }
+
+                if (hidden !== null) {
+                    hidden.value = iso;
+                }
+
+                panel.dataset.value = iso;
+                (panel as HTMLElement & { hidePopover(): void }).hidePopover();
+            }) as EventListener);
+        });
+    }
+}
+
+/**
+ * Liga navegação e seleção de um calendário — serve tanto para o que veio do
+ * servidor quanto para o montado dentro do date-picker.
+ */
+function bindCalendar(calendar: HTMLElement): void {
+    const shift = (months: number): void => {
+        const current = calendar.dataset.month ?? toIso(new Date());
+        const parts = current.split("-").map(Number);
+
+        renderCalendarMonth(
+            calendar,
+            new Date(parts[0] ?? new Date().getFullYear(), (parts[1] ?? 1) - 1 + months, 1),
+        );
+    };
+
+    calendar.querySelector("[data-calendar-prev]")?.addEventListener("click", () => shift(-1));
+    calendar.querySelector("[data-calendar-next]")?.addEventListener("click", () => shift(1));
+
+    calendar.addEventListener("click", (event: MouseEvent) => {
+        const day = (event.target as HTMLElement).closest<HTMLElement>("[data-date]");
+
+        if (day === null || (day as HTMLButtonElement).disabled) {
+            return;
+        }
+
+        const iso = day.dataset.date ?? "";
+        calendar.dataset.value = iso;
+
+        for (const other of calendar.querySelectorAll<HTMLElement>("[data-date]")) {
+            other.removeAttribute("data-selected");
+            other.removeAttribute("aria-pressed");
+        }
+
+        day.setAttribute("data-selected", "true");
+        day.setAttribute("aria-pressed", "true");
+
+        const hidden = calendar.querySelector<HTMLInputElement>("[data-calendar-valor]");
+
+        if (hidden !== null) {
+            hidden.value = iso;
+        }
+
+        calendar.dispatchEvent(
+            new CustomEvent("smn-date-change", { detail: { value: iso }, bubbles: true }),
+        );
+    });
+}
+
 initializeColorAreas();
 initializeColorPickers();
 initializeToolbars();
+initializeCalendars();
+initializeDatePickers();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();
