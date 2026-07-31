@@ -1,0 +1,78 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Checkbox</p>
+        <p class="mb-4 text-sm text-muted">
+            O controle é dirigido pelo <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">:checked</code>
+            do input nativo, que fica oculto mas continua no fluxo de foco e de formulário. Teclado,
+            clique no rótulo, <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">submit</code>
+            e <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">required</code>
+            funcionam sem uma linha de JavaScript — experimente navegar com Tab e marcar com Espaço.
+        </p>
+        <div class="flex flex-col gap-3">
+            <smn-checkbox name="termos" label="Aceito os termos de uso" />
+            <smn-checkbox name="marcado" label="Já vem marcado" checked="true" />
+            <smn-checkbox name="com-ajuda"
+                          label="Receber novidades"
+                          description="No máximo um e-mail por mês. Dá para cancelar depois." />
+            <smn-checkbox name="desabilitado" label="Desabilitado" disabled="true" />
+            <smn-checkbox name="desabilitado-marcado"
+                          label="Desabilitado e marcado"
+                          checked="true"
+                          disabled="true" />
+            <smn-checkbox name="invalido"
+                          label="Preciso deste aceite"
+                          error="É necessário aceitar para continuar." />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Grupo de checkbox</p>
+        <smn-checkbox-group legend="Como prefere ser avisado?"
+                            description="Pode marcar mais de um.">
+            <smn-checkbox name="canal" value="email" label="E-mail" checked="true" />
+            <smn-checkbox name="canal" value="sms" label="SMS" />
+            <smn-checkbox name="canal" value="push" label="Notificação no app" />
+        </smn-checkbox-group>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Radio</p>
+        <p class="mb-4 text-sm text-muted">
+            Radio sempre em grupo: o
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;fieldset&gt;</code>
+            com <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;legend&gt;</code>
+            faz o leitor de tela anunciar a pergunta junto de cada opção, em vez de ler as opções soltas.
+        </p>
+        <smn-radio-group legend="Ciclo de cobrança">
+            <smn-radio name="ciclo" value="mensal" label="Mensal" checked="true" />
+            <smn-radio name="ciclo"
+                       value="anual"
+                       label="Anual"
+                       description="Dois meses de desconto." />
+            <smn-radio name="ciclo" value="vitalicio" label="Vitalício" disabled="true" />
+        </smn-radio-group>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Grupo na horizontal</p>
+        <smn-radio-group legend="Tamanho" orientation="Horizontal">
+            <smn-radio name="tamanho" value="p" label="P" />
+            <smn-radio name="tamanho" value="m" label="M" checked="true" />
+            <smn-radio name="tamanho" value="g" label="G" />
+        </smn-radio-group>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Grupo com erro</p>
+        <smn-radio-group legend="Forma de pagamento"
+                         error="Escolha uma forma de pagamento.">
+            <smn-radio name="pagamento" value="cartao" label="Cartão de crédito" />
+            <smn-radio name="pagamento" value="pix" label="Pix" />
+        </smn-radio-group>
+    </div>
+</div>

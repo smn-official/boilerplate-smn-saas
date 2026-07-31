@@ -101,6 +101,24 @@ public sealed class UiKitController : Controller
         <smn-textarea name="observacao" label="Observação" rows="4" />
         """;
 
+    private const string CheckboxUsage =
+        """
+        <smn-checkbox name="termos" label="Aceito os termos de uso" required="true" />
+
+        <smn-radio-group legend="Ciclo de cobrança">
+            <smn-radio name="ciclo" value="mensal" label="Mensal" checked="true" />
+            <smn-radio name="ciclo" value="anual" label="Anual" />
+        </smn-radio-group>
+        """;
+
+    private const string SwitchUsage =
+        """
+        <smn-switch name="dois-fatores"
+                    label="Verificação em duas etapas"
+                    description="Pedimos um código a cada novo acesso."
+                    checked="true" />
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -203,6 +221,28 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Separator))));
     }
 
+    /// <summary>Checkbox and radio component page.</summary>
+    [HttpGet("checkbox")]
+    public IActionResult Checkbox()
+    {
+        return View(new ComponentViewModel(
+            "Checkbox",
+            "Marca uma ou várias opções; o radio escolhe uma só dentro do grupo.",
+            CheckboxUsage,
+            BuildNavigation(nameof(Checkbox))));
+    }
+
+    /// <summary>Switch component page.</summary>
+    [HttpGet("switch")]
+    public IActionResult Switch()
+    {
+        return View(new ComponentViewModel(
+            "Switch",
+            "Liga e desliga uma opção que vale na hora, sem esperar o submit.",
+            SwitchUsage,
+            BuildNavigation(nameof(Switch))));
+    }
+
     /// <summary>Input component page.</summary>
     [HttpGet("input")]
     public IActionResult Input()
@@ -256,6 +296,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Badge", nameof(Badge), activeAction == nameof(Badge)),
             new NavigationItemViewModel("Button", nameof(Button), activeAction == nameof(Button)),
             new NavigationItemViewModel("Card", nameof(Card), activeAction == nameof(Card)),
+            new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
@@ -263,6 +304,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),
             new NavigationItemViewModel("Skeleton", nameof(Skeleton), activeAction == nameof(Skeleton)),
             new NavigationItemViewModel("Spinner", nameof(Spinner), activeAction == nameof(Spinner)),
+            new NavigationItemViewModel("Switch", nameof(Switch), activeAction == nameof(Switch)),
         ];
     }
 }

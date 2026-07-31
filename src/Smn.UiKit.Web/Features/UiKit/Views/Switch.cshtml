@@ -1,0 +1,52 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Estados</p>
+        <div class="flex flex-col gap-4">
+            <smn-switch name="desligado" label="Desligado" />
+            <smn-switch name="ligado" label="Ligado" checked="true" />
+            <smn-switch name="switch-desabilitado" label="Desabilitado" disabled="true" />
+            <smn-switch name="switch-desabilitado-ligado"
+                        label="Desabilitado e ligado"
+                        checked="true"
+                        disabled="true" />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tamanhos</p>
+        <div class="flex flex-col gap-4">
+            <smn-switch name="sm" size="Small" label="Small" checked="true" />
+            <smn-switch name="md" size="Medium" label="Medium" checked="true" />
+            <smn-switch name="lg" size="Large" label="Large" checked="true" />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Com descrição</p>
+        <div class="flex flex-col gap-4">
+            <smn-switch name="dois-fatores"
+                        label="Verificação em duas etapas"
+                        description="Pedimos um código por e-mail a cada novo acesso."
+                        checked="true" />
+            <smn-switch name="perfil-publico"
+                        label="Perfil público"
+                        description="Qualquer pessoa com o link consegue ver seu perfil." />
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Switch ou checkbox?</p>
+        <p class="text-sm text-muted">
+            O switch é para a opção que <strong class="font-medium text-foreground">vale na hora</strong> —
+            ligar uma notificação, mudar um preferência. O checkbox é para o que só vale
+            <strong class="font-medium text-foreground">depois do submit</strong>, como aceitar um
+            termo dentro de um formulário. Trocar um pelo outro faz o usuário esperar um efeito que
+            não vem, ou achar que já salvou quando não salvou.
+        </p>
+    </div>
+</div>
