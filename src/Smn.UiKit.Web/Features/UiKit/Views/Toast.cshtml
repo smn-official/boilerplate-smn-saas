@@ -3,6 +3,46 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string variantesCodigo =
+"""
+<smn-toast title="Cadastro salvo">O registro já aparece na listagem.</smn-toast>
+
+<smn-toast variant="Success" title="Pagamento confirmado">
+    A fatura de agosto foi baixada.
+</smn-toast>
+
+<smn-toast variant="Warning" title="Quota quase no limite">
+    Você usou 87% do armazenamento do plano.
+</smn-toast>
+
+<smn-toast variant="Danger" title="Falha ao enviar" assertive="true">
+    Não conseguimos falar com o servidor. Tente de novo.
+</smn-toast>
+
+<smn-toast variant="Accent" title="Nova versão disponível" dismissible="false">
+    Recarregue a página para atualizar.
+</smn-toast>
+""";
+
+    const string codigoUnicoCodigo =
+"""
+<smn-input-otp name="codigo"
+               label="Código enviado por e-mail"
+               description="Seis dígitos, válidos por 10 minutos." />
+
+<smn-input-otp name="codigo-dividido"
+               length="6"
+               split="true"
+               label="Com separador no meio" />
+
+<smn-input-otp name="codigo-curto"
+               length="4"
+               label="Quatro dígitos"
+               error="Código inválido ou expirado." />
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
@@ -26,6 +66,7 @@
                 Recarregue a página para atualizar.
             </smn-toast>
         </div>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -63,6 +104,7 @@
                            label="Quatro dígitos"
                            error="Código inválido ou expirado." />
         </div>
+        @await Html.PartialAsync("_Codigo", codigoUnicoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">

@@ -3,12 +3,47 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string horizontalCodigo =
+"""
+<p class="text-sm">Primeira seção do conteúdo.</p>
+<smn-separator class="my-4" />
+<p class="text-sm">Segunda seção, depois da divisão.</p>
+""";
+
+    const string contrasteCodigo =
+"""
+<smn-separator variant="Default" />
+<smn-separator variant="Secondary" />
+<smn-separator variant="Tertiary" />
+""";
+
+    const string verticalCodigo =
+"""
+<div class="flex h-10 items-center gap-3">
+    <span class="text-sm">Editar</span>
+    <smn-separator orientation="Vertical" />
+    <span class="text-sm">Duplicar</span>
+    <smn-separator orientation="Vertical" />
+    <span class="text-sm">Excluir</span>
+</div>
+""";
+
+    const string comConteudoCodigo =
+"""
+<smn-button variant="Primary" full-width="true">Entrar com e-mail</smn-button>
+<smn-separator class="text-xs">ou</smn-separator>
+<smn-button variant="Outline" full-width="true">Entrar com Google</smn-button>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Horizontal</p>
         <p class="text-sm">Primeira seção do conteúdo.</p>
         <smn-separator class="my-4" />
         <p class="text-sm">Segunda seção, depois da divisão.</p>
+        @await Html.PartialAsync("_Codigo", horizontalCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -27,6 +62,7 @@
                 <smn-separator variant="Tertiary" />
             </div>
         </div>
+        @await Html.PartialAsync("_Codigo", contrasteCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -38,6 +74,7 @@
             <smn-separator orientation="Vertical" />
             <span class="text-sm">Excluir</span>
         </div>
+        @await Html.PartialAsync("_Codigo", verticalCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -51,5 +88,6 @@
             <smn-separator class="text-xs">ou</smn-separator>
             <smn-button variant="Outline" full-width="true">Entrar com Google</smn-button>
         </div>
+        @await Html.PartialAsync("_Codigo", comConteudoCodigo)
     </div>
 </div>

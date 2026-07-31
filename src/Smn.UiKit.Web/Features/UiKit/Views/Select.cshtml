@@ -3,6 +3,78 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string selectCodigo =
+"""
+<smn-select name="estado" label="Estado" description="Onde a nota será emitida.">
+    <option value="">Selecione…</option>
+    <option value="sp">São Paulo</option>
+    <option value="rj">Rio de Janeiro</option>
+    <option value="mg">Minas Gerais</option>
+</smn-select>
+
+<smn-select name="plano" label="Plano" required="true">
+    <option value="basico">Básico</option>
+    <option value="pro" selected>Profissional</option>
+    <option value="enterprise">Enterprise</option>
+</smn-select>
+""";
+
+    const string estadosCodigo =
+"""
+<smn-select name="com-erro" label="Com erro" error="Escolha uma opção.">
+    <option value="">Selecione…</option>
+    <option value="a">Opção A</option>
+</smn-select>
+
+<smn-select name="select-desabilitado" label="Desabilitado" disabled="true">
+    <option>Indisponível</option>
+</smn-select>
+
+<smn-select name="secundario" variant="Secondary" label="Variante secondary">
+    <option value="a">Opção A</option>
+    <option value="b">Opção B</option>
+</smn-select>
+""";
+
+    const string gruposCodigo =
+"""
+<smn-select name="agrupado" label="Fuso horário">
+    <optgroup label="Brasil">
+        <option value="sp">Brasília (GMT-3)</option>
+        <option value="mao">Manaus (GMT-4)</option>
+    </optgroup>
+    <optgroup label="Europa">
+        <option value="lis">Lisboa (GMT+0)</option>
+        <option value="ber">Berlim (GMT+1)</option>
+    </optgroup>
+</smn-select>
+""";
+
+    const string paginacaoCodigo =
+"""
+<smn-pagination current="1"
+                total="10"
+                href-template="?pagina={page}"
+                summary="Mostrando 1 a 20 de 195" />
+
+<smn-pagination current="5"
+                total="10"
+                href-template="?pagina={page}"
+                summary="Mostrando 81 a 100 de 195" />
+
+<smn-pagination current="10"
+                total="10"
+                href-template="?pagina={page}"
+                summary="Mostrando 181 a 195 de 195" />
+""";
+
+    const string poucasPaginasCodigo =
+"""
+<smn-pagination current="2" total="4" href-template="?pagina={page}" />
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Select</p>
@@ -25,6 +97,7 @@
                 <option value="enterprise">Enterprise</option>
             </smn-select>
         </div>
+        @await Html.PartialAsync("_Codigo", selectCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -44,6 +117,7 @@
                 <option value="b">Opção B</option>
             </smn-select>
         </div>
+        @await Html.PartialAsync("_Codigo", estadosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -60,6 +134,7 @@
                 </optgroup>
             </smn-select>
         </div>
+        @await Html.PartialAsync("_Codigo", gruposCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -85,6 +160,7 @@
                             href-template="?pagina={page}"
                             summary="Mostrando 181 a 195 de 195" />
         </div>
+        @await Html.PartialAsync("_Codigo", paginacaoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -93,5 +169,6 @@
             Sem folga para abreviar, mostrar tudo sai menor que usar reticências.
         </p>
         <smn-pagination current="2" total="4" href-template="?pagina={page}" />
+        @await Html.PartialAsync("_Codigo", poucasPaginasCodigo)
     </div>
 </div>

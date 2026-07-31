@@ -3,6 +3,38 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string teclaSimplesCodigo =
+"""
+<smn-kbd>K</smn-kbd>
+<smn-kbd>Enter</smn-kbd>
+<smn-kbd>Esc</smn-kbd>
+<smn-kbd>/</smn-kbd>
+""";
+
+    const string modificadorCodigo =
+"""
+<smn-kbd keys="command">K</smn-kbd>
+<smn-kbd keys="command shift">P</smn-kbd>
+<smn-kbd keys="ctrl alt">Delete</smn-kbd>
+<smn-kbd keys="shift">Tab</smn-kbd>
+""";
+
+    const string lightCodigo =
+"""
+<smn-kbd variant="Light" keys="command">K</smn-kbd>
+<smn-kbd variant="Light" keys="command shift">P</smn-kbd>
+""";
+
+    const string emUsoCodigo =
+"""
+<div class="flex items-center justify-between rounded-xl bg-surface-secondary px-4 py-3">
+    <span class="text-sm">Busca rápida</span>
+    <smn-kbd keys="command">K</smn-kbd>
+</div>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tecla simples</p>
@@ -12,6 +44,7 @@
             <smn-kbd>Esc</smn-kbd>
             <smn-kbd>/</smn-kbd>
         </div>
+        @await Html.PartialAsync("_Codigo", teclaSimplesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -30,6 +63,7 @@
             <smn-kbd keys="ctrl alt">Delete</smn-kbd>
             <smn-kbd keys="shift">Tab</smn-kbd>
         </div>
+        @await Html.PartialAsync("_Codigo", modificadorCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -38,6 +72,7 @@
             <smn-kbd variant="Light" keys="command">K</smn-kbd>
             <smn-kbd variant="Light" keys="command shift">P</smn-kbd>
         </div>
+        @await Html.PartialAsync("_Codigo", lightCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -46,5 +81,6 @@
             <span class="text-sm">Busca rápida</span>
             <smn-kbd keys="command">K</smn-kbd>
         </div>
+        @await Html.PartialAsync("_Codigo", emUsoCodigo)
     </div>
 </div>

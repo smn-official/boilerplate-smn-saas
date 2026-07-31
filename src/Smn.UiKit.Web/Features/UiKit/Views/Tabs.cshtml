@@ -3,6 +3,71 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string abasCodigo =
+"""
+<smn-tabs id="conta" aria-label="Seções da conta">
+    <smn-tab key="perfil" label="Perfil">
+        <div class="pt-4 text-sm">
+            <p class="mb-3">Nome, foto e como você aparece para o resto da equipe.</p>
+            <smn-input name="nome-exibicao" label="Nome de exibição" value="Vagner Araújo" />
+        </div>
+    </smn-tab>
+    <smn-tab key="seguranca" label="Segurança">
+        <div class="pt-4 text-sm">
+            <p class="mb-3">Senha e verificação em duas etapas.</p>
+            <smn-switch name="mfa" label="Verificação em duas etapas" checked="true" />
+        </div>
+    </smn-tab>
+    <smn-tab key="cobranca" label="Cobrança">
+        <div class="pt-4 text-sm">
+            <p class="mb-3">Plano atual e forma de pagamento.</p>
+            <smn-chip color="Success" variant="Soft">Plano Profissional</smn-chip>
+        </div>
+    </smn-tab>
+</smn-tabs>
+""";
+
+    const string abaInicialCodigo =
+"""
+<smn-tabs id="periodo" aria-label="Período do relatório">
+    <smn-tab key="dia" label="Hoje">
+        <p class="pt-4 text-sm">Movimentação de hoje.</p>
+    </smn-tab>
+    <smn-tab key="mes" label="Mês" selected="true">
+        <p class="pt-4 text-sm">Este painel abre primeiro porque a aba pediu selected.</p>
+    </smn-tab>
+    <smn-tab key="ano" label="Ano">
+        <p class="pt-4 text-sm">Consolidado do ano.</p>
+    </smn-tab>
+</smn-tabs>
+""";
+
+    const string larguraTotalCodigo =
+"""
+<smn-tabs id="visao" aria-label="Modo de visualização" full-width="true">
+    <smn-tab key="lista" label="Lista">
+        <p class="pt-4 text-sm">Uma linha por registro.</p>
+    </smn-tab>
+    <smn-tab key="grade" label="Grade">
+        <p class="pt-4 text-sm">Cartões lado a lado.</p>
+    </smn-tab>
+</smn-tabs>
+""";
+
+    const string abaDesabilitadaCodigo =
+"""
+<smn-tabs id="etapas" aria-label="Etapas do cadastro">
+    <smn-tab key="dados" label="Dados">
+        <p class="pt-4 text-sm">Preencha os dados para liberar a próxima etapa.</p>
+    </smn-tab>
+    <smn-tab key="pagamento" label="Pagamento" disabled="true">
+        <p class="pt-4 text-sm">Ainda não liberado.</p>
+    </smn-tab>
+</smn-tabs>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Abas</p>
@@ -31,6 +96,7 @@
             <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">tabindex</code> acompanha
             a seleção, então o Tab sai da lista em vez de percorrer aba por aba.
         </p>
+        @await Html.PartialAsync("_Codigo", abasCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -47,6 +113,7 @@
                 <p class="pt-4 text-sm">Consolidado do ano.</p>
             </smn-tab>
         </smn-tabs>
+        @await Html.PartialAsync("_Codigo", abaInicialCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -59,6 +126,7 @@
                 <p class="pt-4 text-sm">Cartões lado a lado.</p>
             </smn-tab>
         </smn-tabs>
+        @await Html.PartialAsync("_Codigo", larguraTotalCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -71,5 +139,6 @@
                 <p class="pt-4 text-sm">Ainda não liberado.</p>
             </smn-tab>
         </smn-tabs>
+        @await Html.PartialAsync("_Codigo", abaDesabilitadaCodigo)
     </div>
 </div>

@@ -3,6 +3,36 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string variantesCodigo =
+"""
+<smn-button variant="Primary">Primary</smn-button>
+<smn-button variant="Secondary">Secondary</smn-button>
+<smn-button variant="Outline">Outline</smn-button>
+<smn-button variant="Ghost">Ghost</smn-button>
+<smn-button variant="Danger">Danger</smn-button>
+""";
+
+    const string tamanhosCodigo =
+"""
+<smn-button variant="Primary" size="Small">Small</smn-button>
+<smn-button variant="Primary" size="Medium">Medium</smn-button>
+<smn-button variant="Primary" size="Large">Large</smn-button>
+""";
+
+    const string desabilitadoCodigo =
+"""
+<smn-button variant="Primary" disabled="true">Primary</smn-button>
+<smn-button variant="Outline" disabled="true">Outline</smn-button>
+<smn-button variant="Danger" disabled="true">Danger</smn-button>
+""";
+
+    const string larguraTotalCodigo =
+"""
+<smn-button variant="Primary" full-width="true">Continuar</smn-button>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
@@ -13,6 +43,7 @@
             <smn-button variant="Ghost">Ghost</smn-button>
             <smn-button variant="Danger">Danger</smn-button>
         </div>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -22,6 +53,7 @@
             <smn-button variant="Primary" size="Medium">Medium</smn-button>
             <smn-button variant="Primary" size="Large">Large</smn-button>
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -31,10 +63,12 @@
             <smn-button variant="Outline" disabled="true">Outline</smn-button>
             <smn-button variant="Danger" disabled="true">Danger</smn-button>
         </div>
+        @await Html.PartialAsync("_Codigo", desabilitadoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Largura total</p>
         <smn-button variant="Primary" full-width="true">Continuar</smn-button>
+        @await Html.PartialAsync("_Codigo", larguraTotalCodigo)
     </div>
 </div>

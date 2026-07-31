@@ -3,6 +3,43 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string tamanhosCodigo =
+"""
+<smn-spinner size="Small" color="Accent" />
+<smn-spinner size="Medium" color="Accent" />
+<smn-spinner size="Large" color="Accent" />
+<smn-spinner size="ExtraLarge" color="Accent" />
+""";
+
+    const string coresCodigo =
+"""
+<smn-spinner color="Accent" />
+<smn-spinner color="Success" />
+<smn-spinner color="Warning" />
+<smn-spinner color="Danger" />
+""";
+
+    const string herdandoCorCodigo =
+"""
+<smn-button variant="Primary" disabled="true">
+    <smn-spinner size="Small" />
+    Salvando
+</smn-button>
+
+<smn-button variant="Outline" disabled="true">
+    <smn-spinner size="Small" />
+    Carregando
+</smn-button>
+""";
+
+    const string anunciadoCodigo =
+"""
+<smn-spinner color="Accent" label="Carregando relatório" />
+<span class="text-sm text-muted">Gerando o relatório…</span>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tamanhos</p>
@@ -12,6 +49,7 @@
             <smn-spinner size="Large" color="Accent" />
             <smn-spinner size="ExtraLarge" color="Accent" />
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -22,6 +60,7 @@
             <smn-spinner color="Warning" />
             <smn-spinner color="Danger" />
         </div>
+        @await Html.PartialAsync("_Codigo", coresCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -40,6 +79,7 @@
                 Carregando
             </smn-button>
         </div>
+        @await Html.PartialAsync("_Codigo", herdandoCorCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -54,5 +94,6 @@
             <smn-spinner color="Accent" label="Carregando relatório" />
             <span class="text-sm text-muted">Gerando o relatório…</span>
         </div>
+        @await Html.PartialAsync("_Codigo", anunciadoCodigo)
     </div>
 </div>

@@ -1,8 +1,77 @@
 /* Estilos exclusivos do painel de documentação. NÃO faz parte do pacote distribuído. */
 
 @layer components {
+    /*
+      O código de cada exemplo nasce recolhido: o olho bate primeiro no
+      resultado, e quem quer replicar abre e copia.
+    */
+    .exemplo__codigo {
+        @apply mt-5 border-t border-separator pt-4;
+    }
+
+    .exemplo__resumo {
+        @apply inline-flex list-none items-center gap-1.5 rounded-lg text-xs font-medium
+               text-muted outline-none select-none;
+
+        cursor: var(--cursor-interactive);
+        transition: color 100ms var(--ease-out);
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:hover {
+            @apply text-foreground;
+        }
+
+        &:focus-visible {
+            @apply status-focused;
+        }
+    }
+
+    .exemplo__seta {
+        @apply size-3.5 shrink-0 transition-transform duration-200 motion-reduce:transition-none;
+    }
+
+    .exemplo__codigo[open] .exemplo__seta {
+        @apply rotate-180;
+    }
+
+    @supports (interpolate-size: allow-keywords) and (selector(::details-content)) {
+        .exemplo__codigo {
+            interpolate-size: allow-keywords;
+        }
+
+        .exemplo__codigo::details-content {
+            height: 0;
+            overflow: clip;
+            opacity: 0;
+
+            transition:
+                height 220ms var(--ease-out-fluid),
+                content-visibility 220ms var(--ease-out-fluid) allow-discrete,
+                opacity 160ms var(--ease-out);
+        }
+
+        .exemplo__codigo[open]::details-content {
+            height: auto;
+            opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .exemplo__codigo::details-content {
+                transition: none;
+            }
+        }
+    }
+
     .code-block {
         @apply relative isolate overflow-hidden rounded-2xl bg-surface shadow-surface;
+    }
+
+    /* Dentro do card, que já é bg-surface, o bloco precisa de um degrau a mais. */
+    .exemplo__codigo .code-block {
+        @apply bg-surface-secondary shadow-none;
     }
 
     .code-block__pre {

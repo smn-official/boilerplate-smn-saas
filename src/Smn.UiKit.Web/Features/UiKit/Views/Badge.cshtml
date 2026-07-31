@@ -3,6 +3,58 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string coresCodigo =
+"""
+<smn-badge color="Default">8</smn-badge>
+<smn-badge color="Accent">8</smn-badge>
+<smn-badge color="Success">8</smn-badge>
+<smn-badge color="Warning">8</smn-badge>
+<smn-badge color="Danger">8</smn-badge>
+""";
+
+    const string variantesCodigo =
+"""
+<smn-badge variant="Primary" color="Accent">12</smn-badge>
+<smn-badge variant="Primary" color="Success">12</smn-badge>
+<smn-badge variant="Primary" color="Warning">12</smn-badge>
+<smn-badge variant="Primary" color="Danger">12</smn-badge>
+
+<smn-badge variant="Soft" color="Accent">12</smn-badge>
+<smn-badge variant="Soft" color="Success">12</smn-badge>
+<smn-badge variant="Soft" color="Warning">12</smn-badge>
+<smn-badge variant="Soft" color="Danger">12</smn-badge>
+
+<smn-badge variant="Secondary" color="Accent">12</smn-badge>
+<smn-badge variant="Secondary" color="Danger">12</smn-badge>
+""";
+
+    const string tamanhosCodigo =
+"""
+<smn-badge size="Small" color="Danger">3</smn-badge>
+<smn-badge size="Medium" color="Danger">3</smn-badge>
+<smn-badge size="Large" color="Danger">3</smn-badge>
+""";
+
+    const string ancoradoCodigo =
+"""
+<smn-badge-anchor>
+    <smn-avatar initials="VA" color="Accent" variant="Soft"></smn-avatar>
+    <smn-badge placement="TopRight" size="Small" color="Danger">5</smn-badge>
+</smn-badge-anchor>
+
+<smn-badge-anchor>
+    <smn-avatar initials="MK" color="Success" variant="Soft"></smn-avatar>
+    <smn-badge placement="BottomRight" size="Small" color="Success">&nbsp;</smn-badge>
+</smn-badge-anchor>
+
+<smn-badge-anchor>
+    <smn-button variant="Outline" size="Small">Notificações</smn-button>
+    <smn-badge placement="TopRight" size="Small" color="Accent">9</smn-badge>
+</smn-badge-anchor>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Cores</p>
@@ -13,6 +65,7 @@
             <smn-badge color="Warning">8</smn-badge>
             <smn-badge color="Danger">8</smn-badge>
         </div>
+        @await Html.PartialAsync("_Codigo", coresCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -35,6 +88,7 @@
                 <smn-badge variant="Secondary" color="Danger">12</smn-badge>
             </div>
         </div>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -44,6 +98,7 @@
             <smn-badge size="Medium" color="Danger">3</smn-badge>
             <smn-badge size="Large" color="Danger">3</smn-badge>
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -68,5 +123,6 @@
                 <smn-badge placement="TopRight" size="Small" color="Accent">9</smn-badge>
             </smn-badge-anchor>
         </div>
+        @await Html.PartialAsync("_Codigo", ancoradoCodigo)
     </div>
 </div>

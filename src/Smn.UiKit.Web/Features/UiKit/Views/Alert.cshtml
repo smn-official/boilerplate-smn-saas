@@ -3,8 +3,47 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string variantesCodigo =
+"""
+<smn-alert variant="Default" title="Novos recursos disponíveis">
+    Modo escuro e melhorias de acessibilidade entraram nesta versão.
+</smn-alert>
+
+<smn-alert variant="Accent" title="Atualização disponível">
+    Uma nova versão da aplicação está pronta. Recarregue para aplicar.
+</smn-alert>
+
+<smn-alert variant="Success" title="Cadastro concluído">
+    O registro foi salvo e já aparece na listagem.
+</smn-alert>
+
+<smn-alert variant="Warning" title="Assinatura vence em 3 dias">
+    Atualize a forma de pagamento para não perder o acesso.
+</smn-alert>
+
+<smn-alert variant="Danger" title="Não foi possível salvar">
+    Verifique os campos destacados e tente novamente.
+</smn-alert>
+""";
+
+    const string semTituloCodigo =
+"""
+<smn-alert variant="Accent">
+    A descrição sozinha também é um uso válido.
+</smn-alert>
+""";
+
+    const string assertivoCodigo =
+"""
+<smn-alert variant="Danger" title="Sessão expirada" assertive="true">
+    Entre novamente para continuar.
+</smn-alert>
+""";
+}
+
 <div class="flex flex-col gap-6">
-    <div class="rounded-2xl bg-surface-secondary p-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
         <div class="flex flex-col gap-3">
             <smn-alert variant="Default" title="Novos recursos disponíveis">
@@ -27,12 +66,29 @@
                 Verifique os campos destacados e tente novamente.
             </smn-alert>
         </div>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
-    <div class="rounded-2xl bg-surface-secondary p-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Sem título</p>
         <smn-alert variant="Accent">
             A descrição sozinha também é um uso válido.
         </smn-alert>
+        @await Html.PartialAsync("_Codigo", semTituloCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Anúncio assertivo</p>
+        <p class="mb-4 text-sm text-muted">
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">assertive</code> troca
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">role="status"</code> por
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">role="alert"</code> e
+            interrompe a leitura do leitor de tela. Reserve para falha; confirmação não merece cortar
+            o que está sendo lido.
+        </p>
+        <smn-alert variant="Danger" title="Sessão expirada" assertive="true">
+            Entre novamente para continuar.
+        </smn-alert>
+        @await Html.PartialAsync("_Codigo", assertivoCodigo)
     </div>
 </div>

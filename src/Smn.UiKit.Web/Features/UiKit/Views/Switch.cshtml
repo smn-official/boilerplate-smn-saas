@@ -3,6 +3,39 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string estadosCodigo =
+"""
+<smn-switch name="desligado" label="Desligado" />
+<smn-switch name="ligado" label="Ligado" checked="true" />
+<smn-switch name="switch-desabilitado" label="Desabilitado" disabled="true" />
+
+<smn-switch name="switch-desabilitado-ligado"
+            label="Desabilitado e ligado"
+            checked="true"
+            disabled="true" />
+""";
+
+    const string tamanhosCodigo =
+"""
+<smn-switch name="sm" size="Small" label="Small" checked="true" />
+<smn-switch name="md" size="Medium" label="Medium" checked="true" />
+<smn-switch name="lg" size="Large" label="Large" checked="true" />
+""";
+
+    const string comDescricaoCodigo =
+"""
+<smn-switch name="dois-fatores"
+            label="Verificação em duas etapas"
+            description="Pedimos um código por e-mail a cada novo acesso."
+            checked="true" />
+
+<smn-switch name="perfil-publico"
+            label="Perfil público"
+            description="Qualquer pessoa com o link consegue ver seu perfil." />
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Estados</p>
@@ -15,6 +48,7 @@
                         checked="true"
                         disabled="true" />
         </div>
+        @await Html.PartialAsync("_Codigo", estadosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -24,6 +58,7 @@
             <smn-switch name="md" size="Medium" label="Medium" checked="true" />
             <smn-switch name="lg" size="Large" label="Large" checked="true" />
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -37,6 +72,7 @@
                         label="Perfil público"
                         description="Qualquer pessoa com o link consegue ver seu perfil." />
         </div>
+        @await Html.PartialAsync("_Codigo", comDescricaoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">

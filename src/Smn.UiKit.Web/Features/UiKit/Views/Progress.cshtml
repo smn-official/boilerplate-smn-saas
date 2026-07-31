@@ -3,6 +3,47 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string barraCodigo =
+"""
+<smn-progress-bar value="25" label="Enviando arquivos" show-value="true" />
+<smn-progress-bar value="60" label="Processando" show-value="true" color="Success" />
+<smn-progress-bar value="90" label="Quase lá" show-value="true" color="Warning" />
+""";
+
+    const string indeterminadoCodigo =
+"""
+<smn-progress-bar label="Sincronizando" />
+""";
+
+    const string tamanhosCodigo =
+"""
+<smn-progress-bar value="45" size="Small" label="Small" />
+<smn-progress-bar value="45" size="Medium" label="Medium" />
+<smn-progress-bar value="45" size="Large" label="Large" />
+""";
+
+    const string meterCodigo =
+"""
+<smn-meter value="3.2" maximum="10" label="Armazenamento" value-text="3,2 de 10 GB" />
+<smn-meter value="8.7"
+           maximum="10"
+           color="Warning"
+           label="Quota de e-mails"
+           value-text="8.700 de 10.000" />
+<smn-meter value="9.8"
+           maximum="10"
+           color="Danger"
+           label="Limite do plano"
+           value-text="98%" />
+""";
+
+    const string faixaCodigo =
+"""
+<smn-meter value="18" minimum="0" maximum="40" label="Horas usadas" value-text="18h de 40h" />
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Progress bar</p>
@@ -11,6 +52,7 @@
             <smn-progress-bar value="60" label="Processando" show-value="true" color="Success" />
             <smn-progress-bar value="90" label="Quase lá" show-value="true" color="Warning" />
         </div>
+        @await Html.PartialAsync("_Codigo", barraCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -21,6 +63,7 @@
             que não se conhece é pior que assumir que não se sabe.
         </p>
         <smn-progress-bar label="Sincronizando" />
+        @await Html.PartialAsync("_Codigo", indeterminadoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -30,6 +73,7 @@
             <smn-progress-bar value="45" size="Medium" label="Medium" />
             <smn-progress-bar value="45" size="Large" label="Large" />
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -51,10 +95,12 @@
                        label="Limite do plano"
                        value-text="98%" />
         </div>
+        @await Html.PartialAsync("_Codigo", meterCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Faixa personalizada</p>
         <smn-meter value="18" minimum="0" maximum="40" label="Horas usadas" value-text="18h de 40h" />
+        @await Html.PartialAsync("_Codigo", faixaCodigo)
     </div>
 </div>

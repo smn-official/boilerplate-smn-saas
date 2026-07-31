@@ -3,6 +3,109 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string drawerCodigo =
+"""
+<!-- abrir e fechar vêm de Features/UiKit/Scripts/uikit.ts -->
+<div class="flex flex-wrap gap-3">
+    <smn-button variant="Outline" data-modal-open="drawer-direita">Pela direita</smn-button>
+    <smn-button variant="Outline" data-modal-open="drawer-esquerda">Pela esquerda</smn-button>
+    <smn-button variant="Outline" data-modal-open="drawer-baixo">De baixo</smn-button>
+</div>
+
+<smn-drawer id="drawer-direita"
+            placement="Right"
+            title="Filtros"
+            description="Refine a listagem de faturas.">
+    <smn-drawer-body>
+        <div class="flex flex-col gap-4">
+            <smn-select name="drawer-situacao" label="Situação">
+                <option value="">Todas</option>
+                <option value="paga">Paga</option>
+                <option value="aberta">Em aberto</option>
+                <option value="vencida">Vencida</option>
+            </smn-select>
+            <smn-input name="drawer-de" type="date" label="De" />
+            <smn-input name="drawer-ate" type="date" label="Até" />
+            <smn-checkbox name="drawer-somente-minhas" label="Somente as minhas" />
+        </div>
+    </smn-drawer-body>
+    <smn-drawer-footer>
+        <smn-button variant="Ghost" data-modal-close="true">Limpar</smn-button>
+        <smn-button variant="Primary" data-modal-close="true">Aplicar</smn-button>
+    </smn-drawer-footer>
+</smn-drawer>
+
+<smn-drawer id="drawer-esquerda" placement="Left" title="Navegação">
+    <smn-drawer-body>
+        <nav class="flex flex-col gap-1">
+            <smn-link href="#">Painel</smn-link>
+            <smn-link href="#">Clientes</smn-link>
+            <smn-link href="#">Faturas</smn-link>
+            <smn-link href="#">Configurações</smn-link>
+        </nav>
+    </smn-drawer-body>
+</smn-drawer>
+
+<smn-drawer id="drawer-baixo"
+            placement="Bottom"
+            title="Ações"
+            description="O que fazer com os 3 itens selecionados.">
+    <smn-drawer-body>
+        <div class="flex flex-col gap-2">
+            <smn-button variant="Ghost" full-width="true">Marcar como paga</smn-button>
+            <smn-button variant="Ghost" full-width="true">Enviar por e-mail</smn-button>
+            <smn-button variant="Ghost" full-width="true">Baixar PDF</smn-button>
+        </div>
+    </smn-drawer-body>
+    <smn-drawer-footer>
+        <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
+    </smn-drawer-footer>
+</smn-drawer>
+""";
+
+    const string sliderCodigo =
+"""
+<!-- data-slider-output atualiza o valor exibido; vem de Features/UiKit/Scripts/uikit.ts -->
+<div data-slider-output data-slider-suffix="%">
+    <smn-slider name="volume" label="Volume" value="60" value-text="60%" />
+</div>
+<div data-slider-output data-slider-suffix=" usuários">
+    <smn-slider name="usuarios"
+                label="Usuários no plano"
+                minimum="5"
+                maximum="100"
+                step="5"
+                value="25"
+                value-text="25 usuários" />
+</div>
+<smn-slider name="desabilitado" label="Desabilitado" value="40" disabled="true" />
+""";
+
+    const string toggleButtonCodigo =
+"""
+<smn-toggle-button pressed="true">Negrito</smn-toggle-button>
+<smn-toggle-button>Itálico</smn-toggle-button>
+<smn-toggle-button>Sublinhado</smn-toggle-button>
+<smn-toggle-button disabled="true">Indisponível</smn-toggle-button>
+""";
+
+    const string buttonGroupCodigo =
+"""
+<smn-button-group aria-label="Alinhamento">
+    <smn-button variant="Outline">Esquerda</smn-button>
+    <smn-button variant="Outline">Centro</smn-button>
+    <smn-button variant="Outline">Direita</smn-button>
+</smn-button-group>
+
+<smn-button-group aria-label="Ações da fatura">
+    <smn-button variant="Secondary">Ver</smn-button>
+    <smn-button variant="Secondary">Editar</smn-button>
+    <smn-button variant="Secondary">Excluir</smn-button>
+</smn-button-group>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Drawer</p>
@@ -66,6 +169,7 @@
                 <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
             </smn-drawer-footer>
         </smn-drawer>
+        @await Html.PartialAsync("_Codigo", drawerCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -89,6 +193,7 @@
             </div>
             <smn-slider name="desabilitado" label="Desabilitado" value="40" disabled="true" />
         </div>
+        @await Html.PartialAsync("_Codigo", sliderCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -103,6 +208,7 @@
             <smn-toggle-button>Sublinhado</smn-toggle-button>
             <smn-toggle-button disabled="true">Indisponível</smn-toggle-button>
         </div>
+        @await Html.PartialAsync("_Codigo", toggleButtonCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -120,5 +226,6 @@
                 <smn-button variant="Secondary">Excluir</smn-button>
             </smn-button-group>
         </div>
+        @await Html.PartialAsync("_Codigo", buttonGroupCodigo)
     </div>
 </div>

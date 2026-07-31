@@ -3,6 +3,48 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string coresCodigo =
+"""
+<smn-chip color="Default">Default</smn-chip>
+<smn-chip color="Accent">Accent</smn-chip>
+<smn-chip color="Success">Success</smn-chip>
+<smn-chip color="Warning">Warning</smn-chip>
+<smn-chip color="Danger">Danger</smn-chip>
+""";
+
+    const string variantesCodigo =
+"""
+<smn-chip variant="Primary" color="Accent">Primary</smn-chip>
+<smn-chip variant="Primary" color="Success">Primary</smn-chip>
+<smn-chip variant="Primary" color="Warning">Primary</smn-chip>
+<smn-chip variant="Primary" color="Danger">Primary</smn-chip>
+
+<smn-chip variant="Soft" color="Accent">Soft</smn-chip>
+<smn-chip variant="Soft" color="Success">Soft</smn-chip>
+<smn-chip variant="Soft" color="Warning">Soft</smn-chip>
+<smn-chip variant="Soft" color="Danger">Soft</smn-chip>
+
+<smn-chip variant="Secondary" color="Accent">Secondary</smn-chip>
+<smn-chip variant="Tertiary" color="Accent">Tertiary</smn-chip>
+""";
+
+    const string tamanhosCodigo =
+"""
+<smn-chip size="Small" variant="Soft" color="Accent">Small</smn-chip>
+<smn-chip size="Medium" variant="Soft" color="Accent">Medium</smn-chip>
+<smn-chip size="Large" variant="Soft" color="Accent">Large</smn-chip>
+""";
+
+    const string emUsoCodigo =
+"""
+<smn-chip variant="Soft" color="Success">Pago</smn-chip>
+<smn-chip variant="Soft" color="Warning">Aguardando</smn-chip>
+<smn-chip variant="Soft" color="Danger">Vencido</smn-chip>
+<smn-chip variant="Soft" color="Default">Rascunho</smn-chip>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Cores</p>
@@ -13,6 +55,7 @@
             <smn-chip color="Warning">Warning</smn-chip>
             <smn-chip color="Danger">Danger</smn-chip>
         </div>
+        @await Html.PartialAsync("_Codigo", coresCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -35,6 +78,7 @@
                 <smn-chip variant="Tertiary" color="Accent">Tertiary</smn-chip>
             </div>
         </div>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -44,6 +88,7 @@
             <smn-chip size="Medium" variant="Soft" color="Accent">Medium</smn-chip>
             <smn-chip size="Large" variant="Soft" color="Accent">Large</smn-chip>
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -54,5 +99,6 @@
             <smn-chip variant="Soft" color="Danger">Vencido</smn-chip>
             <smn-chip variant="Soft" color="Default">Rascunho</smn-chip>
         </div>
+        @await Html.PartialAsync("_Codigo", emUsoCodigo)
     </div>
 </div>

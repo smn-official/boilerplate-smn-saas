@@ -3,6 +3,50 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string animacoesCodigo =
+"""
+<smn-skeleton animation="Shimmer" class="h-4 w-full" />
+<smn-skeleton animation="Pulse" class="h-4 w-full" />
+<smn-skeleton animation="None" class="h-4 w-full" />
+""";
+
+    const string formaCodigo =
+"""
+<div class="flex items-center gap-3">
+    <smn-skeleton class="size-10 rounded-3xl" />
+    <div class="flex flex-1 flex-col gap-2">
+        <smn-skeleton class="h-4 w-32" />
+        <smn-skeleton class="h-3 w-48" />
+    </div>
+</div>
+""";
+
+    const string listagemCodigo =
+"""
+<div class="flex flex-col gap-4">
+    <!-- repita por linha da listagem -->
+    <div class="flex items-center gap-3">
+        <smn-skeleton class="size-8 rounded-2xl" />
+        <smn-skeleton class="h-4 flex-1" />
+        <smn-skeleton class="h-4 w-16" />
+    </div>
+</div>
+""";
+
+    const string cardCodigo =
+"""
+<smn-card variant="Secondary" class="max-w-sm">
+    <smn-skeleton class="h-32 w-full rounded-2xl" />
+    <div class="flex flex-col gap-2">
+        <smn-skeleton class="h-4 w-2/3" />
+        <smn-skeleton class="h-3 w-full" />
+        <smn-skeleton class="h-3 w-4/5" />
+    </div>
+</smn-card>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Animações</p>
@@ -20,6 +64,7 @@
                 <smn-skeleton animation="None" class="h-4 w-full" />
             </div>
         </div>
+        @await Html.PartialAsync("_Codigo", animacoesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -35,6 +80,7 @@
                 <smn-skeleton class="h-3 w-48" />
             </div>
         </div>
+        @await Html.PartialAsync("_Codigo", formaCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -49,6 +95,7 @@
                 </div>
             }
         </div>
+        @await Html.PartialAsync("_Codigo", listagemCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -61,5 +108,6 @@
                 <smn-skeleton class="h-3 w-4/5" />
             </div>
         </smn-card>
+        @await Html.PartialAsync("_Codigo", cardCodigo)
     </div>
 </div>

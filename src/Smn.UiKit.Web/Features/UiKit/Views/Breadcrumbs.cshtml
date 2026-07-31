@@ -3,6 +3,41 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string trilhaCompletaCodigo =
+"""
+<smn-breadcrumbs>
+    <smn-breadcrumb href="/">Início</smn-breadcrumb>
+    <smn-breadcrumb href="/clientes">Clientes</smn-breadcrumb>
+    <smn-breadcrumb href="/clientes/42">Acme Ltda</smn-breadcrumb>
+    <smn-breadcrumb current="true">Faturas</smn-breadcrumb>
+</smn-breadcrumbs>
+""";
+
+    const string doisNiveisCodigo =
+"""
+<smn-breadcrumbs>
+    <smn-breadcrumb href="/">Início</smn-breadcrumb>
+    <smn-breadcrumb current="true">Configurações</smn-breadcrumb>
+</smn-breadcrumbs>
+""";
+
+    const string estadoVazioCodigo =
+"""
+<smn-empty-state title="Nenhuma fatura por aqui">
+    <p>As faturas aparecem assim que a primeira cobrança for gerada.</p>
+    <smn-button variant="Outline" size="Small" class="mt-2">Criar cobrança</smn-button>
+</smn-empty-state>
+""";
+
+    const string vazioPorBuscaCodigo =
+"""
+<smn-empty-state title="Nada encontrado para “xyz”">
+    <p>Tente outro termo ou limpe os filtros.</p>
+</smn-empty-state>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Trilha completa</p>
@@ -12,6 +47,7 @@
             <smn-breadcrumb href="/clientes/42">Acme Ltda</smn-breadcrumb>
             <smn-breadcrumb current="true">Faturas</smn-breadcrumb>
         </smn-breadcrumbs>
+        @await Html.PartialAsync("_Codigo", trilhaCompletaCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -20,6 +56,7 @@
             <smn-breadcrumb href="/">Início</smn-breadcrumb>
             <smn-breadcrumb current="true">Configurações</smn-breadcrumb>
         </smn-breadcrumbs>
+        @await Html.PartialAsync("_Codigo", doisNiveisCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -34,6 +71,7 @@
                 <smn-button variant="Outline" size="Small" class="mt-2">Criar cobrança</smn-button>
             </smn-empty-state>
         </div>
+        @await Html.PartialAsync("_Codigo", estadoVazioCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -43,5 +81,6 @@
                 <p>Tente outro termo ou limpe os filtros.</p>
             </smn-empty-state>
         </div>
+        @await Html.PartialAsync("_Codigo", vazioPorBuscaCodigo)
     </div>
 </div>

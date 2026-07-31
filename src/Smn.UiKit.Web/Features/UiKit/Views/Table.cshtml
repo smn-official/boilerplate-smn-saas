@@ -3,6 +3,125 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string tabelaCodigo =
+"""
+<smn-table caption="Faturas do último trimestre" hide-caption="true">
+    <smn-table-header>
+        <smn-table-row>
+            <smn-table-column>Cliente</smn-table-column>
+            <smn-table-column>Vencimento</smn-table-column>
+            <smn-table-column>Situação</smn-table-column>
+            <smn-table-column numeric="true">Valor</smn-table-column>
+        </smn-table-row>
+    </smn-table-header>
+    <smn-table-body>
+        <smn-table-row>
+            <smn-table-cell>Acme Ltda</smn-table-cell>
+            <smn-table-cell>10/08/2026</smn-table-cell>
+            <smn-table-cell><smn-chip color="Success" variant="Soft">Pago</smn-chip></smn-table-cell>
+            <smn-table-cell numeric="true">R$ 1.240,00</smn-table-cell>
+        </smn-table-row>
+        <smn-table-row>
+            <smn-table-cell>Globex</smn-table-cell>
+            <smn-table-cell>15/08/2026</smn-table-cell>
+            <smn-table-cell><smn-chip color="Warning" variant="Soft">Aguardando</smn-chip></smn-table-cell>
+            <smn-table-cell numeric="true">R$ 890,50</smn-table-cell>
+        </smn-table-row>
+        <smn-table-row>
+            <smn-table-cell>Initech</smn-table-cell>
+            <smn-table-cell>02/08/2026</smn-table-cell>
+            <smn-table-cell><smn-chip color="Danger" variant="Soft">Vencido</smn-chip></smn-table-cell>
+            <smn-table-cell numeric="true">R$ 3.150,00</smn-table-cell>
+        </smn-table-row>
+    </smn-table-body>
+</smn-table>
+""";
+
+    const string variantSecondaryCodigo =
+"""
+<smn-table variant="Secondary">
+    <smn-table-header>
+        <smn-table-row>
+            <smn-table-column>Plano</smn-table-column>
+            <smn-table-column numeric="true">Usuários</smn-table-column>
+            <smn-table-column numeric="true">Mensal</smn-table-column>
+        </smn-table-row>
+    </smn-table-header>
+    <smn-table-body>
+        <smn-table-row>
+            <smn-table-cell>Básico</smn-table-cell>
+            <smn-table-cell numeric="true">5</smn-table-cell>
+            <smn-table-cell numeric="true">R$ 49,00</smn-table-cell>
+        </smn-table-row>
+        <smn-table-row>
+            <smn-table-cell>Profissional</smn-table-cell>
+            <smn-table-cell numeric="true">25</smn-table-cell>
+            <smn-table-cell numeric="true">R$ 149,00</smn-table-cell>
+        </smn-table-row>
+    </smn-table-body>
+</smn-table>
+""";
+
+    const string tabelaLargaCodigo =
+"""
+<smn-table>
+    <smn-table-header>
+        <smn-table-row>
+            <smn-table-column>Identificador</smn-table-column>
+            <smn-table-column>Cliente</smn-table-column>
+            <smn-table-column>Documento</smn-table-column>
+            <smn-table-column>Emissão</smn-table-column>
+            <smn-table-column>Vencimento</smn-table-column>
+            <smn-table-column>Situação</smn-table-column>
+            <smn-table-column numeric="true">Valor</smn-table-column>
+        </smn-table-row>
+    </smn-table-header>
+    <smn-table-body>
+        <smn-table-row>
+            <smn-table-cell>NF-2026-000184</smn-table-cell>
+            <smn-table-cell>Acme Ltda</smn-table-cell>
+            <smn-table-cell>12.345.678/0001-90</smn-table-cell>
+            <smn-table-cell>01/08/2026</smn-table-cell>
+            <smn-table-cell>10/08/2026</smn-table-cell>
+            <smn-table-cell>Pago</smn-table-cell>
+            <smn-table-cell numeric="true">R$ 1.240,00</smn-table-cell>
+        </smn-table-row>
+        <smn-table-row>
+            <smn-table-cell>NF-2026-000185</smn-table-cell>
+            <smn-table-cell>Globex Comércio</smn-table-cell>
+            <smn-table-cell>98.765.432/0001-10</smn-table-cell>
+            <smn-table-cell>05/08/2026</smn-table-cell>
+            <smn-table-cell>15/08/2026</smn-table-cell>
+            <smn-table-cell>Aguardando</smn-table-cell>
+            <smn-table-cell numeric="true">R$ 890,50</smn-table-cell>
+        </smn-table-row>
+    </smn-table-body>
+</smn-table>
+""";
+
+    const string semResultadoCodigo =
+"""
+<smn-table>
+    <smn-table-header>
+        <smn-table-row>
+            <smn-table-column>Cliente</smn-table-column>
+            <smn-table-column numeric="true">Valor</smn-table-column>
+        </smn-table-row>
+    </smn-table-header>
+    <smn-table-body>
+        <smn-table-row>
+            <smn-table-cell colspan="2">
+                <smn-empty-state title="Nenhuma fatura no período">
+                    <p>Ajuste o intervalo de datas para ver outros resultados.</p>
+                </smn-empty-state>
+            </smn-table-cell>
+        </smn-table-row>
+    </smn-table-body>
+</smn-table>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Tabela</p>
@@ -40,6 +159,7 @@
             Coluna de número usa <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">numeric</code>:
             alinha à direita e liga a figura tabular, para os valores ficarem alinhados na vírgula.
         </p>
+        @await Html.PartialAsync("_Codigo", tabelaCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -65,6 +185,7 @@
                 </smn-table-row>
             </smn-table-body>
         </smn-table>
+        @await Html.PartialAsync("_Codigo", variantSecondaryCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -106,6 +227,7 @@
                 </smn-table-row>
             </smn-table-body>
         </smn-table>
+        @await Html.PartialAsync("_Codigo", tabelaLargaCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -127,5 +249,6 @@
                 </smn-table-row>
             </smn-table-body>
         </smn-table>
+        @await Html.PartialAsync("_Codigo", semResultadoCodigo)
     </div>
 </div>

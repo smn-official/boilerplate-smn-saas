@@ -3,6 +3,65 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string campoNumericoCodigo =
+"""
+<smn-number-field name="quantidade"
+                  label="Quantidade"
+                  value="1"
+                  minimum="1"
+                  maximum="99" />
+
+<smn-number-field name="usuarios-extra"
+                  label="Usuários adicionais"
+                  value="5"
+                  minimum="0"
+                  maximum="50"
+                  step="5"
+                  description="Cobrados à parte, de 5 em 5." />
+
+<smn-number-field name="numero-invalido"
+                  label="Com erro"
+                  value="0"
+                  minimum="1"
+                  error="A quantidade mínima é 1." />
+
+<smn-number-field name="numero-desabilitado"
+                  label="Desabilitado"
+                  value="3"
+                  disabled="true" />
+""";
+
+    const string campoBuscaCodigo =
+"""
+<smn-search-field name="busca" placeholder="Buscar faturas…" />
+
+<smn-search-field name="busca-com-rotulo"
+                  label="Buscar clientes"
+                  placeholder="Nome ou CNPJ"
+                  description="Busca por parte do nome também funciona." />
+
+<smn-search-field name="busca-preenchida" value="Acme" placeholder="Buscar…" />
+""";
+
+    const string fieldsetCodigo =
+"""
+<smn-fieldset legend="Endereço de cobrança"
+              description="Aparece na nota fiscal.">
+    <smn-input name="logradouro" label="Logradouro" />
+    <div class="grid grid-cols-2 gap-4">
+        <smn-input name="numero" label="Número" />
+        <smn-input name="complemento" label="Complemento" />
+    </div>
+    <smn-select name="uf" label="UF">
+        <option value="">Selecione…</option>
+        <option value="sp">SP</option>
+        <option value="rj">RJ</option>
+    </smn-select>
+</smn-fieldset>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Campo numérico</p>
@@ -42,6 +101,7 @@
                               value="3"
                               disabled="true" />
         </div>
+        @await Html.PartialAsync("_Codigo", campoNumericoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -61,6 +121,7 @@
 
             <smn-search-field name="busca-preenchida" value="Acme" placeholder="Buscar…" />
         </div>
+        @await Html.PartialAsync("_Codigo", campoBuscaCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -84,5 +145,6 @@
                 </smn-select>
             </smn-fieldset>
         </div>
+        @await Html.PartialAsync("_Codigo", fieldsetCodigo)
     </div>
 </div>

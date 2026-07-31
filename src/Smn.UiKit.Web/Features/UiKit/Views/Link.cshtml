@@ -3,6 +3,37 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string variantesCodigo =
+"""
+<smn-link href="#">Default</smn-link>
+<smn-link href="#" variant="Accent">Accent</smn-link>
+<smn-link href="#" variant="Muted">Muted</smn-link>
+<smn-link href="#" disabled="true">Desabilitado</smn-link>
+""";
+
+    const string externoCodigo =
+"""
+<smn-link href="https://heroui.com" external="true">Documentação do HeroUI</smn-link>
+<smn-link href="https://github.com" external="true" variant="Accent">GitHub</smn-link>
+""";
+
+    const string setaCodigo =
+"""
+<smn-link href="#" show-icon="true">Ver detalhes</smn-link>
+<smn-link href="https://heroui.com" external="true" show-icon="false">Sem seta</smn-link>
+""";
+
+    const string inlineCodigo =
+"""
+<p class="text-sm">
+    Leia a
+    <smn-link href="#" variant="Accent">política de privacidade</smn-link>
+    antes de continuar.
+</p>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Variantes</p>
@@ -16,6 +47,7 @@
             O sublinhado aparece no hover e no estado pressionado, não em repouso — passe o mouse
             para ver. O anel de foco segue a mesma regra do resto do sistema.
         </p>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -31,6 +63,7 @@
             <smn-link href="https://heroui.com" external="true">Documentação do HeroUI</smn-link>
             <smn-link href="https://github.com" external="true" variant="Accent">GitHub</smn-link>
         </div>
+        @await Html.PartialAsync("_Codigo", externoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -43,6 +76,7 @@
             <smn-link href="#" show-icon="true">Ver detalhes</smn-link>
             <smn-link href="https://heroui.com" external="true" show-icon="false">Sem seta</smn-link>
         </div>
+        @await Html.PartialAsync("_Codigo", setaCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -53,5 +87,6 @@
             <smn-link href="#" variant="Accent">política de privacidade</smn-link>
             antes de continuar.
         </p>
+        @await Html.PartialAsync("_Codigo", inlineCodigo)
     </div>
 </div>

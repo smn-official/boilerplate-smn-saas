@@ -3,6 +3,71 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string campoCompletoCodigo =
+"""
+<smn-input name="email"
+           type="email"
+           label="E-mail"
+           placeholder="voce@empresa.com.br"
+           description="Usamos só para enviar o recibo."
+           required="true" />
+""";
+
+    const string estadosCodigo =
+"""
+<smn-input name="normal" label="Normal" placeholder="Digite aqui" />
+
+<smn-input name="invalido"
+           label="Com erro"
+           value="não-é-um-email"
+           error="Informe um e-mail válido." />
+
+<smn-input name="desabilitado"
+           label="Desabilitado"
+           value="Não editável"
+           disabled="true" />
+
+<smn-input name="somente-leitura"
+           label="Somente leitura"
+           value="Valor fixo"
+           read-only="true"
+           description="Dá para copiar, mas não editar." />
+""";
+
+    const string variantesCodigo =
+"""
+<smn-input name="primary" label="Primary" placeholder="Com sombra" />
+
+<smn-input name="secondary"
+           variant="Secondary"
+           label="Secondary"
+           placeholder="Fundo sólido, sem sombra" />
+""";
+
+    const string tiposCodigo =
+"""
+<smn-input name="senha" type="password" label="Senha" placeholder="••••••••" />
+<smn-input name="valor" type="number" label="Quantidade" value="1" />
+<smn-input name="quando" type="date" label="Vencimento" />
+<smn-input name="busca" type="search" label="Busca" placeholder="Procurar…" />
+""";
+
+    const string textareaCodigo =
+"""
+<smn-textarea name="observacao"
+              label="Observação"
+              placeholder="Conte o que aconteceu"
+              description="Máximo de 500 caracteres."
+              rows="4" />
+
+<smn-textarea name="obrigatorio"
+              label="Justificativa"
+              error="A justificativa é obrigatória."
+              rows="3" />
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Campo completo</p>
@@ -22,6 +87,7 @@
                        description="Usamos só para enviar o recibo."
                        required="true" />
         </div>
+        @await Html.PartialAsync("_Codigo", campoCompletoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -42,6 +108,7 @@
                        read-only="true"
                        description="Dá para copiar, mas não editar." />
         </div>
+        @await Html.PartialAsync("_Codigo", estadosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -53,6 +120,7 @@
                        label="Secondary"
                        placeholder="Fundo sólido, sem sombra" />
         </div>
+        @await Html.PartialAsync("_Codigo", variantesCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -63,6 +131,7 @@
             <smn-input name="quando" type="date" label="Vencimento" />
             <smn-input name="busca" type="search" label="Busca" placeholder="Procurar…" />
         </div>
+        @await Html.PartialAsync("_Codigo", tiposCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -78,5 +147,6 @@
                           error="A justificativa é obrigatória."
                           rows="3" />
         </div>
+        @await Html.PartialAsync("_Codigo", textareaCodigo)
     </div>
 </div>

@@ -3,6 +3,69 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string checkboxCodigo =
+"""
+<smn-checkbox name="termos" label="Aceito os termos de uso" />
+<smn-checkbox name="marcado" label="Já vem marcado" checked="true" />
+
+<smn-checkbox name="com-ajuda"
+              label="Receber novidades"
+              description="No máximo um e-mail por mês. Dá para cancelar depois." />
+
+<smn-checkbox name="desabilitado" label="Desabilitado" disabled="true" />
+
+<smn-checkbox name="desabilitado-marcado"
+              label="Desabilitado e marcado"
+              checked="true"
+              disabled="true" />
+
+<smn-checkbox name="invalido"
+              label="Preciso deste aceite"
+              error="É necessário aceitar para continuar." />
+""";
+
+    const string grupoCheckboxCodigo =
+"""
+<smn-checkbox-group legend="Como prefere ser avisado?"
+                    description="Pode marcar mais de um.">
+    <smn-checkbox name="canal" value="email" label="E-mail" checked="true" />
+    <smn-checkbox name="canal" value="sms" label="SMS" />
+    <smn-checkbox name="canal" value="push" label="Notificação no app" />
+</smn-checkbox-group>
+""";
+
+    const string radioCodigo =
+"""
+<smn-radio-group legend="Ciclo de cobrança">
+    <smn-radio name="ciclo" value="mensal" label="Mensal" checked="true" />
+    <smn-radio name="ciclo"
+               value="anual"
+               label="Anual"
+               description="Dois meses de desconto." />
+    <smn-radio name="ciclo" value="vitalicio" label="Vitalício" disabled="true" />
+</smn-radio-group>
+""";
+
+    const string grupoHorizontalCodigo =
+"""
+<smn-radio-group legend="Tamanho" orientation="Horizontal">
+    <smn-radio name="tamanho" value="p" label="P" />
+    <smn-radio name="tamanho" value="m" label="M" checked="true" />
+    <smn-radio name="tamanho" value="g" label="G" />
+</smn-radio-group>
+""";
+
+    const string grupoComErroCodigo =
+"""
+<smn-radio-group legend="Forma de pagamento"
+                 error="Escolha uma forma de pagamento.">
+    <smn-radio name="pagamento" value="cartao" label="Cartão de crédito" />
+    <smn-radio name="pagamento" value="pix" label="Pix" />
+</smn-radio-group>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Checkbox</p>
@@ -28,6 +91,7 @@
                           label="Preciso deste aceite"
                           error="É necessário aceitar para continuar." />
         </div>
+        @await Html.PartialAsync("_Codigo", checkboxCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -38,6 +102,7 @@
             <smn-checkbox name="canal" value="sms" label="SMS" />
             <smn-checkbox name="canal" value="push" label="Notificação no app" />
         </smn-checkbox-group>
+        @await Html.PartialAsync("_Codigo", grupoCheckboxCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -56,6 +121,7 @@
                        description="Dois meses de desconto." />
             <smn-radio name="ciclo" value="vitalicio" label="Vitalício" disabled="true" />
         </smn-radio-group>
+        @await Html.PartialAsync("_Codigo", radioCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -65,6 +131,7 @@
             <smn-radio name="tamanho" value="m" label="M" checked="true" />
             <smn-radio name="tamanho" value="g" label="G" />
         </smn-radio-group>
+        @await Html.PartialAsync("_Codigo", grupoHorizontalCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -74,5 +141,6 @@
             <smn-radio name="pagamento" value="cartao" label="Cartão de crédito" />
             <smn-radio name="pagamento" value="pix" label="Pix" />
         </smn-radio-group>
+        @await Html.PartialAsync("_Codigo", grupoComErroCodigo)
     </div>
 </div>

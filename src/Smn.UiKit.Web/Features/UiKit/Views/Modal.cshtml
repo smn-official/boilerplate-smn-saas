@@ -3,6 +3,74 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string confirmacaoCodigo =
+"""
+<!-- abrir e fechar vêm de Features/UiKit/Scripts/uikit.ts -->
+<smn-button variant="Danger" data-modal-open="modal-excluir">Excluir conta</smn-button>
+
+<smn-modal id="modal-excluir"
+           title="Excluir a conta?"
+           description="Some tudo: faturas, relatórios e histórico. Não dá para desfazer.">
+    <smn-modal-body>
+        <p>Digite o nome da empresa para confirmar.</p>
+        <div class="mt-3">
+            <smn-input name="confirmacao" placeholder="Acme Ltda" />
+        </div>
+    </smn-modal-body>
+    <smn-modal-footer>
+        <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
+        <smn-button variant="Danger" data-modal-close="true">Excluir</smn-button>
+    </smn-modal-footer>
+</smn-modal>
+""";
+
+    const string formularioCodigo =
+"""
+<!-- abrir e fechar vêm de Features/UiKit/Scripts/uikit.ts -->
+<smn-button variant="Primary" data-modal-open="modal-convidar">Convidar pessoa</smn-button>
+
+<smn-modal id="modal-convidar"
+           title="Convidar para a equipe"
+           description="A pessoa recebe um e-mail com o link de acesso.">
+    <smn-modal-body>
+        <div class="flex flex-col gap-4">
+            <smn-input name="convite-email"
+                       type="email"
+                       label="E-mail"
+                       placeholder="pessoa@empresa.com.br"
+                       required="true" />
+            <smn-radio-group legend="Permissão">
+                <smn-radio name="permissao" value="leitura" label="Somente leitura" checked="true" />
+                <smn-radio name="permissao" value="edicao" label="Pode editar" />
+                <smn-radio name="permissao" value="admin" label="Administrador" />
+            </smn-radio-group>
+        </div>
+    </smn-modal-body>
+    <smn-modal-footer>
+        <smn-button variant="Ghost" data-modal-close="true">Cancelar</smn-button>
+        <smn-button variant="Primary" data-modal-close="true">Enviar convite</smn-button>
+    </smn-modal-footer>
+</smn-modal>
+""";
+
+    const string soConteudoCodigo =
+"""
+<!-- abrir e fechar vêm de Features/UiKit/Scripts/uikit.ts -->
+<smn-button variant="Outline" data-modal-open="modal-simples">Ver detalhes</smn-button>
+
+<smn-modal id="modal-simples" title="Sobre o cálculo">
+    <smn-modal-body>
+        <p>O valor considera os usuários ativos no fechamento do ciclo, não o total
+           cadastrado. Quem entrou no meio do mês entra proporcional.</p>
+    </smn-modal-body>
+    <smn-modal-footer>
+        <smn-button variant="Primary" data-modal-close="true">Entendi</smn-button>
+    </smn-modal-footer>
+</smn-modal>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Confirmação</p>
@@ -27,6 +95,7 @@
                 <smn-button variant="Danger" data-modal-close="true">Excluir</smn-button>
             </smn-modal-footer>
         </smn-modal>
+        @await Html.PartialAsync("_Codigo", confirmacaoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -55,6 +124,7 @@
                 <smn-button variant="Primary" data-modal-close="true">Enviar convite</smn-button>
             </smn-modal-footer>
         </smn-modal>
+        @await Html.PartialAsync("_Codigo", formularioCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -70,6 +140,7 @@
                 <smn-button variant="Primary" data-modal-close="true">Entendi</smn-button>
             </smn-modal-footer>
         </smn-modal>
+        @await Html.PartialAsync("_Codigo", soConteudoCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">

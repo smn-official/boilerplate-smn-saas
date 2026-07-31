@@ -15,6 +15,58 @@
     }
 }
 
+@{
+    const string comImagemCodigo =
+"""
+<!-- Na tela acima o src é um SVG em data URI, para o painel não depender de
+     rede. Aqui vai o que você realmente escreveria. -->
+<smn-avatar src="/media/ana-ribeiro.jpg"
+            alt="Foto de Ana Ribeiro"
+            initials="AR"></smn-avatar>
+<smn-avatar src="/media/bruno-costa.jpg"
+            alt="Foto de Bruno Costa"
+            initials="BC"></smn-avatar>
+<smn-avatar src="/media/carla-dias.jpg"
+            alt="Foto de Carla Dias"
+            initials="CD"></smn-avatar>
+""";
+
+    const string iniciaisCodigo =
+"""
+<smn-avatar initials="DF" color="Default"></smn-avatar>
+<smn-avatar initials="AC" color="Accent"></smn-avatar>
+<smn-avatar initials="SU" color="Success"></smn-avatar>
+<smn-avatar initials="WA" color="Warning"></smn-avatar>
+<smn-avatar initials="DA" color="Danger"></smn-avatar>
+""";
+
+    const string softCodigo =
+"""
+<smn-avatar initials="DF" color="Default" variant="Soft"></smn-avatar>
+<smn-avatar initials="AC" color="Accent" variant="Soft"></smn-avatar>
+<smn-avatar initials="SU" color="Success" variant="Soft"></smn-avatar>
+<smn-avatar initials="WA" color="Warning" variant="Soft"></smn-avatar>
+<smn-avatar initials="DA" color="Danger" variant="Soft"></smn-avatar>
+""";
+
+    const string tamanhosCodigo =
+"""
+<smn-avatar initials="SM" color="Accent" variant="Soft" size="Small"></smn-avatar>
+<smn-avatar initials="MD" color="Accent" variant="Soft" size="Medium"></smn-avatar>
+<smn-avatar initials="LG" color="Accent" variant="Soft" size="Large"></smn-avatar>
+""";
+
+    const string grupoCodigo =
+"""
+<div class="flex items-center -space-x-2">
+    <smn-avatar initials="AR" color="Accent" variant="Soft" class="ring-2 ring-surface"></smn-avatar>
+    <smn-avatar initials="BC" color="Success" variant="Soft" class="ring-2 ring-surface"></smn-avatar>
+    <smn-avatar initials="CD" color="Warning" variant="Soft" class="ring-2 ring-surface"></smn-avatar>
+    <smn-avatar initials="+7" color="Default" variant="Soft" class="ring-2 ring-surface"></smn-avatar>
+</div>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Com imagem</p>
@@ -34,6 +86,7 @@
             aparecem sozinhas — por isso vale sempre informar
             <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">initials</code> junto.
         </p>
+        @await Html.PartialAsync("_Codigo", comImagemCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -45,6 +98,7 @@
             <smn-avatar initials="WA" color="Warning"></smn-avatar>
             <smn-avatar initials="DA" color="Danger"></smn-avatar>
         </div>
+        @await Html.PartialAsync("_Codigo", iniciaisCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -56,6 +110,7 @@
             <smn-avatar initials="WA" color="Warning" variant="Soft"></smn-avatar>
             <smn-avatar initials="DA" color="Danger" variant="Soft"></smn-avatar>
         </div>
+        @await Html.PartialAsync("_Codigo", softCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -65,6 +120,7 @@
             <smn-avatar initials="MD" color="Accent" variant="Soft" size="Medium"></smn-avatar>
             <smn-avatar initials="LG" color="Accent" variant="Soft" size="Large"></smn-avatar>
         </div>
+        @await Html.PartialAsync("_Codigo", tamanhosCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -75,5 +131,6 @@
             <smn-avatar initials="CD" color="Warning" variant="Soft" class="ring-2 ring-surface"></smn-avatar>
             <smn-avatar initials="+7" color="Default" variant="Soft" class="ring-2 ring-surface"></smn-avatar>
         </div>
+        @await Html.PartialAsync("_Codigo", grupoCodigo)
     </div>
 </div>

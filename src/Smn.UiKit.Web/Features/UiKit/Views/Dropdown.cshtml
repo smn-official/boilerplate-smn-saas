@@ -3,6 +3,79 @@
     Layout = "_PanelLayout";
 }
 
+@{
+    const string dropdownCodigo =
+"""
+<smn-dropdown>
+    <smn-button variant="Outline" popovertarget="menu-acoes" aria-haspopup="menu">
+        Ações
+    </smn-button>
+    <smn-menu id="menu-acoes" aria-label="Ações da fatura">
+        <smn-menu-item>Ver detalhes</smn-menu-item>
+        <smn-menu-item>Baixar PDF</smn-menu-item>
+        <smn-menu-item>Enviar por e-mail</smn-menu-item>
+        <smn-menu-separator />
+        <smn-menu-item danger="true">Cancelar fatura</smn-menu-item>
+    </smn-menu>
+</smn-dropdown>
+
+<smn-dropdown>
+    <smn-button variant="Secondary" popovertarget="menu-conta" aria-haspopup="menu">
+        Minha conta
+    </smn-button>
+    <smn-menu id="menu-conta" aria-label="Conta">
+        <smn-menu-section label="Sessão">
+            <smn-menu-item href="#">Perfil</smn-menu-item>
+            <smn-menu-item href="#">Preferências</smn-menu-item>
+        </smn-menu-section>
+        <smn-menu-separator />
+        <smn-menu-section label="Organização">
+            <smn-menu-item href="#">Equipe</smn-menu-item>
+            <smn-menu-item href="#" disabled="true">Faturamento</smn-menu-item>
+        </smn-menu-section>
+        <smn-menu-separator />
+        <smn-menu-item danger="true">Sair</smn-menu-item>
+    </smn-menu>
+</smn-dropdown>
+""";
+
+    const string sombraRolagemCodigo =
+"""
+<smn-scroll-shadow class="max-h-48 rounded-2xl bg-surface-secondary p-4">
+    <ul class="flex flex-col gap-2 text-sm">
+        <li class="flex items-center justify-between">
+            <span>Fatura NF-2026-000101</span>
+            <span class="tabular-nums text-muted">R$ 137,00</span>
+        </li>
+        <li class="flex items-center justify-between">
+            <span>Fatura NF-2026-000102</span>
+            <span class="tabular-nums text-muted">R$ 274,00</span>
+        </li>
+        <li class="flex items-center justify-between">
+            <span>Fatura NF-2026-000103</span>
+            <span class="tabular-nums text-muted">R$ 411,00</span>
+        </li>
+        …
+    </ul>
+</smn-scroll-shadow>
+""";
+
+    const string rolagemHorizontalCodigo =
+"""
+<smn-scroll-shadow horizontal="true" class="rounded-2xl bg-surface-secondary p-4">
+    <div class="flex w-max gap-3">
+        <div class="flex size-24 shrink-0 items-center justify-center rounded-xl bg-surface text-sm">
+            Card 1
+        </div>
+        <div class="flex size-24 shrink-0 items-center justify-center rounded-xl bg-surface text-sm">
+            Card 2
+        </div>
+        …
+    </div>
+</smn-scroll-shadow>
+""";
+}
+
 <div class="flex flex-col gap-6">
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
         <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Dropdown</p>
@@ -47,6 +120,7 @@
                 </smn-menu>
             </smn-dropdown>
         </div>
+        @await Html.PartialAsync("_Codigo", dropdownCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -78,6 +152,7 @@
                 }
             </ul>
         </smn-scroll-shadow>
+        @await Html.PartialAsync("_Codigo", sombraRolagemCodigo)
     </div>
 
     <div class="rounded-2xl bg-surface p-6 shadow-surface">
@@ -92,5 +167,6 @@
                 }
             </div>
         </smn-scroll-shadow>
+        @await Html.PartialAsync("_Codigo", rolagemHorizontalCodigo)
     </div>
 </div>
