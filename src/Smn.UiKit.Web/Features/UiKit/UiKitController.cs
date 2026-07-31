@@ -269,6 +269,21 @@ public sealed class UiKitController : Controller
         </smn-scroll-shadow>
         """;
 
+    private const string NumberFieldUsage =
+        """
+        <smn-number-field name="quantidade"
+                          label="Quantidade"
+                          value="1"
+                          minimum="1"
+                          maximum="99" />
+
+        <smn-search-field name="busca" placeholder="Buscar faturas…" />
+
+        <smn-fieldset legend="Endereço de cobrança">
+            <smn-input name="logradouro" label="Logradouro" />
+        </smn-fieldset>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -391,6 +406,17 @@ public sealed class UiKitController : Controller
             "Interrompe o fluxo para uma decisão, sobre o dialog nativo do navegador.",
             ModalUsage,
             BuildNavigation(nameof(Modal))));
+    }
+
+    /// <summary>Number field, search field and fieldset component page.</summary>
+    [HttpGet("number-field")]
+    public IActionResult NumberField()
+    {
+        return View(new ComponentViewModel(
+            "NumberField",
+            "Recebe número com botões de passo; traz junto o campo de busca e o fieldset.",
+            NumberFieldUsage,
+            BuildNavigation(nameof(NumberField))));
     }
 
     /// <summary>Progress bar and meter component page.</summary>
@@ -566,6 +592,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Kbd", nameof(Kbd), activeAction == nameof(Kbd)),
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
             new NavigationItemViewModel("Modal", nameof(Modal), activeAction == nameof(Modal)),
+            new NavigationItemViewModel("NumberField", nameof(NumberField), activeAction == nameof(NumberField)),
             new NavigationItemViewModel("Progress", nameof(Progress), activeAction == nameof(Progress)),
             new NavigationItemViewModel("Select", nameof(Select), activeAction == nameof(Select)),
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),

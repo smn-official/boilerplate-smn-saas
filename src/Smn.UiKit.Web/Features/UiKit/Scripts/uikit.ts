@@ -264,6 +264,54 @@ function initializeSliderOutputs(): void {
     }
 }
 
+function initializeNumberFields(): void {
+    for (const group of document.querySelectorAll<HTMLElement>("[data-smn-number-field]")) {
+        const input = group.querySelector<HTMLInputElement>(".number-field__input");
+
+        if (input === null) {
+            continue;
+        }
+
+        for (const button of group.querySelectorAll<HTMLButtonElement>("[data-number-step]")) {
+            button.addEventListener("click", () => {
+                // stepUp/stepDown já respeitam min, max e step do próprio input.
+                if (button.dataset.numberStep === "1") {
+                    input.stepUp();
+                } else {
+                    input.stepDown();
+                }
+
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+        }
+    }
+}
+
+function initializeSearchFields(): void {
+    for (const group of document.querySelectorAll<HTMLElement>("[data-smn-search-field]")) {
+        const input = group.querySelector<HTMLInputElement>(".input-group__input");
+        const clear = group.querySelector<HTMLButtonElement>("[data-search-clear]");
+
+        if (input === null || clear === null) {
+            continue;
+        }
+
+        const sync = (): void => {
+            clear.hidden = input.value === "";
+        };
+
+        sync();
+        input.addEventListener("input", sync);
+
+        clear.addEventListener("click", () => {
+            input.value = "";
+            sync();
+            input.focus();
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+        });
+    }
+}
+
 initializeThemeToggle();
 initializeCodeCopy();
 initializeTabs();
@@ -272,3 +320,5 @@ initializeInputOtp();
 initializeToasts();
 initializeToggleButtons();
 initializeSliderOutputs();
+initializeNumberFields();
+initializeSearchFields();
