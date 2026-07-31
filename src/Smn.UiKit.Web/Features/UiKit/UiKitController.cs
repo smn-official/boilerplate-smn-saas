@@ -284,6 +284,24 @@ public sealed class UiKitController : Controller
         </smn-fieldset>
         """;
 
+    private const string PopoverUsage =
+        """
+        <smn-popover-anchor>
+            <smn-button popovertarget="pop-calculo">Como calculamos?</smn-button>
+            <smn-popover id="pop-calculo" title="Cálculo do valor">
+                Consideramos os usuários ativos no fechamento do ciclo.
+            </smn-popover>
+        </smn-popover-anchor>
+
+        <smn-disclosure title="Detalhes da cobrança">
+            Valor proporcional aos dias usados.
+        </smn-disclosure>
+
+        <smn-prose>
+            <!-- texto longo vindo de CMS ou Markdown -->
+        </smn-prose>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -417,6 +435,17 @@ public sealed class UiKitController : Controller
             "Recebe número com botões de passo; traz junto o campo de busca e o fieldset.",
             NumberFieldUsage,
             BuildNavigation(nameof(NumberField))));
+    }
+
+    /// <summary>Popover, disclosure and prose component page.</summary>
+    [HttpGet("popover")]
+    public IActionResult Popover()
+    {
+        return View(new ComponentViewModel(
+            "Popover",
+            "Painel com conteúdo interativo; traz junto o disclosure e o estilo de texto longo.",
+            PopoverUsage,
+            BuildNavigation(nameof(Popover))));
     }
 
     /// <summary>Progress bar and meter component page.</summary>
@@ -593,6 +622,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Link", nameof(Link), activeAction == nameof(Link)),
             new NavigationItemViewModel("Modal", nameof(Modal), activeAction == nameof(Modal)),
             new NavigationItemViewModel("NumberField", nameof(NumberField), activeAction == nameof(NumberField)),
+            new NavigationItemViewModel("Popover", nameof(Popover), activeAction == nameof(Popover)),
             new NavigationItemViewModel("Progress", nameof(Progress), activeAction == nameof(Progress)),
             new NavigationItemViewModel("Select", nameof(Select), activeAction == nameof(Select)),
             new NavigationItemViewModel("Separator", nameof(Separator), activeAction == nameof(Separator)),

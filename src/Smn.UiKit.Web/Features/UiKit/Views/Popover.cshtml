@@ -1,0 +1,95 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Popover</p>
+        <p class="mb-4 text-sm text-muted">
+            Cabe mais coisa que num tooltip: texto que o usuário consegue selecionar, link e botão.
+            Abre pelo <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">popovertarget</code>,
+            sem script, e fecha ao clicar fora ou no Esc.
+        </p>
+        <div class="flex flex-wrap gap-3">
+            <smn-popover-anchor>
+                <smn-button variant="Outline" popovertarget="pop-calculo">
+                    Como calculamos?
+                </smn-button>
+                <smn-popover id="pop-calculo" title="Cálculo do valor">
+                    <p class="mb-2">
+                        Consideramos os usuários ativos no fechamento do ciclo, não o total
+                        cadastrado.
+                    </p>
+                    <smn-link href="#" variant="Accent">Ver a política completa</smn-link>
+                </smn-popover>
+            </smn-popover-anchor>
+
+            <smn-popover-anchor>
+                <smn-button variant="Ghost" popovertarget="pop-atalhos">Atalhos</smn-button>
+                <smn-popover id="pop-atalhos" title="Atalhos de teclado">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center justify-between gap-4">
+                            <span>Busca rápida</span>
+                            <smn-kbd keys="command">K</smn-kbd>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                            <span>Nova fatura</span>
+                            <smn-kbd keys="command">N</smn-kbd>
+                        </div>
+                    </div>
+                </smn-popover>
+            </smn-popover-anchor>
+        </div>
+        <p class="mt-4 text-sm text-muted">
+            Tooltip é dica curta que some; popover é conteúdo com o qual dá para interagir. Se o
+            usuário precisa clicar em algo lá dentro, é popover.
+        </p>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Disclosure</p>
+        <p class="mb-4 text-sm text-muted">
+            Uma seção só, que abre e fecha — o mesmo
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;details&gt;</code>
+            do accordion, sem o grupo em volta.
+        </p>
+        <div class="flex flex-col gap-4">
+            <smn-disclosure title="Detalhes da cobrança">
+                <p>Valor proporcional aos dias usados, somado à mensalidade do próximo ciclo.</p>
+            </smn-disclosure>
+            <smn-disclosure title="Já aberto" open="true">
+                <p>Começa aberto porque recebeu <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">open</code>.</p>
+            </smn-disclosure>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Prose</p>
+        <p class="mb-4 text-sm text-muted">
+            Estiliza texto longo vindo de CMS ou Markdown, onde as tags não têm como carregar
+            classe. Envolva o bloco e os elementos internos herdam o estilo de leitura.
+        </p>
+        <smn-prose>
+            <h2>Política de cancelamento</h2>
+            <p>
+                O cancelamento pode ser feito <strong>a qualquer momento</strong>, direto no painel.
+                O acesso continua até o fim do período já pago.
+            </p>
+            <h3>O que acontece com os dados</h3>
+            <p>Depois do cancelamento, os dados ficam disponíveis para exportação por 30 dias.</p>
+            <ul>
+                <li>Faturas e recibos continuam acessíveis</li>
+                <li>Relatórios podem ser exportados em CSV</li>
+                <li>Anexos precisam ser baixados um a um</li>
+            </ul>
+            <blockquote>
+                Passados os 30 dias, a exclusão é definitiva e não há como recuperar.
+            </blockquote>
+            <p>
+                Dúvidas? Leia a <a href="#">política completa</a> ou use o comando
+                <code>suporte</code> no painel.
+            </p>
+        </smn-prose>
+    </div>
+</div>
