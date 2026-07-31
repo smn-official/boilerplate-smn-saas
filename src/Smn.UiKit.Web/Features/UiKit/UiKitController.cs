@@ -140,6 +140,36 @@ public sealed class UiKitController : Controller
         </smn-empty-state>
         """;
 
+    private const string TableUsage =
+        """
+        <smn-table caption="Faturas" hide-caption="true">
+            <smn-table-header>
+                <smn-table-row>
+                    <smn-table-column>Cliente</smn-table-column>
+                    <smn-table-column numeric="true">Valor</smn-table-column>
+                </smn-table-row>
+            </smn-table-header>
+            <smn-table-body>
+                <smn-table-row>
+                    <smn-table-cell>Acme Ltda</smn-table-cell>
+                    <smn-table-cell numeric="true">R$ 1.240,00</smn-table-cell>
+                </smn-table-row>
+            </smn-table-body>
+        </smn-table>
+        """;
+
+    private const string TabsUsage =
+        """
+        <smn-tabs id="conta" aria-label="Seções da conta">
+            <smn-tab key="perfil" label="Perfil">
+                Nome, foto e como você aparece para a equipe.
+            </smn-tab>
+            <smn-tab key="seguranca" label="Segurança" selected="true">
+                Senha e verificação em duas etapas.
+            </smn-tab>
+        </smn-tabs>
+        """;
+
     private const string LinkUsage =
         """
         <smn-link href="/faturas">Ver faturas</smn-link>
@@ -330,6 +360,28 @@ public sealed class UiKitController : Controller
             BuildNavigation(nameof(Link))));
     }
 
+    /// <summary>Table component page.</summary>
+    [HttpGet("table")]
+    public IActionResult Table()
+    {
+        return View(new ComponentViewModel(
+            "Table",
+            "Apresenta dado tabular, rolando na horizontal sem empurrar a página.",
+            TableUsage,
+            BuildNavigation(nameof(Table))));
+    }
+
+    /// <summary>Tabs component page.</summary>
+    [HttpGet("tabs")]
+    public IActionResult Tabs()
+    {
+        return View(new ComponentViewModel(
+            "Tabs",
+            "Alterna entre seções de um mesmo contexto, seguindo o padrão ARIA de abas.",
+            TabsUsage,
+            BuildNavigation(nameof(Tabs))));
+    }
+
     private static IReadOnlyList<NavigationItemViewModel> BuildNavigation(string activeAction)
     {
         return
@@ -350,6 +402,8 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Skeleton", nameof(Skeleton), activeAction == nameof(Skeleton)),
             new NavigationItemViewModel("Spinner", nameof(Spinner), activeAction == nameof(Spinner)),
             new NavigationItemViewModel("Switch", nameof(Switch), activeAction == nameof(Switch)),
+            new NavigationItemViewModel("Table", nameof(Table), activeAction == nameof(Table)),
+            new NavigationItemViewModel("Tabs", nameof(Tabs), activeAction == nameof(Tabs)),
         ];
     }
 }

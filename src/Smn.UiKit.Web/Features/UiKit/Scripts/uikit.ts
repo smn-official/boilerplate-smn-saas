@@ -100,5 +100,53 @@ function initializeCodeCopy(): void {
     }
 }
 
+function selectTab(tabs: HTMLElement, target: HTMLElement): void {
+    const buttons = tabs.querySelectorAll<HTMLButtonElement>("[role='tab']");
+
+    for (const button of buttons) {
+        const isTarget = button === target;
+        const panelId = button.getAttribute("aria-controls");
+        const panel = panelId === null ? null : document.getElementById(panelId);
+
+        button.setAttribute("aria-selected", isTarget ? "true" : "false");
+        button.tabIndex = isTarget ? 0 : -1;
+        panel?.toggleAttribute("hidden", !isTarget);
+    }
+}
+
+function initializeTabs(): void {
+    const groups = document.querySelectorAll<HTMLElement>("[data-smn-tabs]");
+
+    for (const tabs of groups) {
+        const buttons = [...tabs.querySelectorAll<HTMLButtonElement>("[role='tab']")];
+
+        for (const button of buttons) {
+            button.addEventListener("click", () => selectTab(tabs, button));
+
+            button.addEventListener("keydown", (event: KeyboardEvent) => {
+                const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+
+                if (step === 0) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const enabled = buttons.filter((candidate) => !candidate.disabled);
+                const current = enabled.indexOf(button);
+                const next = enabled[(current + step + enabled.length) % enabled.length];
+
+                if (next === undefined) {
+                    return;
+                }
+
+                selectTab(tabs, next);
+                next.focus();
+            });
+        }
+    }
+}
+
 initializeThemeToggle();
 initializeCodeCopy();
+initializeTabs();
