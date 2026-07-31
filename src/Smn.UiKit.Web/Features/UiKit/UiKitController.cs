@@ -427,6 +427,18 @@ public sealed class UiKitController : Controller
             showMarkupSection: false));
     }
 
+    /// <summary>Range calendar, year picker and autocomplete component page.</summary>
+    [HttpGet("date-range")]
+    public IActionResult DateRange()
+    {
+        return View(new ComponentViewModel(
+            "DateRange",
+            "Intervalo de datas, seletor de ano e o campo que sugere enquanto se digita.",
+            string.Empty,
+            BuildNavigation(nameof(DateRange)),
+            showMarkupSection: false));
+    }
+
     /// <summary>Card component page.</summary>
     [HttpGet("card")]
     public IActionResult Card()
@@ -694,6 +706,7 @@ public sealed class UiKitController : Controller
             new NavigationItemViewModel("Checkbox", nameof(Checkbox), activeAction == nameof(Checkbox)),
             new NavigationItemViewModel("Chip", nameof(Chip), activeAction == nameof(Chip)),
             new NavigationItemViewModel("Color", nameof(Color), activeAction == nameof(Color)),
+            new NavigationItemViewModel("DateRange", nameof(DateRange), activeAction == nameof(DateRange)),
             new NavigationItemViewModel("Drawer", nameof(Drawer), activeAction == nameof(Drawer)),
             new NavigationItemViewModel("Dropdown", nameof(Dropdown), activeAction == nameof(Dropdown)),
             new NavigationItemViewModel("Input", nameof(Input), activeAction == nameof(Input)),

@@ -1,0 +1,132 @@
+@model ComponentViewModel
+@{
+    Layout = "_PanelLayout";
+    var hoje = DateOnly.FromDateTime(DateTime.Today);
+    var mesExemplo = new DateOnly(hoje.Year, hoje.Month, 1).AddMonths(1);
+}
+
+@{
+    const string rangeCalendarCodigo =
+"""
+<smn-range-calendar start-name="periodo-inicio"
+                    end-name="periodo-fim"
+                    start="2026-08-08"
+                    end="2026-08-19"
+                    month="2026-08-01" />
+""";
+
+    const string rangeVazioCodigo =
+"""
+<smn-range-calendar start-name="filtro-inicio" end-name="filtro-fim" />
+""";
+
+    const string dateRangeCodigo =
+"""
+<smn-date-range-picker id="periodo"
+                       legend="Período do relatório"
+                       description="Início e fim entram como duas datas no formulário."
+                       start-name="inicio"
+                       end-name="fim" />
+""";
+
+    const string anoCodigo =
+"""
+<smn-calendar-year-picker name="ano-base" value="2026" />
+""";
+
+    const string autocompleteCodigo =
+"""
+<smn-autocomplete id="cidade"
+                  name="cidade"
+                  label="Cidade"
+                  placeholder="Comece a digitar…"
+                  description="Sugere enquanto você digita, mas aceita qualquer texto."
+                  options="São Paulo|Rio de Janeiro|Belo Horizonte|Curitiba|Porto Alegre|Salvador|Recife|Fortaleza|Manaus|Brasília" />
+""";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Calendário de intervalo</p>
+        <p class="mb-4 text-sm text-muted">
+            O primeiro clique fixa o início, o segundo o fim — clicar de novo recomeça, senão o
+            usuário ficaria preso ao primeiro par escolhido. Clicar antes do início inverte os dois,
+            em vez de recusar.
+        </p>
+        <smn-range-calendar start-name="periodo-inicio"
+                            end-name="periodo-fim"
+                            start="@mesExemplo.AddDays(7)"
+                            end="@mesExemplo.AddDays(18)"
+                            month="@mesExemplo" />
+        @await Html.PartialAsync("_Codigo", rangeCalendarCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Começando vazio</p>
+        <p class="mb-4 text-sm text-muted">
+            Escolha duas datas para ver a faixa se formar.
+        </p>
+        <smn-range-calendar start-name="filtro-inicio" end-name="filtro-fim" month="@mesExemplo" />
+        @await Html.PartialAsync("_Codigo", rangeVazioCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Par de campos</p>
+        <p class="mb-4 text-sm text-muted">
+            Quando não precisa da grade desenhada, dois
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">type="date"</code>
+            nativos resolvem: cada um abre o seletor do sistema e o navegador valida a ordem por
+            <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">min</code>/<code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">max</code>.
+        </p>
+        <div class="max-w-md">
+            <smn-date-range-picker id="periodo"
+                                   legend="Período do relatório"
+                                   description="Início e fim entram como duas datas no formulário."
+                                   start-name="inicio"
+                                   end-name="fim"
+                                   start="@mesExemplo.AddDays(2)"
+                                   end="@mesExemplo.AddDays(16)" />
+        </div>
+        @await Html.PartialAsync("_Codigo", dateRangeCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Seletor de ano</p>
+        <p class="mb-4 text-sm text-muted">
+            Para saltar anos sem percorrer mês a mês.
+        </p>
+        <div class="max-w-sm">
+            <smn-calendar-year-picker name="ano-base" value="@hoje.Year" />
+        </div>
+        @await Html.PartialAsync("_Codigo", anoCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Autocomplete</p>
+        <p class="mb-4 text-sm text-muted">
+            É <code class="rounded bg-surface-secondary px-1.5 py-0.5 text-xs">&lt;datalist&gt;</code>
+            nativo: o navegador filtra enquanto você digita, posiciona e fecha a lista sozinho — e o
+            usuário continua livre para escrever algo que não está nela. Digite
+            <em>“ri”</em> para ver.
+        </p>
+        <div class="max-w-sm">
+            <smn-autocomplete id="cidade"
+                              name="cidade"
+                              label="Cidade"
+                              placeholder="Comece a digitar…"
+                              description="Sugere enquanto você digita, mas aceita qualquer texto."
+                              options="São Paulo|Rio de Janeiro|Belo Horizonte|Curitiba|Porto Alegre|Salvador|Recife|Fortaleza|Manaus|Brasília" />
+        </div>
+        @await Html.PartialAsync("_Codigo", autocompleteCodigo)
+    </div>
+
+    <div class="rounded-2xl bg-surface p-6 shadow-surface">
+        <p class="mb-4 text-xs font-medium tracking-wide text-muted uppercase">Autocomplete ou select?</p>
+        <p class="text-sm text-muted">
+            O <smn-link href="@Url.Action("Select", "UiKit")" variant="Accent">select</smn-link> é
+            para quando o valor <strong class="font-medium text-foreground">precisa</strong> estar
+            na lista. O autocomplete é para lista longa em que digitar é mais rápido que rolar, e
+            onde um valor de fora ainda é aceitável — cidade, tag, nome de cliente.
+        </p>
+    </div>
+</div>

@@ -986,8 +986,101 @@ function bindCalendar(calendar: HTMLElement): void {
 initializeColorAreas();
 initializeColorPickers();
 initializeToolbars();
+/**
+ * Seleção de intervalo: o primeiro clique fixa o início, o segundo o fim.
+ * Clicar de novo recomeça — sem isso o usuário ficaria preso ao primeiro par.
+ */
+function initializeRangeCalendars(): void {
+    for (const calendar of document.querySelectorAll<HTMLElement>("[data-smn-range-calendar]")) {
+        const paint = (): void => {
+            const start = calendar.dataset.start ?? "";
+            const end = calendar.dataset.end ?? "";
+
+            for (const day of calendar.querySelectorAll<HTMLElement>("[data-date]")) {
+                const iso = day.dataset.date ?? "";
+                day.removeAttribute("data-range");
+                day.removeAttribute("data-selected");
+
+                if (iso !== "" && iso === start) {
+                    day.setAttribute("data-range", end === "" ? "start" : "start");
+                    day.setAttribute("data-selected", "true");
+                } else if (iso !== "" && iso === end) {
+                    day.setAttribute("data-range", "end");
+                    day.setAttribute("data-selected", "true");
+                } else if (start !== "" && end !== "" && iso > start && iso < end) {
+                    day.setAttribute("data-range", "middle");
+                }
+            }
+
+            const startField = calendar.querySelector<HTMLInputElement>("[data-range-start]");
+            const endField = calendar.querySelector<HTMLInputElement>("[data-range-end]");
+
+            if (startField !== null) {
+                startField.value = start;
+            }
+
+            if (endField !== null) {
+                endField.value = end;
+            }
+        };
+
+        calendar.addEventListener("click", (event: MouseEvent) => {
+            const day = (event.target as HTMLElement).closest<HTMLElement>("[data-date]");
+
+            if (day === null || (day as HTMLButtonElement).disabled) {
+                return;
+            }
+
+            const iso = day.dataset.date ?? "";
+            const start = calendar.dataset.start ?? "";
+            const end = calendar.dataset.end ?? "";
+
+            if (start === "" || end !== "") {
+                calendar.dataset.start = iso;
+                delete calendar.dataset.end;
+            } else if (iso < start) {
+                calendar.dataset.end = start;
+                calendar.dataset.start = iso;
+            } else {
+                calendar.dataset.end = iso;
+            }
+
+            paint();
+        });
+
+        // Trocar de mês redesenha a grade e apaga a pintura do intervalo.
+        for (const nav of calendar.querySelectorAll("[data-calendar-prev], [data-calendar-next]")) {
+            nav.addEventListener("click", () => window.setTimeout(paint, 0));
+        }
+    }
+}
+
+function initializeYearPickers(): void {
+    for (const picker of document.querySelectorAll<HTMLElement>("[data-smn-year-picker]")) {
+        picker.addEventListener("click", (event: MouseEvent) => {
+            const year = (event.target as HTMLElement).closest<HTMLElement>("[data-year]");
+
+            if (year === null) {
+                return;
+            }
+
+            for (const other of picker.querySelectorAll<HTMLElement>("[data-year]")) {
+                other.setAttribute("aria-selected", other === year ? "true" : "false");
+            }
+
+            const hidden = picker.querySelector<HTMLInputElement>("[data-year-valor]");
+
+            if (hidden !== null) {
+                hidden.value = year.dataset.year ?? "";
+            }
+        });
+    }
+}
+
 initializeCalendars();
 initializeDatePickers();
+initializeRangeCalendars();
+initializeYearPickers();
 initializeCodeCopy();
 initializeTabs();
 initializeModals();
